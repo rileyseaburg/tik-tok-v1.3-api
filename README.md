@@ -307,3 +307,19 @@ use_mcp_tool({
 - [OpenAPI 3.0.0 Specification](https://spec.openapis.org/oas/v3.0.0)
 - [Swagger UI](https://swagger.io/tools/swagger-ui/)
 - [Embeddings Server Documentation](https://modelcontextprotocol.io)
+
+### Quick Start - Swagger UI
+
+To quickly view the API documentation in a Swagger UI, run the following command:
+
+```
+docker run -p 8080:8080 -e SWAGGER_JSON=/foo/swagger.yaml -v ${PWD}:/foo swaggerapi/swagger-ui
+```
+
+This command starts a Docker container with the Swagger UI, mounts the current directory to `/foo` in the container, and sets the `SWAGGER_JSON` environment variable to `/foo/swagger.yaml`. The UI will be accessible at `http://localhost:8080`.
+
+## Client Generation
+
+The TypeScript client in the `client` directory is generated using the [OpenAPI Generator](https://openapi-generator.tech/). This tool automatically generates API clients from OpenAPI specifications.
+
+The `openapitools.json` file in the root directory indicates that the project uses `@openapitools/openapi-generator-cli` version `7.10.0`. However, specific configuration details for the client generation are likely handled externally or through a different configuration file.
