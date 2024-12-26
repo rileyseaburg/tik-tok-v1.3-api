@@ -13,6 +13,14 @@
  */
 
 import { mapValues } from '../runtime';
+import type { AdvertisingObjective } from './AdvertisingObjective';
+import {
+    AdvertisingObjectiveFromJSON,
+    AdvertisingObjectiveFromJSONTyped,
+    AdvertisingObjectiveToJSON,
+    AdvertisingObjectiveToJSONTyped,
+} from './AdvertisingObjective';
+
 /**
  * 
  * @export
@@ -56,11 +64,11 @@ export interface GetAdGroupsFilteringParameter {
      */
     secondaryStatus?: string;
     /**
-     * Campaign advertising objectives
-     * @type {string}
+     * 
+     * @type {AdvertisingObjective}
      * @memberof GetAdGroupsFilteringParameter
      */
-    objectiveType?: GetAdGroupsFilteringParameterObjectiveTypeEnum;
+    objectiveType?: AdvertisingObjective;
     /**
      * Filter by buying types.
      * Note: RESERVATION_TOP_VIEW cannot be combined with other values.
@@ -103,8 +111,8 @@ export interface GetAdGroupsFilteringParameter {
     billingEvents?: Array<string>;
     /**
      * Filter by lower range of creation time (UTC+0)
-     * Format - YYYY-MM-DD HH:MM:SS
-     * Suggestion - Use time range within 6 months
+     * Format: YYYY-MM-DD HH:MM:SS
+     * Suggestion: Use 6 month range
      * 
      * @type {string}
      * @memberof GetAdGroupsFilteringParameter
@@ -112,8 +120,8 @@ export interface GetAdGroupsFilteringParameter {
     creationFilterStartTime?: string;
     /**
      * Filter by higher range of creation time (UTC+0)
-     * Format - YYYY-MM-DD HH:MM:SS
-     * Suggestion - Use time range within 6 months
+     * Format: YYYY-MM-DD HH:MM:SS
+     * Suggestion: Use 6 month range
      * 
      * @type {string}
      * @memberof GetAdGroupsFilteringParameter
@@ -136,22 +144,6 @@ export const GetAdGroupsFilteringParameterCampaignSystemOriginsEnum = {
     TtAdsPlatform: 'TT_ADS_PLATFORM'
 } as const;
 export type GetAdGroupsFilteringParameterCampaignSystemOriginsEnum = typeof GetAdGroupsFilteringParameterCampaignSystemOriginsEnum[keyof typeof GetAdGroupsFilteringParameterCampaignSystemOriginsEnum];
-
-/**
- * @export
- */
-export const GetAdGroupsFilteringParameterObjectiveTypeEnum = {
-    AppPromotion: 'APP_PROMOTION',
-    Conversions: 'CONVERSIONS',
-    Reach: 'REACH',
-    VideoViews: 'VIDEO_VIEWS',
-    Traffic: 'TRAFFIC',
-    LeadGeneration: 'LEAD_GENERATION',
-    ProductSales: 'PRODUCT_SALES',
-    RfReach: 'RF_REACH',
-    WebConversions: 'WEB_CONVERSIONS'
-} as const;
-export type GetAdGroupsFilteringParameterObjectiveTypeEnum = typeof GetAdGroupsFilteringParameterObjectiveTypeEnum[keyof typeof GetAdGroupsFilteringParameterObjectiveTypeEnum];
 
 /**
  * @export
@@ -221,7 +213,7 @@ export function GetAdGroupsFilteringParameterFromJSONTyped(json: any, ignoreDisc
         'adgroupName': json['adgroup_name'] == null ? undefined : json['adgroup_name'],
         'primaryStatus': json['primary_status'] == null ? undefined : json['primary_status'],
         'secondaryStatus': json['secondary_status'] == null ? undefined : json['secondary_status'],
-        'objectiveType': json['objective_type'] == null ? undefined : json['objective_type'],
+        'objectiveType': json['objective_type'] == null ? undefined : AdvertisingObjectiveFromJSON(json['objective_type']),
         'buyingTypes': json['buying_types'] == null ? undefined : json['buying_types'],
         'optimizationGoal': json['optimization_goal'] == null ? undefined : json['optimization_goal'],
         'promotionType': json['promotion_type'] == null ? undefined : json['promotion_type'],
@@ -251,7 +243,7 @@ export function GetAdGroupsFilteringParameterToJSONTyped(value?: GetAdGroupsFilt
         'adgroup_name': value['adgroupName'],
         'primary_status': value['primaryStatus'],
         'secondary_status': value['secondaryStatus'],
-        'objective_type': value['objectiveType'],
+        'objective_type': AdvertisingObjectiveToJSON(value['objectiveType']),
         'buying_types': value['buyingTypes'],
         'optimization_goal': value['optimizationGoal'],
         'promotion_type': value['promotionType'],

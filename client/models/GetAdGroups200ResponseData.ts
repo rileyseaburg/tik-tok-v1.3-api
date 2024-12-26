@@ -13,20 +13,20 @@
  */
 
 import { mapValues } from '../runtime';
-import type { GetAdGroups200ResponseDataListInner } from './GetAdGroups200ResponseDataListInner';
+import type { AdGroupResponse1 } from './AdGroupResponse1';
 import {
-    GetAdGroups200ResponseDataListInnerFromJSON,
-    GetAdGroups200ResponseDataListInnerFromJSONTyped,
-    GetAdGroups200ResponseDataListInnerToJSON,
-    GetAdGroups200ResponseDataListInnerToJSONTyped,
-} from './GetAdGroups200ResponseDataListInner';
-import type { GetAds200ResponseDataPageInfo } from './GetAds200ResponseDataPageInfo';
+    AdGroupResponse1FromJSON,
+    AdGroupResponse1FromJSONTyped,
+    AdGroupResponse1ToJSON,
+    AdGroupResponse1ToJSONTyped,
+} from './AdGroupResponse1';
+import type { PageInfo } from './PageInfo';
 import {
-    GetAds200ResponseDataPageInfoFromJSON,
-    GetAds200ResponseDataPageInfoFromJSONTyped,
-    GetAds200ResponseDataPageInfoToJSON,
-    GetAds200ResponseDataPageInfoToJSONTyped,
-} from './GetAds200ResponseDataPageInfo';
+    PageInfoFromJSON,
+    PageInfoFromJSONTyped,
+    PageInfoToJSON,
+    PageInfoToJSONTyped,
+} from './PageInfo';
 
 /**
  * 
@@ -35,19 +35,17 @@ import {
  */
 export interface GetAdGroups200ResponseData {
     /**
-     * Data list. Fields returned based on fields parameter.
-     * If not specified, all fields are returned.
      * 
-     * @type {Array<GetAdGroups200ResponseDataListInner>}
+     * @type {Array<AdGroupResponse1>}
      * @memberof GetAdGroups200ResponseData
      */
-    list?: Array<GetAdGroups200ResponseDataListInner>;
+    list?: Array<AdGroupResponse1>;
     /**
      * 
-     * @type {GetAds200ResponseDataPageInfo}
+     * @type {PageInfo}
      * @memberof GetAdGroups200ResponseData
      */
-    pageInfo?: GetAds200ResponseDataPageInfo;
+    pageInfo?: PageInfo;
 }
 
 /**
@@ -67,8 +65,8 @@ export function GetAdGroups200ResponseDataFromJSONTyped(json: any, ignoreDiscrim
     }
     return {
         
-        'list': json['list'] == null ? undefined : ((json['list'] as Array<any>).map(GetAdGroups200ResponseDataListInnerFromJSON)),
-        'pageInfo': json['page_info'] == null ? undefined : GetAds200ResponseDataPageInfoFromJSON(json['page_info']),
+        'list': json['list'] == null ? undefined : ((json['list'] as Array<any>).map(AdGroupResponse1FromJSON)),
+        'pageInfo': json['page_info'] == null ? undefined : PageInfoFromJSON(json['page_info']),
     };
 }
 
@@ -83,8 +81,8 @@ export function GetAdGroups200ResponseDataToJSONTyped(value?: GetAdGroups200Resp
 
     return {
         
-        'list': value['list'] == null ? undefined : ((value['list'] as Array<any>).map(GetAdGroups200ResponseDataListInnerToJSON)),
-        'page_info': GetAds200ResponseDataPageInfoToJSON(value['pageInfo']),
+        'list': value['list'] == null ? undefined : ((value['list'] as Array<any>).map(AdGroupResponse1ToJSON)),
+        'page_info': PageInfoToJSON(value['pageInfo']),
     };
 }
 

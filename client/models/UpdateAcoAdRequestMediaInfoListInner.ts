@@ -13,13 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
-import type { CreateSmartCreativeAdRequestCreativesInnerMediaInfo } from './CreateSmartCreativeAdRequestCreativesInnerMediaInfo';
+import type { MediaInfo2 } from './MediaInfo2';
 import {
-    CreateSmartCreativeAdRequestCreativesInnerMediaInfoFromJSON,
-    CreateSmartCreativeAdRequestCreativesInnerMediaInfoFromJSONTyped,
-    CreateSmartCreativeAdRequestCreativesInnerMediaInfoToJSON,
-    CreateSmartCreativeAdRequestCreativesInnerMediaInfoToJSONTyped,
-} from './CreateSmartCreativeAdRequestCreativesInnerMediaInfo';
+    MediaInfo2FromJSON,
+    MediaInfo2FromJSONTyped,
+    MediaInfo2ToJSON,
+    MediaInfo2ToJSONTyped,
+} from './MediaInfo2';
 
 /**
  * 
@@ -29,10 +29,10 @@ import {
 export interface UpdateAcoAdRequestMediaInfoListInner {
     /**
      * 
-     * @type {CreateSmartCreativeAdRequestCreativesInnerMediaInfo}
+     * @type {MediaInfo2}
      * @memberof UpdateAcoAdRequestMediaInfoListInner
      */
-    mediaInfo?: CreateSmartCreativeAdRequestCreativesInnerMediaInfo;
+    mediaInfo?: MediaInfo2;
 }
 
 /**
@@ -52,7 +52,7 @@ export function UpdateAcoAdRequestMediaInfoListInnerFromJSONTyped(json: any, ign
     }
     return {
         
-        'mediaInfo': json['media_info'] == null ? undefined : CreateSmartCreativeAdRequestCreativesInnerMediaInfoFromJSON(json['media_info']),
+        'mediaInfo': json['media_info'] == null ? undefined : MediaInfo2FromJSON(json['media_info']),
     };
 }
 
@@ -67,7 +67,7 @@ export function UpdateAcoAdRequestMediaInfoListInnerToJSONTyped(value?: UpdateAc
 
     return {
         
-        'media_info': CreateSmartCreativeAdRequestCreativesInnerMediaInfoToJSON(value['mediaInfo']),
+        'media_info': MediaInfo2ToJSON(value['mediaInfo']),
     };
 }
 

@@ -14,15 +14,19 @@
 
 
 /**
- * The format of the ad
+ * Format of the advertisement
  * @export
  */
 export const AdFormat = {
     SingleImage: 'SINGLE_IMAGE',
     SingleVideo: 'SINGLE_VIDEO',
-    LiveContent: 'LIVE_CONTENT',
-    CarouselAds: 'CAROUSEL_ADS',
-    CatalogCarousel: 'CATALOG_CAROUSEL'
+    Carousel: 'CAROUSEL',
+    Dynamic: 'DYNAMIC',
+    Playable: 'PLAYABLE',
+    Collection: 'COLLECTION',
+    Showcase: 'SHOWCASE',
+    LiveShopping: 'LIVE_SHOPPING',
+    VerticalVideo: 'VERTICAL_VIDEO'
 } as const;
 export type AdFormat = typeof AdFormat[keyof typeof AdFormat];
 

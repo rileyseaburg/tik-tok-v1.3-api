@@ -16,16 +16,16 @@
 import * as runtime from '../runtime';
 import type {
   CreateComment200Response,
-  CreateComment400Response,
   CreateCommentRequest,
+  ErrorResponse,
 } from '../models/index';
 import {
     CreateComment200ResponseFromJSON,
     CreateComment200ResponseToJSON,
-    CreateComment400ResponseFromJSON,
-    CreateComment400ResponseToJSON,
     CreateCommentRequestFromJSON,
     CreateCommentRequestToJSON,
+    ErrorResponseFromJSON,
+    ErrorResponseToJSON,
 } from '../models/index';
 
 export interface CreateCommentOperationRequest {

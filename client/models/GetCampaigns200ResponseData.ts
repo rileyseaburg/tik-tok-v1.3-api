@@ -13,20 +13,20 @@
  */
 
 import { mapValues } from '../runtime';
-import type { GetCampaigns200ResponseDataPageInfo } from './GetCampaigns200ResponseDataPageInfo';
+import type { PageInfo } from './PageInfo';
 import {
-    GetCampaigns200ResponseDataPageInfoFromJSON,
-    GetCampaigns200ResponseDataPageInfoFromJSONTyped,
-    GetCampaigns200ResponseDataPageInfoToJSON,
-    GetCampaigns200ResponseDataPageInfoToJSONTyped,
-} from './GetCampaigns200ResponseDataPageInfo';
-import type { GetCampaigns200ResponseDataListInner } from './GetCampaigns200ResponseDataListInner';
+    PageInfoFromJSON,
+    PageInfoFromJSONTyped,
+    PageInfoToJSON,
+    PageInfoToJSONTyped,
+} from './PageInfo';
+import type { SmartPlusCampaign1 } from './SmartPlusCampaign1';
 import {
-    GetCampaigns200ResponseDataListInnerFromJSON,
-    GetCampaigns200ResponseDataListInnerFromJSONTyped,
-    GetCampaigns200ResponseDataListInnerToJSON,
-    GetCampaigns200ResponseDataListInnerToJSONTyped,
-} from './GetCampaigns200ResponseDataListInner';
+    SmartPlusCampaign1FromJSON,
+    SmartPlusCampaign1FromJSONTyped,
+    SmartPlusCampaign1ToJSON,
+    SmartPlusCampaign1ToJSONTyped,
+} from './SmartPlusCampaign1';
 
 /**
  * 
@@ -36,16 +36,16 @@ import {
 export interface GetCampaigns200ResponseData {
     /**
      * List of campaigns
-     * @type {Array<GetCampaigns200ResponseDataListInner>}
+     * @type {Array<SmartPlusCampaign1>}
      * @memberof GetCampaigns200ResponseData
      */
-    list?: Array<GetCampaigns200ResponseDataListInner>;
+    list?: Array<SmartPlusCampaign1>;
     /**
      * 
-     * @type {GetCampaigns200ResponseDataPageInfo}
+     * @type {PageInfo}
      * @memberof GetCampaigns200ResponseData
      */
-    pageInfo?: GetCampaigns200ResponseDataPageInfo;
+    pageInfo?: PageInfo;
 }
 
 /**
@@ -65,8 +65,8 @@ export function GetCampaigns200ResponseDataFromJSONTyped(json: any, ignoreDiscri
     }
     return {
         
-        'list': json['list'] == null ? undefined : ((json['list'] as Array<any>).map(GetCampaigns200ResponseDataListInnerFromJSON)),
-        'pageInfo': json['page_info'] == null ? undefined : GetCampaigns200ResponseDataPageInfoFromJSON(json['page_info']),
+        'list': json['list'] == null ? undefined : ((json['list'] as Array<any>).map(SmartPlusCampaign1FromJSON)),
+        'pageInfo': json['page_info'] == null ? undefined : PageInfoFromJSON(json['page_info']),
     };
 }
 
@@ -81,8 +81,8 @@ export function GetCampaigns200ResponseDataToJSONTyped(value?: GetCampaigns200Re
 
     return {
         
-        'list': value['list'] == null ? undefined : ((value['list'] as Array<any>).map(GetCampaigns200ResponseDataListInnerToJSON)),
-        'page_info': GetCampaigns200ResponseDataPageInfoToJSON(value['pageInfo']),
+        'list': value['list'] == null ? undefined : ((value['list'] as Array<any>).map(SmartPlusCampaign1ToJSON)),
+        'page_info': PageInfoToJSON(value['pageInfo']),
     };
 }
 

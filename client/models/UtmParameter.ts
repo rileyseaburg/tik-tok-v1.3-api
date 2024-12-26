@@ -14,19 +14,19 @@
 
 import { mapValues } from '../runtime';
 /**
- * URL tracking parameter
+ * UTM tracking parameters
  * @export
  * @interface UtmParameter
  */
 export interface UtmParameter {
     /**
-     * Parameter key
+     * URL parameter
      * @type {string}
      * @memberof UtmParameter
      */
     key?: string;
     /**
-     * Parameter value or macro
+     * Value of URL parameter
      * @type {string}
      * @memberof UtmParameter
      */

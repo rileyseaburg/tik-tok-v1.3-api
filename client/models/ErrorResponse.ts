@@ -13,13 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
-import type { CreateComment400ResponseErrorsInner } from './CreateComment400ResponseErrorsInner';
+import type { ErrorResponseErrorsInner } from './ErrorResponseErrorsInner';
 import {
-    CreateComment400ResponseErrorsInnerFromJSON,
-    CreateComment400ResponseErrorsInnerFromJSONTyped,
-    CreateComment400ResponseErrorsInnerToJSON,
-    CreateComment400ResponseErrorsInnerToJSONTyped,
-} from './CreateComment400ResponseErrorsInner';
+    ErrorResponseErrorsInnerFromJSON,
+    ErrorResponseErrorsInnerFromJSONTyped,
+    ErrorResponseErrorsInnerToJSON,
+    ErrorResponseErrorsInnerToJSONTyped,
+} from './ErrorResponseErrorsInner';
 
 /**
  * 
@@ -28,35 +28,38 @@ import {
  */
 export interface ErrorResponse {
     /**
-     * Response code
+     * Error code
      * @type {number}
      * @memberof ErrorResponse
      */
-    code?: number;
+    code: number;
     /**
-     * Response message
+     * Error message
      * @type {string}
      * @memberof ErrorResponse
      */
-    message?: string;
+    message: string;
     /**
-     * Unique identifier for the API request
+     * Request ID for tracking
      * @type {string}
      * @memberof ErrorResponse
      */
-    requestId?: string;
+    requestId: string;
     /**
      * 
-     * @type {Array<CreateComment400ResponseErrorsInner>}
+     * @type {Array<ErrorResponseErrorsInner>}
      * @memberof ErrorResponse
      */
-    errors?: Array<CreateComment400ResponseErrorsInner>;
+    errors?: Array<ErrorResponseErrorsInner>;
 }
 
 /**
  * Check if a given object implements the ErrorResponse interface.
  */
 export function instanceOfErrorResponse(value: object): value is ErrorResponse {
+    if (!('code' in value) || value['code'] === undefined) return false;
+    if (!('message' in value) || value['message'] === undefined) return false;
+    if (!('requestId' in value) || value['requestId'] === undefined) return false;
     return true;
 }
 
@@ -70,10 +73,10 @@ export function ErrorResponseFromJSONTyped(json: any, ignoreDiscriminator: boole
     }
     return {
         
-        'code': json['code'] == null ? undefined : json['code'],
-        'message': json['message'] == null ? undefined : json['message'],
-        'requestId': json['request_id'] == null ? undefined : json['request_id'],
-        'errors': json['errors'] == null ? undefined : ((json['errors'] as Array<any>).map(CreateComment400ResponseErrorsInnerFromJSON)),
+        'code': json['code'],
+        'message': json['message'],
+        'requestId': json['request_id'],
+        'errors': json['errors'] == null ? undefined : ((json['errors'] as Array<any>).map(ErrorResponseErrorsInnerFromJSON)),
     };
 }
 
@@ -91,7 +94,7 @@ export function ErrorResponseToJSONTyped(value?: ErrorResponse | null, ignoreDis
         'code': value['code'],
         'message': value['message'],
         'request_id': value['requestId'],
-        'errors': value['errors'] == null ? undefined : ((value['errors'] as Array<any>).map(CreateComment400ResponseErrorsInnerToJSON)),
+        'errors': value['errors'] == null ? undefined : ((value['errors'] as Array<any>).map(ErrorResponseErrorsInnerToJSON)),
     };
 }
 

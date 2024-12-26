@@ -14,10 +14,11 @@
 
 
 /**
- * Post-bid measurement partner
+ * Post-bid partner type
  * @export
  */
 export const PostbidPartner = {
+    Unset: 'UNSET',
     Moat: 'MOAT',
     DoubleVerify: 'DOUBLE_VERIFY',
     Ias: 'IAS',

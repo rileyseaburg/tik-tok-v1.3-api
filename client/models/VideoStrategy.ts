@@ -14,7 +14,7 @@
 
 
 /**
- * Video type for Product Sales scenarios
+ * Video strategy type
  * @export
  */
 export const VideoStrategy = {

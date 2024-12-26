@@ -41,13 +41,13 @@ import {
     GetAcoAds200ResponseDataListInnerDeeplinkListInnerToJSON,
     GetAcoAds200ResponseDataListInnerDeeplinkListInnerToJSONTyped,
 } from './GetAcoAds200ResponseDataListInnerDeeplinkListInner';
-import type { CreateSmartCreativeAdRequestCreativesInnerCallToActionListInner } from './CreateSmartCreativeAdRequestCreativesInnerCallToActionListInner';
+import type { CallToActionInfo } from './CallToActionInfo';
 import {
-    CreateSmartCreativeAdRequestCreativesInnerCallToActionListInnerFromJSON,
-    CreateSmartCreativeAdRequestCreativesInnerCallToActionListInnerFromJSONTyped,
-    CreateSmartCreativeAdRequestCreativesInnerCallToActionListInnerToJSON,
-    CreateSmartCreativeAdRequestCreativesInnerCallToActionListInnerToJSONTyped,
-} from './CreateSmartCreativeAdRequestCreativesInnerCallToActionListInner';
+    CallToActionInfoFromJSON,
+    CallToActionInfoFromJSONTyped,
+    CallToActionInfoToJSON,
+    CallToActionInfoToJSONTyped,
+} from './CallToActionInfo';
 import type { GetAcoAds200ResponseDataListInnerPageListInner } from './GetAcoAds200ResponseDataListInnerPageListInner';
 import {
     GetAcoAds200ResponseDataListInnerPageListInnerFromJSON,
@@ -128,10 +128,10 @@ export interface GetAcoAds200ResponseDataListInner {
     titleList?: Array<GetAcoAds200ResponseDataListInnerTitleListInner>;
     /**
      * 
-     * @type {Array<CreateSmartCreativeAdRequestCreativesInnerCallToActionListInner>}
+     * @type {Array<CallToActionInfo>}
      * @memberof GetAcoAds200ResponseDataListInner
      */
-    callToActionList?: Array<CreateSmartCreativeAdRequestCreativesInnerCallToActionListInner>;
+    callToActionList?: Array<CallToActionInfo>;
     /**
      * 
      * @type {Array<GetAcoAds200ResponseDataListInnerDeeplinkListInner>}
@@ -223,7 +223,7 @@ export function GetAcoAds200ResponseDataListInnerFromJSONTyped(json: any, ignore
         'identityId': json['identity_id'] == null ? undefined : json['identity_id'],
         'identityType': json['identity_type'] == null ? undefined : json['identity_type'],
         'titleList': json['title_list'] == null ? undefined : ((json['title_list'] as Array<any>).map(GetAcoAds200ResponseDataListInnerTitleListInnerFromJSON)),
-        'callToActionList': json['call_to_action_list'] == null ? undefined : ((json['call_to_action_list'] as Array<any>).map(CreateSmartCreativeAdRequestCreativesInnerCallToActionListInnerFromJSON)),
+        'callToActionList': json['call_to_action_list'] == null ? undefined : ((json['call_to_action_list'] as Array<any>).map(CallToActionInfoFromJSON)),
         'deeplinkList': json['deeplink_list'] == null ? undefined : ((json['deeplink_list'] as Array<any>).map(GetAcoAds200ResponseDataListInnerDeeplinkListInnerFromJSON)),
         'displayNameList': json['display_name_list'] == null ? undefined : ((json['display_name_list'] as Array<any>).map(GetAcoAds200ResponseDataListInnerDisplayNameListInnerFromJSON)),
         'avatarIconList': json['avatar_icon_list'] == null ? undefined : ((json['avatar_icon_list'] as Array<any>).map(GetAcoAds200ResponseDataListInnerAvatarIconListInnerFromJSON)),
@@ -253,7 +253,7 @@ export function GetAcoAds200ResponseDataListInnerToJSONTyped(value?: GetAcoAds20
         'identity_id': value['identityId'],
         'identity_type': value['identityType'],
         'title_list': value['titleList'] == null ? undefined : ((value['titleList'] as Array<any>).map(GetAcoAds200ResponseDataListInnerTitleListInnerToJSON)),
-        'call_to_action_list': value['callToActionList'] == null ? undefined : ((value['callToActionList'] as Array<any>).map(CreateSmartCreativeAdRequestCreativesInnerCallToActionListInnerToJSON)),
+        'call_to_action_list': value['callToActionList'] == null ? undefined : ((value['callToActionList'] as Array<any>).map(CallToActionInfoToJSON)),
         'deeplink_list': value['deeplinkList'] == null ? undefined : ((value['deeplinkList'] as Array<any>).map(GetAcoAds200ResponseDataListInnerDeeplinkListInnerToJSON)),
         'display_name_list': value['displayNameList'] == null ? undefined : ((value['displayNameList'] as Array<any>).map(GetAcoAds200ResponseDataListInnerDisplayNameListInnerToJSON)),
         'avatar_icon_list': value['avatarIconList'] == null ? undefined : ((value['avatarIconList'] as Array<any>).map(GetAcoAds200ResponseDataListInnerAvatarIconListInnerToJSON)),

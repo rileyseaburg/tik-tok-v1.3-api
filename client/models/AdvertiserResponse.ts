@@ -13,13 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
-import type { AdvertiserResponseData } from './AdvertiserResponseData';
+import type { AdvertiserResponseAllOfData } from './AdvertiserResponseAllOfData';
 import {
-    AdvertiserResponseDataFromJSON,
-    AdvertiserResponseDataFromJSONTyped,
-    AdvertiserResponseDataToJSON,
-    AdvertiserResponseDataToJSONTyped,
-} from './AdvertiserResponseData';
+    AdvertiserResponseAllOfDataFromJSON,
+    AdvertiserResponseAllOfDataFromJSONTyped,
+    AdvertiserResponseAllOfDataToJSON,
+    AdvertiserResponseAllOfDataToJSONTyped,
+} from './AdvertiserResponseAllOfData';
 
 /**
  * 
@@ -32,31 +32,34 @@ export interface AdvertiserResponse {
      * @type {number}
      * @memberof AdvertiserResponse
      */
-    code?: number;
+    code: number;
     /**
      * Response message
      * @type {string}
      * @memberof AdvertiserResponse
      */
-    message?: string;
+    message: string;
     /**
-     * Unique identifier for the API request
+     * The log ID of the request
      * @type {string}
      * @memberof AdvertiserResponse
      */
-    requestId?: string;
+    requestId: string;
     /**
      * 
-     * @type {AdvertiserResponseData}
+     * @type {AdvertiserResponseAllOfData}
      * @memberof AdvertiserResponse
      */
-    data?: AdvertiserResponseData;
+    data?: AdvertiserResponseAllOfData;
 }
 
 /**
  * Check if a given object implements the AdvertiserResponse interface.
  */
 export function instanceOfAdvertiserResponse(value: object): value is AdvertiserResponse {
+    if (!('code' in value) || value['code'] === undefined) return false;
+    if (!('message' in value) || value['message'] === undefined) return false;
+    if (!('requestId' in value) || value['requestId'] === undefined) return false;
     return true;
 }
 
@@ -70,10 +73,10 @@ export function AdvertiserResponseFromJSONTyped(json: any, ignoreDiscriminator: 
     }
     return {
         
-        'code': json['code'] == null ? undefined : json['code'],
-        'message': json['message'] == null ? undefined : json['message'],
-        'requestId': json['request_id'] == null ? undefined : json['request_id'],
-        'data': json['data'] == null ? undefined : AdvertiserResponseDataFromJSON(json['data']),
+        'code': json['code'],
+        'message': json['message'],
+        'requestId': json['request_id'],
+        'data': json['data'] == null ? undefined : AdvertiserResponseAllOfDataFromJSON(json['data']),
     };
 }
 
@@ -91,7 +94,7 @@ export function AdvertiserResponseToJSONTyped(value?: AdvertiserResponse | null,
         'code': value['code'],
         'message': value['message'],
         'request_id': value['requestId'],
-        'data': AdvertiserResponseDataToJSON(value['data']),
+        'data': AdvertiserResponseAllOfDataToJSON(value['data']),
     };
 }
 

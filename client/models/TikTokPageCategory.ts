@@ -14,7 +14,7 @@
 
 
 /**
- * Category of TikTok page
+ * Category of TikTok pages
  * @export
  */
 export const TikTokPageCategory = {

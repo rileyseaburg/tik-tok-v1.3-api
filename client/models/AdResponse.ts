@@ -13,13 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
-import type { CreateSmartCreativeAd200ResponseData } from './CreateSmartCreativeAd200ResponseData';
+import type { AdResponseAllOfData } from './AdResponseAllOfData';
 import {
-    CreateSmartCreativeAd200ResponseDataFromJSON,
-    CreateSmartCreativeAd200ResponseDataFromJSONTyped,
-    CreateSmartCreativeAd200ResponseDataToJSON,
-    CreateSmartCreativeAd200ResponseDataToJSONTyped,
-} from './CreateSmartCreativeAd200ResponseData';
+    AdResponseAllOfDataFromJSON,
+    AdResponseAllOfDataFromJSONTyped,
+    AdResponseAllOfDataToJSON,
+    AdResponseAllOfDataToJSONTyped,
+} from './AdResponseAllOfData';
 
 /**
  * 
@@ -32,31 +32,34 @@ export interface AdResponse {
      * @type {number}
      * @memberof AdResponse
      */
-    code?: number;
+    code: number;
     /**
      * Response message
      * @type {string}
      * @memberof AdResponse
      */
-    message?: string;
+    message: string;
     /**
-     * Unique identifier for the API request
+     * The log ID of the request
      * @type {string}
      * @memberof AdResponse
      */
-    requestId?: string;
+    requestId: string;
     /**
      * 
-     * @type {CreateSmartCreativeAd200ResponseData}
+     * @type {AdResponseAllOfData}
      * @memberof AdResponse
      */
-    data?: CreateSmartCreativeAd200ResponseData;
+    data?: AdResponseAllOfData;
 }
 
 /**
  * Check if a given object implements the AdResponse interface.
  */
 export function instanceOfAdResponse(value: object): value is AdResponse {
+    if (!('code' in value) || value['code'] === undefined) return false;
+    if (!('message' in value) || value['message'] === undefined) return false;
+    if (!('requestId' in value) || value['requestId'] === undefined) return false;
     return true;
 }
 
@@ -70,10 +73,10 @@ export function AdResponseFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     }
     return {
         
-        'code': json['code'] == null ? undefined : json['code'],
-        'message': json['message'] == null ? undefined : json['message'],
-        'requestId': json['request_id'] == null ? undefined : json['request_id'],
-        'data': json['data'] == null ? undefined : CreateSmartCreativeAd200ResponseDataFromJSON(json['data']),
+        'code': json['code'],
+        'message': json['message'],
+        'requestId': json['request_id'],
+        'data': json['data'] == null ? undefined : AdResponseAllOfDataFromJSON(json['data']),
     };
 }
 
@@ -91,7 +94,7 @@ export function AdResponseToJSONTyped(value?: AdResponse | null, ignoreDiscrimin
         'code': value['code'],
         'message': value['message'],
         'request_id': value['requestId'],
-        'data': CreateSmartCreativeAd200ResponseDataToJSON(value['data']),
+        'data': AdResponseAllOfDataToJSON(value['data']),
     };
 }
 

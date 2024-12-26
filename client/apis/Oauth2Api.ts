@@ -15,12 +15,12 @@
 
 import * as runtime from '../runtime';
 import type {
-  CreateComment400Response,
+  ErrorResponse,
   GetAuthorizedAdvertisers200Response,
 } from '../models/index';
 import {
-    CreateComment400ResponseFromJSON,
-    CreateComment400ResponseToJSON,
+    ErrorResponseFromJSON,
+    ErrorResponseToJSON,
     GetAuthorizedAdvertisers200ResponseFromJSON,
     GetAuthorizedAdvertisers200ResponseToJSON,
 } from '../models/index';

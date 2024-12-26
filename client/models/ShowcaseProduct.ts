@@ -14,7 +14,7 @@
 
 import { mapValues } from '../runtime';
 /**
- * Product details for showcase
+ * Product showcase information
  * @export
  * @interface ShowcaseProduct
  */

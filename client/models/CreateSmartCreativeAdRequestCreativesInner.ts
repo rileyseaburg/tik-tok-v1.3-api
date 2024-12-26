@@ -13,20 +13,27 @@
  */
 
 import { mapValues } from '../runtime';
-import type { CreateSmartCreativeAdRequestCreativesInnerMediaInfo } from './CreateSmartCreativeAdRequestCreativesInnerMediaInfo';
+import type { CallToActionInfo } from './CallToActionInfo';
 import {
-    CreateSmartCreativeAdRequestCreativesInnerMediaInfoFromJSON,
-    CreateSmartCreativeAdRequestCreativesInnerMediaInfoFromJSONTyped,
-    CreateSmartCreativeAdRequestCreativesInnerMediaInfoToJSON,
-    CreateSmartCreativeAdRequestCreativesInnerMediaInfoToJSONTyped,
-} from './CreateSmartCreativeAdRequestCreativesInnerMediaInfo';
-import type { CreateSmartCreativeAdRequestCreativesInnerCallToActionListInner } from './CreateSmartCreativeAdRequestCreativesInnerCallToActionListInner';
+    CallToActionInfoFromJSON,
+    CallToActionInfoFromJSONTyped,
+    CallToActionInfoToJSON,
+    CallToActionInfoToJSONTyped,
+} from './CallToActionInfo';
+import type { MediaInfo2 } from './MediaInfo2';
 import {
-    CreateSmartCreativeAdRequestCreativesInnerCallToActionListInnerFromJSON,
-    CreateSmartCreativeAdRequestCreativesInnerCallToActionListInnerFromJSONTyped,
-    CreateSmartCreativeAdRequestCreativesInnerCallToActionListInnerToJSON,
-    CreateSmartCreativeAdRequestCreativesInnerCallToActionListInnerToJSONTyped,
-} from './CreateSmartCreativeAdRequestCreativesInnerCallToActionListInner';
+    MediaInfo2FromJSON,
+    MediaInfo2FromJSONTyped,
+    MediaInfo2ToJSON,
+    MediaInfo2ToJSONTyped,
+} from './MediaInfo2';
+import type { AdFormat } from './AdFormat';
+import {
+    AdFormatFromJSON,
+    AdFormatFromJSONTyped,
+    AdFormatToJSON,
+    AdFormatToJSONTyped,
+} from './AdFormat';
 
 /**
  * 
@@ -53,11 +60,11 @@ export interface CreateSmartCreativeAdRequestCreativesInner {
      */
     identityId: string;
     /**
-     * The format of the ad
-     * @type {string}
+     * 
+     * @type {AdFormat}
      * @memberof CreateSmartCreativeAdRequestCreativesInner
      */
-    adFormat: CreateSmartCreativeAdRequestCreativesInnerAdFormatEnum;
+    adFormat: AdFormat;
     /**
      * Flag to indicate if this is a Smart Creative ad
      * @type {boolean}
@@ -66,16 +73,16 @@ export interface CreateSmartCreativeAdRequestCreativesInner {
     isSmartCreative?: boolean;
     /**
      * 
-     * @type {CreateSmartCreativeAdRequestCreativesInnerMediaInfo}
+     * @type {MediaInfo2}
      * @memberof CreateSmartCreativeAdRequestCreativesInner
      */
-    mediaInfo?: CreateSmartCreativeAdRequestCreativesInnerMediaInfo;
+    mediaInfo?: MediaInfo2;
     /**
      * List of call-to-action texts (max 3, no duplicates)
-     * @type {Set<CreateSmartCreativeAdRequestCreativesInnerCallToActionListInner>}
+     * @type {Set<CallToActionInfo>}
      * @memberof CreateSmartCreativeAdRequestCreativesInner
      */
-    callToActionList?: Set<CreateSmartCreativeAdRequestCreativesInnerCallToActionListInner>;
+    callToActionList?: Set<CallToActionInfo>;
     /**
      * List of ad titles (max 5, no duplicates)
      * @type {Set<string>}
@@ -90,18 +97,6 @@ export interface CreateSmartCreativeAdRequestCreativesInner {
     pageId?: string;
 }
 
-
-/**
- * @export
- */
-export const CreateSmartCreativeAdRequestCreativesInnerAdFormatEnum = {
-    SingleImage: 'SINGLE_IMAGE',
-    SingleVideo: 'SINGLE_VIDEO',
-    LiveContent: 'LIVE_CONTENT',
-    CarouselAds: 'CAROUSEL_ADS',
-    CatalogCarousel: 'CATALOG_CAROUSEL'
-} as const;
-export type CreateSmartCreativeAdRequestCreativesInnerAdFormatEnum = typeof CreateSmartCreativeAdRequestCreativesInnerAdFormatEnum[keyof typeof CreateSmartCreativeAdRequestCreativesInnerAdFormatEnum];
 
 
 /**
@@ -128,10 +123,10 @@ export function CreateSmartCreativeAdRequestCreativesInnerFromJSONTyped(json: an
         'adName': json['ad_name'],
         'identityType': json['identity_type'],
         'identityId': json['identity_id'],
-        'adFormat': json['ad_format'],
+        'adFormat': AdFormatFromJSON(json['ad_format']),
         'isSmartCreative': json['is_smart_creative'] == null ? undefined : json['is_smart_creative'],
-        'mediaInfo': json['media_info'] == null ? undefined : CreateSmartCreativeAdRequestCreativesInnerMediaInfoFromJSON(json['media_info']),
-        'callToActionList': json['call_to_action_list'] == null ? undefined : (new Set((json['call_to_action_list'] as Array<any>).map(CreateSmartCreativeAdRequestCreativesInnerCallToActionListInnerFromJSON))),
+        'mediaInfo': json['media_info'] == null ? undefined : MediaInfo2FromJSON(json['media_info']),
+        'callToActionList': json['call_to_action_list'] == null ? undefined : (new Set((json['call_to_action_list'] as Array<any>).map(CallToActionInfoFromJSON))),
         'titleList': json['title_list'] == null ? undefined : new Set(json['title_list']),
         'pageId': json['page_id'] == null ? undefined : json['page_id'],
     };
@@ -151,10 +146,10 @@ export function CreateSmartCreativeAdRequestCreativesInnerToJSONTyped(value?: Cr
         'ad_name': value['adName'],
         'identity_type': value['identityType'],
         'identity_id': value['identityId'],
-        'ad_format': value['adFormat'],
+        'ad_format': AdFormatToJSON(value['adFormat']),
         'is_smart_creative': value['isSmartCreative'],
-        'media_info': CreateSmartCreativeAdRequestCreativesInnerMediaInfoToJSON(value['mediaInfo']),
-        'call_to_action_list': value['callToActionList'] == null ? undefined : (Array.from(value['callToActionList'] as Set<any>).map(CreateSmartCreativeAdRequestCreativesInnerCallToActionListInnerToJSON)),
+        'media_info': MediaInfo2ToJSON(value['mediaInfo']),
+        'call_to_action_list': value['callToActionList'] == null ? undefined : (Array.from(value['callToActionList'] as Set<any>).map(CallToActionInfoToJSON)),
         'title_list': value['titleList'] == null ? undefined : Array.from(value['titleList'] as Set<any>),
         'page_id': value['pageId'],
     };

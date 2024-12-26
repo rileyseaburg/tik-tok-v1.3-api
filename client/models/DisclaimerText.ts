@@ -14,13 +14,13 @@
 
 import { mapValues } from '../runtime';
 /**
- * Text-only disclaimer content
+ * Text content for disclaimers
  * @export
  * @interface DisclaimerText
  */
 export interface DisclaimerText {
     /**
-     * The disclaimer text
+     * The disclaimer text content
      * @type {string}
      * @memberof DisclaimerText
      */

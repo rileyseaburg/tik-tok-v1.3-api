@@ -15,13 +15,13 @@
 
 import * as runtime from '../runtime';
 import type {
-  CreateComment400Response,
+  ErrorResponse,
   SetPostAuthorization200Response,
   SetPostAuthorizationRequest,
 } from '../models/index';
 import {
-    CreateComment400ResponseFromJSON,
-    CreateComment400ResponseToJSON,
+    ErrorResponseFromJSON,
+    ErrorResponseToJSON,
     SetPostAuthorization200ResponseFromJSON,
     SetPostAuthorization200ResponseToJSON,
     SetPostAuthorizationRequestFromJSON,

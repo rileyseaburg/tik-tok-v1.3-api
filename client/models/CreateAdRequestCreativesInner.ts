@@ -13,34 +13,125 @@
  */
 
 import { mapValues } from '../runtime';
-import type { CreateAdRequestCreativesInnerDisclaimerClickableTextsInner } from './CreateAdRequestCreativesInnerDisclaimerClickableTextsInner';
+import type { IdentityType } from './IdentityType';
 import {
-    CreateAdRequestCreativesInnerDisclaimerClickableTextsInnerFromJSON,
-    CreateAdRequestCreativesInnerDisclaimerClickableTextsInnerFromJSONTyped,
-    CreateAdRequestCreativesInnerDisclaimerClickableTextsInnerToJSON,
-    CreateAdRequestCreativesInnerDisclaimerClickableTextsInnerToJSONTyped,
-} from './CreateAdRequestCreativesInnerDisclaimerClickableTextsInner';
-import type { CreateAdRequestCreativesInnerShowcaseProductsInner } from './CreateAdRequestCreativesInnerShowcaseProductsInner';
+    IdentityTypeFromJSON,
+    IdentityTypeFromJSONTyped,
+    IdentityTypeToJSON,
+    IdentityTypeToJSONTyped,
+} from './IdentityType';
+import type { DeeplinkType } from './DeeplinkType';
 import {
-    CreateAdRequestCreativesInnerShowcaseProductsInnerFromJSON,
-    CreateAdRequestCreativesInnerShowcaseProductsInnerFromJSONTyped,
-    CreateAdRequestCreativesInnerShowcaseProductsInnerToJSON,
-    CreateAdRequestCreativesInnerShowcaseProductsInnerToJSONTyped,
-} from './CreateAdRequestCreativesInnerShowcaseProductsInner';
-import type { CreateAdRequestCreativesInnerDisclaimerText } from './CreateAdRequestCreativesInnerDisclaimerText';
+    DeeplinkTypeFromJSON,
+    DeeplinkTypeFromJSONTyped,
+    DeeplinkTypeToJSON,
+    DeeplinkTypeToJSONTyped,
+} from './DeeplinkType';
+import type { ProductSpecificType } from './ProductSpecificType';
 import {
-    CreateAdRequestCreativesInnerDisclaimerTextFromJSON,
-    CreateAdRequestCreativesInnerDisclaimerTextFromJSONTyped,
-    CreateAdRequestCreativesInnerDisclaimerTextToJSON,
-    CreateAdRequestCreativesInnerDisclaimerTextToJSONTyped,
-} from './CreateAdRequestCreativesInnerDisclaimerText';
-import type { CreateAdRequestCreativesInnerUtmParamsInner } from './CreateAdRequestCreativesInnerUtmParamsInner';
+    ProductSpecificTypeFromJSON,
+    ProductSpecificTypeFromJSONTyped,
+    ProductSpecificTypeToJSON,
+    ProductSpecificTypeToJSONTyped,
+} from './ProductSpecificType';
+import type { ShowcaseProduct } from './ShowcaseProduct';
 import {
-    CreateAdRequestCreativesInnerUtmParamsInnerFromJSON,
-    CreateAdRequestCreativesInnerUtmParamsInnerFromJSONTyped,
-    CreateAdRequestCreativesInnerUtmParamsInnerToJSON,
-    CreateAdRequestCreativesInnerUtmParamsInnerToJSONTyped,
-} from './CreateAdRequestCreativesInnerUtmParamsInner';
+    ShowcaseProductFromJSON,
+    ShowcaseProductFromJSONTyped,
+    ShowcaseProductToJSON,
+    ShowcaseProductToJSONTyped,
+} from './ShowcaseProduct';
+import type { TikTokPageCategory } from './TikTokPageCategory';
+import {
+    TikTokPageCategoryFromJSON,
+    TikTokPageCategoryFromJSONTyped,
+    TikTokPageCategoryToJSON,
+    TikTokPageCategoryToJSONTyped,
+} from './TikTokPageCategory';
+import type { AigcDisclosureType } from './AigcDisclosureType';
+import {
+    AigcDisclosureTypeFromJSON,
+    AigcDisclosureTypeFromJSONTyped,
+    AigcDisclosureTypeToJSON,
+    AigcDisclosureTypeToJSONTyped,
+} from './AigcDisclosureType';
+import type { DynamicDestination } from './DynamicDestination';
+import {
+    DynamicDestinationFromJSON,
+    DynamicDestinationFromJSONTyped,
+    DynamicDestinationToJSON,
+    DynamicDestinationToJSONTyped,
+} from './DynamicDestination';
+import type { ShoppingAdsDeeplinkType } from './ShoppingAdsDeeplinkType';
+import {
+    ShoppingAdsDeeplinkTypeFromJSON,
+    ShoppingAdsDeeplinkTypeFromJSONTyped,
+    ShoppingAdsDeeplinkTypeToJSON,
+    ShoppingAdsDeeplinkTypeToJSONTyped,
+} from './ShoppingAdsDeeplinkType';
+import type { VideoStrategy } from './VideoStrategy';
+import {
+    VideoStrategyFromJSON,
+    VideoStrategyFromJSONTyped,
+    VideoStrategyToJSON,
+    VideoStrategyToJSONTyped,
+} from './VideoStrategy';
+import type { UtmParameter } from './UtmParameter';
+import {
+    UtmParameterFromJSON,
+    UtmParameterFromJSONTyped,
+    UtmParameterToJSON,
+    UtmParameterToJSONTyped,
+} from './UtmParameter';
+import type { DisclaimerType } from './DisclaimerType';
+import {
+    DisclaimerTypeFromJSON,
+    DisclaimerTypeFromJSONTyped,
+    DisclaimerTypeToJSON,
+    DisclaimerTypeToJSONTyped,
+} from './DisclaimerType';
+import type { PostbidPartner } from './PostbidPartner';
+import {
+    PostbidPartnerFromJSON,
+    PostbidPartnerFromJSONTyped,
+    PostbidPartnerToJSON,
+    PostbidPartnerToJSONTyped,
+} from './PostbidPartner';
+import type { DisclaimerText } from './DisclaimerText';
+import {
+    DisclaimerTextFromJSON,
+    DisclaimerTextFromJSONTyped,
+    DisclaimerTextToJSON,
+    DisclaimerTextToJSONTyped,
+} from './DisclaimerText';
+import type { AdFormat } from './AdFormat';
+import {
+    AdFormatFromJSON,
+    AdFormatFromJSONTyped,
+    AdFormatToJSON,
+    AdFormatToJSONTyped,
+} from './AdFormat';
+import type { FallbackType } from './FallbackType';
+import {
+    FallbackTypeFromJSON,
+    FallbackTypeFromJSONTyped,
+    FallbackTypeToJSON,
+    FallbackTypeToJSONTyped,
+} from './FallbackType';
+import type { DeeplinkFormatType } from './DeeplinkFormatType';
+import {
+    DeeplinkFormatTypeFromJSON,
+    DeeplinkFormatTypeFromJSONTyped,
+    DeeplinkFormatTypeToJSON,
+    DeeplinkFormatTypeToJSONTyped,
+} from './DeeplinkFormatType';
+import type { ClickableDisclaimer } from './ClickableDisclaimer';
+import {
+    ClickableDisclaimerFromJSON,
+    ClickableDisclaimerFromJSONTyped,
+    ClickableDisclaimerToJSON,
+    ClickableDisclaimerToJSONTyped,
+} from './ClickableDisclaimer';
 
 /**
  * 
@@ -57,11 +148,11 @@ export interface CreateAdRequestCreativesInner {
      */
     adName: string;
     /**
-     * Type of identity used for the ad
-     * @type {string}
+     * 
+     * @type {IdentityType}
      * @memberof CreateAdRequestCreativesInner
      */
-    identityType: CreateAdRequestCreativesInnerIdentityTypeEnum;
+    identityType: IdentityType;
     /**
      * Identity ID. Required for all ads.
      * @type {string}
@@ -69,11 +160,11 @@ export interface CreateAdRequestCreativesInner {
      */
     identityId: string;
     /**
-     * The format of the ad
-     * @type {string}
+     * 
+     * @type {AdFormat}
      * @memberof CreateAdRequestCreativesInner
      */
-    adFormat: CreateAdRequestCreativesInnerAdFormatEnum;
+    adFormat: AdFormat;
     /**
      * Required when ad_format is SINGLE_VIDEO and identity_type is CUSTOMIZED_USER.
      * Video ID from /file/video/ad/search/.
@@ -118,11 +209,11 @@ export interface CreateAdRequestCreativesInner {
      */
     catalogId?: string;
     /**
-     * Different dimensions to choose products
-     * @type {string}
+     * 
+     * @type {ProductSpecificType}
      * @memberof CreateAdRequestCreativesInner
      */
-    productSpecificType?: CreateAdRequestCreativesInnerProductSpecificTypeEnum;
+    productSpecificType?: ProductSpecificType;
     /**
      * Product SPU IDs. Required in specific scenarios:
      * - When shopping_ads_type is VIDEO, product_source is CATALOG, and product_specific_type is PRODUCT_SET
@@ -150,22 +241,22 @@ export interface CreateAdRequestCreativesInner {
      * Required when product_source is SHOWCASE.
      * List of Showcase products to use in ad. Max size: 20.
      * 
-     * @type {Array<CreateAdRequestCreativesInnerShowcaseProductsInner>}
+     * @type {Array<ShowcaseProduct>}
      * @memberof CreateAdRequestCreativesInner
      */
-    showcaseProducts?: Array<CreateAdRequestCreativesInnerShowcaseProductsInner>;
+    showcaseProducts?: Array<ShowcaseProduct>;
     /**
-     * Video type for Product Sales scenarios
-     * @type {string}
+     * 
+     * @type {VideoStrategy}
      * @memberof CreateAdRequestCreativesInner
      */
-    verticalVideoStrategy?: CreateAdRequestCreativesInnerVerticalVideoStrategyEnum;
+    verticalVideoStrategy?: VideoStrategy;
     /**
-     * Dynamic destination strategy
-     * @type {string}
+     * 
+     * @type {DynamicDestination}
      * @memberof CreateAdRequestCreativesInner
      */
-    dynamicFormat?: CreateAdRequestCreativesInnerDynamicFormatEnum;
+    dynamicFormat?: DynamicDestination;
     /**
      * ID of music to use in TikTok Carousel Ad.
      * Required for:
@@ -227,10 +318,10 @@ export interface CreateAdRequestCreativesInner {
     cardId?: string;
     /**
      * URL parameters for tracking clicks and interactions.
-     * @type {Array<CreateAdRequestCreativesInnerUtmParamsInner>}
+     * @type {Array<UtmParameter>}
      * @memberof CreateAdRequestCreativesInner
      */
-    utmParams?: Array<CreateAdRequestCreativesInnerUtmParamsInner>;
+    utmParams?: Array<UtmParameter>;
     /**
      * Page ID for Instant form, Custom TikTok Instant Page or App Profile Page.
      * @type {string}
@@ -244,11 +335,11 @@ export interface CreateAdRequestCreativesInner {
      */
     cppUrl?: string;
     /**
-     * Category of TikTok page
-     * @type {string}
+     * 
+     * @type {TikTokPageCategory}
      * @memberof CreateAdRequestCreativesInner
      */
-    tiktokPageCategory?: CreateAdRequestCreativesInnerTiktokPageCategoryEnum;
+    tiktokPageCategory?: TikTokPageCategory;
     /**
      * Phone number for click-to-call ads.
      * @type {string}
@@ -274,47 +365,47 @@ export interface CreateAdRequestCreativesInner {
      */
     deeplink?: string;
     /**
-     * Type of deeplink
-     * @type {string}
+     * 
+     * @type {DeeplinkType}
      * @memberof CreateAdRequestCreativesInner
      */
-    deeplinkType?: CreateAdRequestCreativesInnerDeeplinkTypeEnum;
+    deeplinkType?: DeeplinkType;
     /**
-     * Format of the deeplink
-     * @type {string}
+     * 
+     * @type {DeeplinkFormatType}
      * @memberof CreateAdRequestCreativesInner
      */
-    deeplinkFormatType?: CreateAdRequestCreativesInnerDeeplinkFormatTypeEnum;
+    deeplinkFormatType?: DeeplinkFormatType;
     /**
-     * Source of deeplink for Shopping Ads
-     * @type {string}
+     * 
+     * @type {ShoppingAdsDeeplinkType}
      * @memberof CreateAdRequestCreativesInner
      */
-    shoppingAdsDeeplinkType?: CreateAdRequestCreativesInnerShoppingAdsDeeplinkTypeEnum;
+    shoppingAdsDeeplinkType?: ShoppingAdsDeeplinkType;
     /**
      * Deeplink URL parameters for tracking.
-     * @type {Array<CreateAdRequestCreativesInnerUtmParamsInner>}
+     * @type {Array<UtmParameter>}
      * @memberof CreateAdRequestCreativesInner
      */
-    deeplinkUtmParams?: Array<CreateAdRequestCreativesInnerUtmParamsInner>;
+    deeplinkUtmParams?: Array<UtmParameter>;
     /**
-     * Fallback type when deeplink fails
-     * @type {string}
+     * 
+     * @type {FallbackType}
      * @memberof CreateAdRequestCreativesInner
      */
-    shoppingAdsFallbackType?: CreateAdRequestCreativesInnerShoppingAdsFallbackTypeEnum;
+    shoppingAdsFallbackType?: FallbackType;
     /**
-     * Fallback type when deeplink fails
-     * @type {string}
+     * 
+     * @type {FallbackType}
      * @memberof CreateAdRequestCreativesInner
      */
-    fallbackType?: CreateAdRequestCreativesInnerFallbackTypeEnum;
+    fallbackType?: FallbackType;
     /**
-     * Dynamic destination strategy
-     * @type {string}
+     * 
+     * @type {DynamicDestination}
      * @memberof CreateAdRequestCreativesInner
      */
-    dynamicDestination?: CreateAdRequestCreativesInnerDynamicDestinationEnum;
+    dynamicDestination?: DynamicDestination;
     /**
      * Whether to use TikTok Instant Product Page.
      * @type {boolean}
@@ -328,29 +419,29 @@ export interface CreateAdRequestCreativesInner {
      */
     pageImageIndex?: number;
     /**
-     * AI-generated content disclosure type
-     * @type {string}
+     * 
+     * @type {AigcDisclosureType}
      * @memberof CreateAdRequestCreativesInner
      */
-    aigcDisclosureType?: CreateAdRequestCreativesInnerAigcDisclosureTypeEnum;
-    /**
-     * Type of disclaimer
-     * @type {string}
-     * @memberof CreateAdRequestCreativesInner
-     */
-    disclaimerType?: CreateAdRequestCreativesInnerDisclaimerTypeEnum;
+    aigcDisclosureType?: AigcDisclosureType;
     /**
      * 
-     * @type {CreateAdRequestCreativesInnerDisclaimerText}
+     * @type {DisclaimerType}
      * @memberof CreateAdRequestCreativesInner
      */
-    disclaimerText?: CreateAdRequestCreativesInnerDisclaimerText;
+    disclaimerType?: DisclaimerType;
+    /**
+     * 
+     * @type {DisclaimerText}
+     * @memberof CreateAdRequestCreativesInner
+     */
+    disclaimerText?: DisclaimerText;
     /**
      * Clickable disclaimers. Max size 3.
-     * @type {Array<CreateAdRequestCreativesInnerDisclaimerClickableTextsInner>}
+     * @type {Array<ClickableDisclaimer>}
      * @memberof CreateAdRequestCreativesInner
      */
-    disclaimerClickableTexts?: Array<CreateAdRequestCreativesInnerDisclaimerClickableTextsInner>;
+    disclaimerClickableTexts?: Array<ClickableDisclaimer>;
     /**
      * Pixel ID to track offsite events.
      * @type {number}
@@ -376,11 +467,11 @@ export interface CreateAdRequestCreativesInner {
      */
     trackingMessageEventSetId?: string;
     /**
-     * Post-bid measurement partner
-     * @type {string}
+     * 
+     * @type {PostbidPartner}
      * @memberof CreateAdRequestCreativesInner
      */
-    viewabilityPostbidPartner?: CreateAdRequestCreativesInnerViewabilityPostbidPartnerEnum;
+    viewabilityPostbidPartner?: PostbidPartner;
     /**
      * Wrapped VAST URL for viewability measurement.
      * @type {string}
@@ -388,11 +479,11 @@ export interface CreateAdRequestCreativesInner {
      */
     viewabilityVastUrl?: string;
     /**
-     * Post-bid measurement partner
-     * @type {string}
+     * 
+     * @type {PostbidPartner}
      * @memberof CreateAdRequestCreativesInner
      */
-    brandSafetyPostbidPartner?: CreateAdRequestCreativesInnerBrandSafetyPostbidPartnerEnum;
+    brandSafetyPostbidPartner?: PostbidPartner;
     /**
      * Wrapped VAST URL for brand safety measurement.
      * @type {string}
@@ -411,172 +502,11 @@ export interface CreateAdRequestCreativesInner {
 /**
  * @export
  */
-export const CreateAdRequestCreativesInnerIdentityTypeEnum = {
-    CustomizedUser: 'CUSTOMIZED_USER',
-    AuthCode: 'AUTH_CODE',
-    TtUser: 'TT_USER',
-    BcAuthTt: 'BC_AUTH_TT'
-} as const;
-export type CreateAdRequestCreativesInnerIdentityTypeEnum = typeof CreateAdRequestCreativesInnerIdentityTypeEnum[keyof typeof CreateAdRequestCreativesInnerIdentityTypeEnum];
-
-/**
- * @export
- */
-export const CreateAdRequestCreativesInnerAdFormatEnum = {
-    SingleImage: 'SINGLE_IMAGE',
-    SingleVideo: 'SINGLE_VIDEO',
-    LiveContent: 'LIVE_CONTENT',
-    CarouselAds: 'CAROUSEL_ADS',
-    CatalogCarousel: 'CATALOG_CAROUSEL'
-} as const;
-export type CreateAdRequestCreativesInnerAdFormatEnum = typeof CreateAdRequestCreativesInnerAdFormatEnum[keyof typeof CreateAdRequestCreativesInnerAdFormatEnum];
-
-/**
- * @export
- */
-export const CreateAdRequestCreativesInnerProductSpecificTypeEnum = {
-    All: 'ALL',
-    ProductSet: 'PRODUCT_SET',
-    CustomizedProducts: 'CUSTOMIZED_PRODUCTS'
-} as const;
-export type CreateAdRequestCreativesInnerProductSpecificTypeEnum = typeof CreateAdRequestCreativesInnerProductSpecificTypeEnum[keyof typeof CreateAdRequestCreativesInnerProductSpecificTypeEnum];
-
-/**
- * @export
- */
-export const CreateAdRequestCreativesInnerVerticalVideoStrategyEnum = {
-    Unset: 'UNSET',
-    SingleVideo: 'SINGLE_VIDEO',
-    CatalogVideos: 'CATALOG_VIDEOS',
-    CatalogUploadedVideos: 'CATALOG_UPLOADED_VIDEOS',
-    LiveStream: 'LIVE_STREAM'
-} as const;
-export type CreateAdRequestCreativesInnerVerticalVideoStrategyEnum = typeof CreateAdRequestCreativesInnerVerticalVideoStrategyEnum[keyof typeof CreateAdRequestCreativesInnerVerticalVideoStrategyEnum];
-
-/**
- * @export
- */
-export const CreateAdRequestCreativesInnerDynamicFormatEnum = {
-    Dlp: 'DLP',
-    Unset: 'UNSET'
-} as const;
-export type CreateAdRequestCreativesInnerDynamicFormatEnum = typeof CreateAdRequestCreativesInnerDynamicFormatEnum[keyof typeof CreateAdRequestCreativesInnerDynamicFormatEnum];
-
-/**
- * @export
- */
 export const CreateAdRequestCreativesInnerDarkPostStatusEnum = {
     True: 'true',
     False: 'false'
 } as const;
 export type CreateAdRequestCreativesInnerDarkPostStatusEnum = typeof CreateAdRequestCreativesInnerDarkPostStatusEnum[keyof typeof CreateAdRequestCreativesInnerDarkPostStatusEnum];
-
-/**
- * @export
- */
-export const CreateAdRequestCreativesInnerTiktokPageCategoryEnum = {
-    ProfilePage: 'PROFILE_PAGE',
-    OtherTiktokPage: 'OTHER_TIKTOK_PAGE',
-    TiktokInstantPage: 'TIKTOK_INSTANT_PAGE'
-} as const;
-export type CreateAdRequestCreativesInnerTiktokPageCategoryEnum = typeof CreateAdRequestCreativesInnerTiktokPageCategoryEnum[keyof typeof CreateAdRequestCreativesInnerTiktokPageCategoryEnum];
-
-/**
- * @export
- */
-export const CreateAdRequestCreativesInnerDeeplinkTypeEnum = {
-    Normal: 'NORMAL',
-    DeferredDeeplink: 'DEFERRED_DEEPLINK'
-} as const;
-export type CreateAdRequestCreativesInnerDeeplinkTypeEnum = typeof CreateAdRequestCreativesInnerDeeplinkTypeEnum[keyof typeof CreateAdRequestCreativesInnerDeeplinkTypeEnum];
-
-/**
- * @export
- */
-export const CreateAdRequestCreativesInnerDeeplinkFormatTypeEnum = {
-    UniversalOrAppLink: 'UNIVERSAL_OR_APP_LINK',
-    SchemeLink: 'SCHEME_LINK'
-} as const;
-export type CreateAdRequestCreativesInnerDeeplinkFormatTypeEnum = typeof CreateAdRequestCreativesInnerDeeplinkFormatTypeEnum[keyof typeof CreateAdRequestCreativesInnerDeeplinkFormatTypeEnum];
-
-/**
- * @export
- */
-export const CreateAdRequestCreativesInnerShoppingAdsDeeplinkTypeEnum = {
-    None: 'NONE',
-    Custom: 'CUSTOM',
-    ShoppingAds: 'SHOPPING_ADS'
-} as const;
-export type CreateAdRequestCreativesInnerShoppingAdsDeeplinkTypeEnum = typeof CreateAdRequestCreativesInnerShoppingAdsDeeplinkTypeEnum[keyof typeof CreateAdRequestCreativesInnerShoppingAdsDeeplinkTypeEnum];
-
-/**
- * @export
- */
-export const CreateAdRequestCreativesInnerShoppingAdsFallbackTypeEnum = {
-    AppInstall: 'APP_INSTALL',
-    Website: 'WEBSITE',
-    Unset: 'UNSET'
-} as const;
-export type CreateAdRequestCreativesInnerShoppingAdsFallbackTypeEnum = typeof CreateAdRequestCreativesInnerShoppingAdsFallbackTypeEnum[keyof typeof CreateAdRequestCreativesInnerShoppingAdsFallbackTypeEnum];
-
-/**
- * @export
- */
-export const CreateAdRequestCreativesInnerFallbackTypeEnum = {
-    AppInstall: 'APP_INSTALL',
-    Website: 'WEBSITE',
-    Unset: 'UNSET'
-} as const;
-export type CreateAdRequestCreativesInnerFallbackTypeEnum = typeof CreateAdRequestCreativesInnerFallbackTypeEnum[keyof typeof CreateAdRequestCreativesInnerFallbackTypeEnum];
-
-/**
- * @export
- */
-export const CreateAdRequestCreativesInnerDynamicDestinationEnum = {
-    Dlp: 'DLP',
-    Unset: 'UNSET'
-} as const;
-export type CreateAdRequestCreativesInnerDynamicDestinationEnum = typeof CreateAdRequestCreativesInnerDynamicDestinationEnum[keyof typeof CreateAdRequestCreativesInnerDynamicDestinationEnum];
-
-/**
- * @export
- */
-export const CreateAdRequestCreativesInnerAigcDisclosureTypeEnum = {
-    SelfDisclosure: 'SELF_DISCLOSURE',
-    NotDeclared: 'NOT_DECLARED'
-} as const;
-export type CreateAdRequestCreativesInnerAigcDisclosureTypeEnum = typeof CreateAdRequestCreativesInnerAigcDisclosureTypeEnum[keyof typeof CreateAdRequestCreativesInnerAigcDisclosureTypeEnum];
-
-/**
- * @export
- */
-export const CreateAdRequestCreativesInnerDisclaimerTypeEnum = {
-    Link: 'TEXT_LINK',
-    Only: 'TEXT_ONLY'
-} as const;
-export type CreateAdRequestCreativesInnerDisclaimerTypeEnum = typeof CreateAdRequestCreativesInnerDisclaimerTypeEnum[keyof typeof CreateAdRequestCreativesInnerDisclaimerTypeEnum];
-
-/**
- * @export
- */
-export const CreateAdRequestCreativesInnerViewabilityPostbidPartnerEnum = {
-    Moat: 'MOAT',
-    DoubleVerify: 'DOUBLE_VERIFY',
-    Ias: 'IAS',
-    Zefr: 'ZEFR'
-} as const;
-export type CreateAdRequestCreativesInnerViewabilityPostbidPartnerEnum = typeof CreateAdRequestCreativesInnerViewabilityPostbidPartnerEnum[keyof typeof CreateAdRequestCreativesInnerViewabilityPostbidPartnerEnum];
-
-/**
- * @export
- */
-export const CreateAdRequestCreativesInnerBrandSafetyPostbidPartnerEnum = {
-    Moat: 'MOAT',
-    DoubleVerify: 'DOUBLE_VERIFY',
-    Ias: 'IAS',
-    Zefr: 'ZEFR'
-} as const;
-export type CreateAdRequestCreativesInnerBrandSafetyPostbidPartnerEnum = typeof CreateAdRequestCreativesInnerBrandSafetyPostbidPartnerEnum[keyof typeof CreateAdRequestCreativesInnerBrandSafetyPostbidPartnerEnum];
 
 /**
  * @export
@@ -610,22 +540,22 @@ export function CreateAdRequestCreativesInnerFromJSONTyped(json: any, ignoreDisc
     return {
         
         'adName': json['ad_name'],
-        'identityType': json['identity_type'],
+        'identityType': IdentityTypeFromJSON(json['identity_type']),
         'identityId': json['identity_id'],
-        'adFormat': json['ad_format'],
+        'adFormat': AdFormatFromJSON(json['ad_format']),
         'videoId': json['video_id'] == null ? undefined : json['video_id'],
         'imageIds': json['image_ids'] == null ? undefined : json['image_ids'],
         'adText': json['ad_text'] == null ? undefined : json['ad_text'],
         'callToAction': json['call_to_action'] == null ? undefined : json['call_to_action'],
         'landingPageUrl': json['landing_page_url'] == null ? undefined : json['landing_page_url'],
         'catalogId': json['catalog_id'] == null ? undefined : json['catalog_id'],
-        'productSpecificType': json['product_specific_type'] == null ? undefined : json['product_specific_type'],
+        'productSpecificType': json['product_specific_type'] == null ? undefined : ProductSpecificTypeFromJSON(json['product_specific_type']),
         'itemGroupIds': json['item_group_ids'] == null ? undefined : json['item_group_ids'],
         'productSetId': json['product_set_id'] == null ? undefined : json['product_set_id'],
         'skuIds': json['sku_ids'] == null ? undefined : json['sku_ids'],
-        'showcaseProducts': json['showcase_products'] == null ? undefined : ((json['showcase_products'] as Array<any>).map(CreateAdRequestCreativesInnerShowcaseProductsInnerFromJSON)),
-        'verticalVideoStrategy': json['vertical_video_strategy'] == null ? undefined : json['vertical_video_strategy'],
-        'dynamicFormat': json['dynamic_format'] == null ? undefined : json['dynamic_format'],
+        'showcaseProducts': json['showcase_products'] == null ? undefined : ((json['showcase_products'] as Array<any>).map(ShowcaseProductFromJSON)),
+        'verticalVideoStrategy': json['vertical_video_strategy'] == null ? undefined : VideoStrategyFromJSON(json['vertical_video_strategy']),
+        'dynamicFormat': json['dynamic_format'] == null ? undefined : DynamicDestinationFromJSON(json['dynamic_format']),
         'musicId': json['music_id'] == null ? undefined : json['music_id'],
         'tiktokItemId': json['tiktok_item_id'] == null ? undefined : json['tiktok_item_id'],
         'promotionalMusicDisabled': json['promotional_music_disabled'] == null ? undefined : json['promotional_music_disabled'],
@@ -633,34 +563,34 @@ export function CreateAdRequestCreativesInnerFromJSONTyped(json: any, ignoreDisc
         'shoppingAdsVideoPackageId': json['shopping_ads_video_package_id'] == null ? undefined : json['shopping_ads_video_package_id'],
         'callToActionId': json['call_to_action_id'] == null ? undefined : json['call_to_action_id'],
         'cardId': json['card_id'] == null ? undefined : json['card_id'],
-        'utmParams': json['utm_params'] == null ? undefined : ((json['utm_params'] as Array<any>).map(CreateAdRequestCreativesInnerUtmParamsInnerFromJSON)),
+        'utmParams': json['utm_params'] == null ? undefined : ((json['utm_params'] as Array<any>).map(UtmParameterFromJSON)),
         'pageId': json['page_id'] == null ? undefined : json['page_id'],
         'cppUrl': json['cpp_url'] == null ? undefined : json['cpp_url'],
-        'tiktokPageCategory': json['tiktok_page_category'] == null ? undefined : json['tiktok_page_category'],
+        'tiktokPageCategory': json['tiktok_page_category'] == null ? undefined : TikTokPageCategoryFromJSON(json['tiktok_page_category']),
         'phoneNumber': json['phone_number'] == null ? undefined : json['phone_number'],
         'phoneRegionCode': json['phone_region_code'] == null ? undefined : json['phone_region_code'],
         'phoneRegionCallingCode': json['phone_region_calling_code'] == null ? undefined : json['phone_region_calling_code'],
         'deeplink': json['deeplink'] == null ? undefined : json['deeplink'],
-        'deeplinkType': json['deeplink_type'] == null ? undefined : json['deeplink_type'],
-        'deeplinkFormatType': json['deeplink_format_type'] == null ? undefined : json['deeplink_format_type'],
-        'shoppingAdsDeeplinkType': json['shopping_ads_deeplink_type'] == null ? undefined : json['shopping_ads_deeplink_type'],
-        'deeplinkUtmParams': json['deeplink_utm_params'] == null ? undefined : ((json['deeplink_utm_params'] as Array<any>).map(CreateAdRequestCreativesInnerUtmParamsInnerFromJSON)),
-        'shoppingAdsFallbackType': json['shopping_ads_fallback_type'] == null ? undefined : json['shopping_ads_fallback_type'],
-        'fallbackType': json['fallback_type'] == null ? undefined : json['fallback_type'],
-        'dynamicDestination': json['dynamic_destination'] == null ? undefined : json['dynamic_destination'],
+        'deeplinkType': json['deeplink_type'] == null ? undefined : DeeplinkTypeFromJSON(json['deeplink_type']),
+        'deeplinkFormatType': json['deeplink_format_type'] == null ? undefined : DeeplinkFormatTypeFromJSON(json['deeplink_format_type']),
+        'shoppingAdsDeeplinkType': json['shopping_ads_deeplink_type'] == null ? undefined : ShoppingAdsDeeplinkTypeFromJSON(json['shopping_ads_deeplink_type']),
+        'deeplinkUtmParams': json['deeplink_utm_params'] == null ? undefined : ((json['deeplink_utm_params'] as Array<any>).map(UtmParameterFromJSON)),
+        'shoppingAdsFallbackType': json['shopping_ads_fallback_type'] == null ? undefined : FallbackTypeFromJSON(json['shopping_ads_fallback_type']),
+        'fallbackType': json['fallback_type'] == null ? undefined : FallbackTypeFromJSON(json['fallback_type']),
+        'dynamicDestination': json['dynamic_destination'] == null ? undefined : DynamicDestinationFromJSON(json['dynamic_destination']),
         'instantProductPageUsed': json['instant_product_page_used'] == null ? undefined : json['instant_product_page_used'],
         'pageImageIndex': json['page_image_index'] == null ? undefined : json['page_image_index'],
-        'aigcDisclosureType': json['aigc_disclosure_type'] == null ? undefined : json['aigc_disclosure_type'],
-        'disclaimerType': json['disclaimer_type'] == null ? undefined : json['disclaimer_type'],
-        'disclaimerText': json['disclaimer_text'] == null ? undefined : CreateAdRequestCreativesInnerDisclaimerTextFromJSON(json['disclaimer_text']),
-        'disclaimerClickableTexts': json['disclaimer_clickable_texts'] == null ? undefined : ((json['disclaimer_clickable_texts'] as Array<any>).map(CreateAdRequestCreativesInnerDisclaimerClickableTextsInnerFromJSON)),
+        'aigcDisclosureType': json['aigc_disclosure_type'] == null ? undefined : AigcDisclosureTypeFromJSON(json['aigc_disclosure_type']),
+        'disclaimerType': json['disclaimer_type'] == null ? undefined : DisclaimerTypeFromJSON(json['disclaimer_type']),
+        'disclaimerText': json['disclaimer_text'] == null ? undefined : DisclaimerTextFromJSON(json['disclaimer_text']),
+        'disclaimerClickableTexts': json['disclaimer_clickable_texts'] == null ? undefined : ((json['disclaimer_clickable_texts'] as Array<any>).map(ClickableDisclaimerFromJSON)),
         'trackingPixelId': json['tracking_pixel_id'] == null ? undefined : json['tracking_pixel_id'],
         'trackingAppId': json['tracking_app_id'] == null ? undefined : json['tracking_app_id'],
         'trackingOfflineEventSetIds': json['tracking_offline_event_set_ids'] == null ? undefined : json['tracking_offline_event_set_ids'],
         'trackingMessageEventSetId': json['tracking_message_event_set_id'] == null ? undefined : json['tracking_message_event_set_id'],
-        'viewabilityPostbidPartner': json['viewability_postbid_partner'] == null ? undefined : json['viewability_postbid_partner'],
+        'viewabilityPostbidPartner': json['viewability_postbid_partner'] == null ? undefined : PostbidPartnerFromJSON(json['viewability_postbid_partner']),
         'viewabilityVastUrl': json['viewability_vast_url'] == null ? undefined : json['viewability_vast_url'],
-        'brandSafetyPostbidPartner': json['brand_safety_postbid_partner'] == null ? undefined : json['brand_safety_postbid_partner'],
+        'brandSafetyPostbidPartner': json['brand_safety_postbid_partner'] == null ? undefined : PostbidPartnerFromJSON(json['brand_safety_postbid_partner']),
         'brandSafetyVastUrl': json['brand_safety_vast_url'] == null ? undefined : json['brand_safety_vast_url'],
         'operationStatus': json['operation_status'] == null ? undefined : json['operation_status'],
     };
@@ -678,22 +608,22 @@ export function CreateAdRequestCreativesInnerToJSONTyped(value?: CreateAdRequest
     return {
         
         'ad_name': value['adName'],
-        'identity_type': value['identityType'],
+        'identity_type': IdentityTypeToJSON(value['identityType']),
         'identity_id': value['identityId'],
-        'ad_format': value['adFormat'],
+        'ad_format': AdFormatToJSON(value['adFormat']),
         'video_id': value['videoId'],
         'image_ids': value['imageIds'],
         'ad_text': value['adText'],
         'call_to_action': value['callToAction'],
         'landing_page_url': value['landingPageUrl'],
         'catalog_id': value['catalogId'],
-        'product_specific_type': value['productSpecificType'],
+        'product_specific_type': ProductSpecificTypeToJSON(value['productSpecificType']),
         'item_group_ids': value['itemGroupIds'],
         'product_set_id': value['productSetId'],
         'sku_ids': value['skuIds'],
-        'showcase_products': value['showcaseProducts'] == null ? undefined : ((value['showcaseProducts'] as Array<any>).map(CreateAdRequestCreativesInnerShowcaseProductsInnerToJSON)),
-        'vertical_video_strategy': value['verticalVideoStrategy'],
-        'dynamic_format': value['dynamicFormat'],
+        'showcase_products': value['showcaseProducts'] == null ? undefined : ((value['showcaseProducts'] as Array<any>).map(ShowcaseProductToJSON)),
+        'vertical_video_strategy': VideoStrategyToJSON(value['verticalVideoStrategy']),
+        'dynamic_format': DynamicDestinationToJSON(value['dynamicFormat']),
         'music_id': value['musicId'],
         'tiktok_item_id': value['tiktokItemId'],
         'promotional_music_disabled': value['promotionalMusicDisabled'],
@@ -701,34 +631,34 @@ export function CreateAdRequestCreativesInnerToJSONTyped(value?: CreateAdRequest
         'shopping_ads_video_package_id': value['shoppingAdsVideoPackageId'],
         'call_to_action_id': value['callToActionId'],
         'card_id': value['cardId'],
-        'utm_params': value['utmParams'] == null ? undefined : ((value['utmParams'] as Array<any>).map(CreateAdRequestCreativesInnerUtmParamsInnerToJSON)),
+        'utm_params': value['utmParams'] == null ? undefined : ((value['utmParams'] as Array<any>).map(UtmParameterToJSON)),
         'page_id': value['pageId'],
         'cpp_url': value['cppUrl'],
-        'tiktok_page_category': value['tiktokPageCategory'],
+        'tiktok_page_category': TikTokPageCategoryToJSON(value['tiktokPageCategory']),
         'phone_number': value['phoneNumber'],
         'phone_region_code': value['phoneRegionCode'],
         'phone_region_calling_code': value['phoneRegionCallingCode'],
         'deeplink': value['deeplink'],
-        'deeplink_type': value['deeplinkType'],
-        'deeplink_format_type': value['deeplinkFormatType'],
-        'shopping_ads_deeplink_type': value['shoppingAdsDeeplinkType'],
-        'deeplink_utm_params': value['deeplinkUtmParams'] == null ? undefined : ((value['deeplinkUtmParams'] as Array<any>).map(CreateAdRequestCreativesInnerUtmParamsInnerToJSON)),
-        'shopping_ads_fallback_type': value['shoppingAdsFallbackType'],
-        'fallback_type': value['fallbackType'],
-        'dynamic_destination': value['dynamicDestination'],
+        'deeplink_type': DeeplinkTypeToJSON(value['deeplinkType']),
+        'deeplink_format_type': DeeplinkFormatTypeToJSON(value['deeplinkFormatType']),
+        'shopping_ads_deeplink_type': ShoppingAdsDeeplinkTypeToJSON(value['shoppingAdsDeeplinkType']),
+        'deeplink_utm_params': value['deeplinkUtmParams'] == null ? undefined : ((value['deeplinkUtmParams'] as Array<any>).map(UtmParameterToJSON)),
+        'shopping_ads_fallback_type': FallbackTypeToJSON(value['shoppingAdsFallbackType']),
+        'fallback_type': FallbackTypeToJSON(value['fallbackType']),
+        'dynamic_destination': DynamicDestinationToJSON(value['dynamicDestination']),
         'instant_product_page_used': value['instantProductPageUsed'],
         'page_image_index': value['pageImageIndex'],
-        'aigc_disclosure_type': value['aigcDisclosureType'],
-        'disclaimer_type': value['disclaimerType'],
-        'disclaimer_text': CreateAdRequestCreativesInnerDisclaimerTextToJSON(value['disclaimerText']),
-        'disclaimer_clickable_texts': value['disclaimerClickableTexts'] == null ? undefined : ((value['disclaimerClickableTexts'] as Array<any>).map(CreateAdRequestCreativesInnerDisclaimerClickableTextsInnerToJSON)),
+        'aigc_disclosure_type': AigcDisclosureTypeToJSON(value['aigcDisclosureType']),
+        'disclaimer_type': DisclaimerTypeToJSON(value['disclaimerType']),
+        'disclaimer_text': DisclaimerTextToJSON(value['disclaimerText']),
+        'disclaimer_clickable_texts': value['disclaimerClickableTexts'] == null ? undefined : ((value['disclaimerClickableTexts'] as Array<any>).map(ClickableDisclaimerToJSON)),
         'tracking_pixel_id': value['trackingPixelId'],
         'tracking_app_id': value['trackingAppId'],
         'tracking_offline_event_set_ids': value['trackingOfflineEventSetIds'],
         'tracking_message_event_set_id': value['trackingMessageEventSetId'],
-        'viewability_postbid_partner': value['viewabilityPostbidPartner'],
+        'viewability_postbid_partner': PostbidPartnerToJSON(value['viewabilityPostbidPartner']),
         'viewability_vast_url': value['viewabilityVastUrl'],
-        'brand_safety_postbid_partner': value['brandSafetyPostbidPartner'],
+        'brand_safety_postbid_partner': PostbidPartnerToJSON(value['brandSafetyPostbidPartner']),
         'brand_safety_vast_url': value['brandSafetyVastUrl'],
         'operation_status': value['operationStatus'],
     };

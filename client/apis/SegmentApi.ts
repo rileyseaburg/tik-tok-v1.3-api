@@ -15,31 +15,31 @@
 
 import * as runtime from '../runtime';
 import type {
-  AppealAdGroup200Response,
-  CreateComment400Response,
-  ManageAudienceSegment200Response,
-  ManageAudienceSegmentRequest,
-  ManageSegmentMappingRequest,
+  CreateAudienceSegment200Response,
+  CreateAudienceSegmentRequest,
+  CreateSegmentMapping200Response,
+  CreateSegmentMappingRequest,
+  ErrorResponse,
 } from '../models/index';
 import {
-    AppealAdGroup200ResponseFromJSON,
-    AppealAdGroup200ResponseToJSON,
-    CreateComment400ResponseFromJSON,
-    CreateComment400ResponseToJSON,
-    ManageAudienceSegment200ResponseFromJSON,
-    ManageAudienceSegment200ResponseToJSON,
-    ManageAudienceSegmentRequestFromJSON,
-    ManageAudienceSegmentRequestToJSON,
-    ManageSegmentMappingRequestFromJSON,
-    ManageSegmentMappingRequestToJSON,
+    CreateAudienceSegment200ResponseFromJSON,
+    CreateAudienceSegment200ResponseToJSON,
+    CreateAudienceSegmentRequestFromJSON,
+    CreateAudienceSegmentRequestToJSON,
+    CreateSegmentMapping200ResponseFromJSON,
+    CreateSegmentMapping200ResponseToJSON,
+    CreateSegmentMappingRequestFromJSON,
+    CreateSegmentMappingRequestToJSON,
+    ErrorResponseFromJSON,
+    ErrorResponseToJSON,
 } from '../models/index';
 
-export interface ManageAudienceSegmentOperationRequest {
-    manageAudienceSegmentRequest: ManageAudienceSegmentRequest;
+export interface CreateAudienceSegmentOperationRequest {
+    createAudienceSegmentRequest: CreateAudienceSegmentRequest;
 }
 
-export interface ManageSegmentMappingOperationRequest {
-    manageSegmentMappingRequest: ManageSegmentMappingRequest;
+export interface CreateSegmentMappingOperationRequest {
+    createSegmentMappingRequest: CreateSegmentMappingRequest;
 }
 
 /**
@@ -48,14 +48,14 @@ export interface ManageSegmentMappingOperationRequest {
 export class SegmentApi extends runtime.BaseAPI {
 
     /**
-     * Create or delete an audience segment. Requires Streaming API access (apply via Developer Portal).  Notes: - Rate limit: 1 QPS per advertiser account - Maximum 400 audience segments per advertiser account - Names over 70 characters truncated to 67 + \"...\" - See Streaming API docs for:   * Multiple advertisers with business account   * Mixed segments with IDFA/AAID   * Email normalization rules 
-     * Create/Delete audience segment
+     * Create a new audience segment for targeting
+     * Create audience segment
      */
-    async manageAudienceSegmentRaw(requestParameters: ManageAudienceSegmentOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ManageAudienceSegment200Response>> {
-        if (requestParameters['manageAudienceSegmentRequest'] == null) {
+    async createAudienceSegmentRaw(requestParameters: CreateAudienceSegmentOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateAudienceSegment200Response>> {
+        if (requestParameters['createAudienceSegmentRequest'] == null) {
             throw new runtime.RequiredError(
-                'manageAudienceSegmentRequest',
-                'Required parameter "manageAudienceSegmentRequest" was null or undefined when calling manageAudienceSegment().'
+                'createAudienceSegmentRequest',
+                'Required parameter "createAudienceSegmentRequest" was null or undefined when calling createAudienceSegment().'
             );
         }
 
@@ -74,30 +74,30 @@ export class SegmentApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: ManageAudienceSegmentRequestToJSON(requestParameters['manageAudienceSegmentRequest']),
+            body: CreateAudienceSegmentRequestToJSON(requestParameters['createAudienceSegmentRequest']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ManageAudienceSegment200ResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CreateAudienceSegment200ResponseFromJSON(jsonValue));
     }
 
     /**
-     * Create or delete an audience segment. Requires Streaming API access (apply via Developer Portal).  Notes: - Rate limit: 1 QPS per advertiser account - Maximum 400 audience segments per advertiser account - Names over 70 characters truncated to 67 + \"...\" - See Streaming API docs for:   * Multiple advertisers with business account   * Mixed segments with IDFA/AAID   * Email normalization rules 
-     * Create/Delete audience segment
+     * Create a new audience segment for targeting
+     * Create audience segment
      */
-    async manageAudienceSegment(requestParameters: ManageAudienceSegmentOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ManageAudienceSegment200Response> {
-        const response = await this.manageAudienceSegmentRaw(requestParameters, initOverrides);
+    async createAudienceSegment(requestParameters: CreateAudienceSegmentOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateAudienceSegment200Response> {
+        const response = await this.createAudienceSegmentRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
-     * Add or delete mappings to/from audience segments. Supports single ID mapping (one audience ID per user/device) or multiple ID mapping (multiple audience IDs per user/device).  Rate Limits: - Maximum 10 audience IDs per request - 5,000 QPS per advertiser account per app - 1 billion IDs (user/device) per day per advertiser account - Streaming API QPS limits:   * Basic: 10,000 QPS   * Advanced: 20,000 QPS   * Premium: 30,000 QPS   * Ultimate: 50,000 QPS - Maximum 1,000 IDs per request payload  SLA: - Immediate success/error response - Asynchronous ID processing within 48 hours  Notes: - Multiple advertisers under one Business Account:   * Single authorization token for all advertisers   * Can add same segment to multiple audiences across advertisers   * All advertisers must belong to same Business Account - Email normalization rules:   * Remove \'+\' and following chars until \'@\'   * Remove all \'.\' before \'@\'   * Lowercase before hashing - Requires Streaming API access (apply via Developer Portal) 
-     * Create/Delete segment mappings
+     * Map a segment to targeting criteria
+     * Create segment mapping
      */
-    async manageSegmentMappingRaw(requestParameters: ManageSegmentMappingOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AppealAdGroup200Response>> {
-        if (requestParameters['manageSegmentMappingRequest'] == null) {
+    async createSegmentMappingRaw(requestParameters: CreateSegmentMappingOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateSegmentMapping200Response>> {
+        if (requestParameters['createSegmentMappingRequest'] == null) {
             throw new runtime.RequiredError(
-                'manageSegmentMappingRequest',
-                'Required parameter "manageSegmentMappingRequest" was null or undefined when calling manageSegmentMapping().'
+                'createSegmentMappingRequest',
+                'Required parameter "createSegmentMappingRequest" was null or undefined when calling createSegmentMapping().'
             );
         }
 
@@ -116,18 +116,18 @@ export class SegmentApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: ManageSegmentMappingRequestToJSON(requestParameters['manageSegmentMappingRequest']),
+            body: CreateSegmentMappingRequestToJSON(requestParameters['createSegmentMappingRequest']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => AppealAdGroup200ResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => CreateSegmentMapping200ResponseFromJSON(jsonValue));
     }
 
     /**
-     * Add or delete mappings to/from audience segments. Supports single ID mapping (one audience ID per user/device) or multiple ID mapping (multiple audience IDs per user/device).  Rate Limits: - Maximum 10 audience IDs per request - 5,000 QPS per advertiser account per app - 1 billion IDs (user/device) per day per advertiser account - Streaming API QPS limits:   * Basic: 10,000 QPS   * Advanced: 20,000 QPS   * Premium: 30,000 QPS   * Ultimate: 50,000 QPS - Maximum 1,000 IDs per request payload  SLA: - Immediate success/error response - Asynchronous ID processing within 48 hours  Notes: - Multiple advertisers under one Business Account:   * Single authorization token for all advertisers   * Can add same segment to multiple audiences across advertisers   * All advertisers must belong to same Business Account - Email normalization rules:   * Remove \'+\' and following chars until \'@\'   * Remove all \'.\' before \'@\'   * Lowercase before hashing - Requires Streaming API access (apply via Developer Portal) 
-     * Create/Delete segment mappings
+     * Map a segment to targeting criteria
+     * Create segment mapping
      */
-    async manageSegmentMapping(requestParameters: ManageSegmentMappingOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AppealAdGroup200Response> {
-        const response = await this.manageSegmentMappingRaw(requestParameters, initOverrides);
+    async createSegmentMapping(requestParameters: CreateSegmentMappingOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateSegmentMapping200Response> {
+        const response = await this.createSegmentMappingRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

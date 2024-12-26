@@ -15,13 +15,13 @@
 
 import * as runtime from '../runtime';
 import type {
+  AdResponse1,
   CreateAcoAd200Response,
   CreateAcoAdRequest,
   CreateAd200Response,
   CreateAdRequest,
-  CreateComment400Response,
-  CreateSmartCreativeAd200Response,
   CreateSmartCreativeAdRequest,
+  ErrorResponse,
   EstimateAudienceSize200Response,
   EstimateAudienceSizeRequest,
   GetAcoAds200Response,
@@ -37,6 +37,8 @@ import type {
   UpdateAdStatusRequest,
 } from '../models/index';
 import {
+    AdResponse1FromJSON,
+    AdResponse1ToJSON,
     CreateAcoAd200ResponseFromJSON,
     CreateAcoAd200ResponseToJSON,
     CreateAcoAdRequestFromJSON,
@@ -45,12 +47,10 @@ import {
     CreateAd200ResponseToJSON,
     CreateAdRequestFromJSON,
     CreateAdRequestToJSON,
-    CreateComment400ResponseFromJSON,
-    CreateComment400ResponseToJSON,
-    CreateSmartCreativeAd200ResponseFromJSON,
-    CreateSmartCreativeAd200ResponseToJSON,
     CreateSmartCreativeAdRequestFromJSON,
     CreateSmartCreativeAdRequestToJSON,
+    ErrorResponseFromJSON,
+    ErrorResponseToJSON,
     EstimateAudienceSize200ResponseFromJSON,
     EstimateAudienceSize200ResponseToJSON,
     EstimateAudienceSizeRequestFromJSON,
@@ -112,9 +112,9 @@ export interface GetAdsRequest {
     fields?: Array<string>;
     excludeFieldTypesInResponse?: Array<GetAdsExcludeFieldTypesInResponseEnum>;
     filtering?: GetAdsFilteringParameter;
-    creationFilterStartTime?: string;
-    creationFilterEndTime?: string;
-    modifiedAfter?: string;
+    creationFilterStartTime?: Date;
+    creationFilterEndTime?: Date;
+    modifiedAfter?: Date;
     page?: number;
     pageSize?: number;
 }
@@ -228,7 +228,7 @@ export class AdApi extends runtime.BaseAPI {
      * Create a Smart Creative ad using the provided parameters
      * Create a Smart Creative ad
      */
-    async createSmartCreativeAdRaw(requestParameters: CreateSmartCreativeAdOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateSmartCreativeAd200Response>> {
+    async createSmartCreativeAdRaw(requestParameters: CreateSmartCreativeAdOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AdResponse1>> {
         if (requestParameters['createSmartCreativeAdRequest'] == null) {
             throw new runtime.RequiredError(
                 'createSmartCreativeAdRequest',
@@ -254,14 +254,14 @@ export class AdApi extends runtime.BaseAPI {
             body: CreateSmartCreativeAdRequestToJSON(requestParameters['createSmartCreativeAdRequest']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => CreateSmartCreativeAd200ResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => AdResponse1FromJSON(jsonValue));
     }
 
     /**
      * Create a Smart Creative ad using the provided parameters
      * Create a Smart Creative ad
      */
-    async createSmartCreativeAd(requestParameters: CreateSmartCreativeAdOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateSmartCreativeAd200Response> {
+    async createSmartCreativeAd(requestParameters: CreateSmartCreativeAdOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AdResponse1> {
         const response = await this.createSmartCreativeAdRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -334,11 +334,11 @@ export class AdApi extends runtime.BaseAPI {
         }
 
         if (requestParameters['adgroupIds'] != null) {
-            queryParameters['adgroup_ids'] = requestParameters['adgroupIds'];
+            queryParameters['adgroup_ids'] = requestParameters['adgroupIds']!.join(runtime.COLLECTION_FORMATS["csv"]);
         }
 
         if (requestParameters['excludeFieldTypesInResponse'] != null) {
-            queryParameters['exclude_field_types_in_response'] = requestParameters['excludeFieldTypesInResponse'];
+            queryParameters['exclude_field_types_in_response'] = requestParameters['excludeFieldTypesInResponse']!.join(runtime.COLLECTION_FORMATS["csv"]);
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -392,7 +392,7 @@ export class AdApi extends runtime.BaseAPI {
         }
 
         if (requestParameters['adIds'] != null) {
-            queryParameters['ad_ids'] = requestParameters['adIds'];
+            queryParameters['ad_ids'] = requestParameters['adIds']!.join(runtime.COLLECTION_FORMATS["csv"]);
         }
 
         if (requestParameters['lang'] != null) {
@@ -443,11 +443,11 @@ export class AdApi extends runtime.BaseAPI {
         }
 
         if (requestParameters['fields'] != null) {
-            queryParameters['fields'] = requestParameters['fields'];
+            queryParameters['fields'] = requestParameters['fields']!.join(runtime.COLLECTION_FORMATS["csv"]);
         }
 
         if (requestParameters['excludeFieldTypesInResponse'] != null) {
-            queryParameters['exclude_field_types_in_response'] = requestParameters['excludeFieldTypesInResponse'];
+            queryParameters['exclude_field_types_in_response'] = requestParameters['excludeFieldTypesInResponse']!.join(runtime.COLLECTION_FORMATS["csv"]);
         }
 
         if (requestParameters['filtering'] != null) {
@@ -455,15 +455,15 @@ export class AdApi extends runtime.BaseAPI {
         }
 
         if (requestParameters['creationFilterStartTime'] != null) {
-            queryParameters['creation_filter_start_time'] = requestParameters['creationFilterStartTime'];
+            queryParameters['creation_filter_start_time'] = (requestParameters['creationFilterStartTime'] as any).toISOString();
         }
 
         if (requestParameters['creationFilterEndTime'] != null) {
-            queryParameters['creation_filter_end_time'] = requestParameters['creationFilterEndTime'];
+            queryParameters['creation_filter_end_time'] = (requestParameters['creationFilterEndTime'] as any).toISOString();
         }
 
         if (requestParameters['modifiedAfter'] != null) {
-            queryParameters['modified_after'] = requestParameters['modifiedAfter'];
+            queryParameters['modified_after'] = (requestParameters['modifiedAfter'] as any).toISOString();
         }
 
         if (requestParameters['page'] != null) {

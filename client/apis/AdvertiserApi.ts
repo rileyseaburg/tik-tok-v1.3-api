@@ -15,12 +15,12 @@
 
 import * as runtime from '../runtime';
 import type {
-  CreateComment400Response,
+  ErrorResponse,
   GetAdvertiserInfo200Response,
 } from '../models/index';
 import {
-    CreateComment400ResponseFromJSON,
-    CreateComment400ResponseToJSON,
+    ErrorResponseFromJSON,
+    ErrorResponseToJSON,
     GetAdvertiserInfo200ResponseFromJSON,
     GetAdvertiserInfo200ResponseToJSON,
 } from '../models/index';
@@ -50,11 +50,11 @@ export class AdvertiserApi extends runtime.BaseAPI {
         const queryParameters: any = {};
 
         if (requestParameters['advertiserIds'] != null) {
-            queryParameters['advertiser_ids'] = requestParameters['advertiserIds'];
+            queryParameters['advertiser_ids'] = requestParameters['advertiserIds']!.join(runtime.COLLECTION_FORMATS["csv"]);
         }
 
         if (requestParameters['fields'] != null) {
-            queryParameters['fields'] = requestParameters['fields'];
+            queryParameters['fields'] = requestParameters['fields']!.join(runtime.COLLECTION_FORMATS["csv"]);
         }
 
         const headerParameters: runtime.HTTPHeaders = {};

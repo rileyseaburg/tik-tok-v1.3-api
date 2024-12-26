@@ -41,13 +41,13 @@ import {
     UpdateAcoAdRequestDisplayNameListInnerToJSON,
     UpdateAcoAdRequestDisplayNameListInnerToJSONTyped,
 } from './UpdateAcoAdRequestDisplayNameListInner';
-import type { CreateSmartCreativeAdRequestCreativesInnerCallToActionListInner } from './CreateSmartCreativeAdRequestCreativesInnerCallToActionListInner';
+import type { CallToActionInfo } from './CallToActionInfo';
 import {
-    CreateSmartCreativeAdRequestCreativesInnerCallToActionListInnerFromJSON,
-    CreateSmartCreativeAdRequestCreativesInnerCallToActionListInnerFromJSONTyped,
-    CreateSmartCreativeAdRequestCreativesInnerCallToActionListInnerToJSON,
-    CreateSmartCreativeAdRequestCreativesInnerCallToActionListInnerToJSONTyped,
-} from './CreateSmartCreativeAdRequestCreativesInnerCallToActionListInner';
+    CallToActionInfoFromJSON,
+    CallToActionInfoFromJSONTyped,
+    CallToActionInfoToJSON,
+    CallToActionInfoToJSONTyped,
+} from './CallToActionInfo';
 import type { UpdateAcoAdRequestCommonMaterial } from './UpdateAcoAdRequestCommonMaterial';
 import {
     UpdateAcoAdRequestCommonMaterialFromJSON,
@@ -136,10 +136,10 @@ export interface UpdateAcoAdRequest {
      * Note: Maximum of three call-to-action texts per list.
      * If updating any CTA, you must provide all original CTAs along with their updates.
      * 
-     * @type {Array<CreateSmartCreativeAdRequestCreativesInnerCallToActionListInner>}
+     * @type {Array<CallToActionInfo>}
      * @memberof UpdateAcoAdRequest
      */
-    callToActionList?: Array<CreateSmartCreativeAdRequestCreativesInnerCallToActionListInner>;
+    callToActionList?: Array<CallToActionInfo>;
     /**
      * List of deeplinks. Length range - [0,1]
      * @type {Array<UpdateAcoAdRequestDeeplinkListInner>}
@@ -237,7 +237,7 @@ export function UpdateAcoAdRequestFromJSONTyped(json: any, ignoreDiscriminator: 
         'patchUpdate': json['patch_update'] == null ? undefined : json['patch_update'],
         'mediaInfoList': json['media_info_list'] == null ? undefined : ((json['media_info_list'] as Array<any>).map(UpdateAcoAdRequestMediaInfoListInnerFromJSON)),
         'titleList': json['title_list'] == null ? undefined : ((json['title_list'] as Array<any>).map(UpdateAcoAdRequestTitleListInnerFromJSON)),
-        'callToActionList': json['call_to_action_list'] == null ? undefined : ((json['call_to_action_list'] as Array<any>).map(CreateSmartCreativeAdRequestCreativesInnerCallToActionListInnerFromJSON)),
+        'callToActionList': json['call_to_action_list'] == null ? undefined : ((json['call_to_action_list'] as Array<any>).map(CallToActionInfoFromJSON)),
         'deeplinkList': json['deeplink_list'] == null ? undefined : ((json['deeplink_list'] as Array<any>).map(UpdateAcoAdRequestDeeplinkListInnerFromJSON)),
         'displayNameList': json['display_name_list'] == null ? undefined : ((json['display_name_list'] as Array<any>).map(UpdateAcoAdRequestDisplayNameListInnerFromJSON)),
         'avatarIconList': json['avatar_icon_list'] == null ? undefined : ((json['avatar_icon_list'] as Array<any>).map(UpdateAcoAdRequestAvatarIconListInnerFromJSON)),
@@ -266,7 +266,7 @@ export function UpdateAcoAdRequestToJSONTyped(value?: UpdateAcoAdRequest | null,
         'patch_update': value['patchUpdate'],
         'media_info_list': value['mediaInfoList'] == null ? undefined : ((value['mediaInfoList'] as Array<any>).map(UpdateAcoAdRequestMediaInfoListInnerToJSON)),
         'title_list': value['titleList'] == null ? undefined : ((value['titleList'] as Array<any>).map(UpdateAcoAdRequestTitleListInnerToJSON)),
-        'call_to_action_list': value['callToActionList'] == null ? undefined : ((value['callToActionList'] as Array<any>).map(CreateSmartCreativeAdRequestCreativesInnerCallToActionListInnerToJSON)),
+        'call_to_action_list': value['callToActionList'] == null ? undefined : ((value['callToActionList'] as Array<any>).map(CallToActionInfoToJSON)),
         'deeplink_list': value['deeplinkList'] == null ? undefined : ((value['deeplinkList'] as Array<any>).map(UpdateAcoAdRequestDeeplinkListInnerToJSON)),
         'display_name_list': value['displayNameList'] == null ? undefined : ((value['displayNameList'] as Array<any>).map(UpdateAcoAdRequestDisplayNameListInnerToJSON)),
         'avatar_icon_list': value['avatarIconList'] == null ? undefined : ((value['avatarIconList'] as Array<any>).map(UpdateAcoAdRequestAvatarIconListInnerToJSON)),

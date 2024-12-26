@@ -41,6 +41,13 @@ import {
     UpdateAdRequestCreativesInnerUtmParamsInnerToJSON,
     UpdateAdRequestCreativesInnerUtmParamsInnerToJSONTyped,
 } from './UpdateAdRequestCreativesInnerUtmParamsInner';
+import type { AdFormat } from './AdFormat';
+import {
+    AdFormatFromJSON,
+    AdFormatFromJSONTyped,
+    AdFormatToJSON,
+    AdFormatToJSONTyped,
+} from './AdFormat';
 
 /**
  * 
@@ -112,11 +119,11 @@ export interface UpdateAdRequestCreativesInner {
      */
     skuIds?: Array<string>;
     /**
-     * The format of the ad
-     * @type {string}
+     * 
+     * @type {AdFormat}
      * @memberof UpdateAdRequestCreativesInner
      */
-    adFormat?: UpdateAdRequestCreativesInnerAdFormatEnum;
+    adFormat?: AdFormat;
     /**
      * Video type for Product Sales scenarios
      * @type {string}
@@ -441,18 +448,6 @@ export type UpdateAdRequestCreativesInnerProductSpecificTypeEnum = typeof Update
 /**
  * @export
  */
-export const UpdateAdRequestCreativesInnerAdFormatEnum = {
-    SingleImage: 'SINGLE_IMAGE',
-    SingleVideo: 'SINGLE_VIDEO',
-    LiveContent: 'LIVE_CONTENT',
-    CarouselAds: 'CAROUSEL_ADS',
-    CatalogCarousel: 'CATALOG_CAROUSEL'
-} as const;
-export type UpdateAdRequestCreativesInnerAdFormatEnum = typeof UpdateAdRequestCreativesInnerAdFormatEnum[keyof typeof UpdateAdRequestCreativesInnerAdFormatEnum];
-
-/**
- * @export
- */
 export const UpdateAdRequestCreativesInnerVerticalVideoStrategyEnum = {
     Unset: 'UNSET',
     SingleVideo: 'SINGLE_VIDEO',
@@ -623,7 +618,7 @@ export function UpdateAdRequestCreativesInnerFromJSONTyped(json: any, ignoreDisc
         'itemGroupIds': json['item_group_ids'] == null ? undefined : json['item_group_ids'],
         'productSetId': json['product_set_id'] == null ? undefined : json['product_set_id'],
         'skuIds': json['sku_ids'] == null ? undefined : json['sku_ids'],
-        'adFormat': json['ad_format'] == null ? undefined : json['ad_format'],
+        'adFormat': json['ad_format'] == null ? undefined : AdFormatFromJSON(json['ad_format']),
         'verticalVideoStrategy': json['vertical_video_strategy'] == null ? undefined : json['vertical_video_strategy'],
         'dynamicFormat': json['dynamic_format'] == null ? undefined : json['dynamic_format'],
         'videoId': json['video_id'] == null ? undefined : json['video_id'],
@@ -698,7 +693,7 @@ export function UpdateAdRequestCreativesInnerToJSONTyped(value?: UpdateAdRequest
         'item_group_ids': value['itemGroupIds'],
         'product_set_id': value['productSetId'],
         'sku_ids': value['skuIds'],
-        'ad_format': value['adFormat'],
+        'ad_format': AdFormatToJSON(value['adFormat']),
         'vertical_video_strategy': value['verticalVideoStrategy'],
         'dynamic_format': value['dynamicFormat'],
         'video_id': value['videoId'],

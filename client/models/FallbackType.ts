@@ -14,7 +14,7 @@
 
 
 /**
- * Fallback type when deeplink fails
+ * General fallback type
  * @export
  */
 export const FallbackType = {

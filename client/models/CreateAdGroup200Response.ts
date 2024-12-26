@@ -13,13 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
-import type { CreateAdGroup200ResponseData } from './CreateAdGroup200ResponseData';
+import type { AdGroupResponse2 } from './AdGroupResponse2';
 import {
-    CreateAdGroup200ResponseDataFromJSON,
-    CreateAdGroup200ResponseDataFromJSONTyped,
-    CreateAdGroup200ResponseDataToJSON,
-    CreateAdGroup200ResponseDataToJSONTyped,
-} from './CreateAdGroup200ResponseData';
+    AdGroupResponse2FromJSON,
+    AdGroupResponse2FromJSONTyped,
+    AdGroupResponse2ToJSON,
+    AdGroupResponse2ToJSONTyped,
+} from './AdGroupResponse2';
 
 /**
  * 
@@ -47,10 +47,10 @@ export interface CreateAdGroup200Response {
     requestId?: string;
     /**
      * 
-     * @type {CreateAdGroup200ResponseData}
+     * @type {AdGroupResponse2}
      * @memberof CreateAdGroup200Response
      */
-    data?: CreateAdGroup200ResponseData;
+    data?: AdGroupResponse2;
 }
 
 /**
@@ -73,7 +73,7 @@ export function CreateAdGroup200ResponseFromJSONTyped(json: any, ignoreDiscrimin
         'code': json['code'] == null ? undefined : json['code'],
         'message': json['message'] == null ? undefined : json['message'],
         'requestId': json['request_id'] == null ? undefined : json['request_id'],
-        'data': json['data'] == null ? undefined : CreateAdGroup200ResponseDataFromJSON(json['data']),
+        'data': json['data'] == null ? undefined : AdGroupResponse2FromJSON(json['data']),
     };
 }
 
@@ -91,7 +91,7 @@ export function CreateAdGroup200ResponseToJSONTyped(value?: CreateAdGroup200Resp
         'code': value['code'],
         'message': value['message'],
         'request_id': value['requestId'],
-        'data': CreateAdGroup200ResponseDataToJSON(value['data']),
+        'data': AdGroupResponse2ToJSON(value['data']),
     };
 }
 

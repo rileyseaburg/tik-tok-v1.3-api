@@ -62,13 +62,13 @@ import {
     GetAcoAds200ResponseDataListInnerDeeplinkListInnerToJSON,
     GetAcoAds200ResponseDataListInnerDeeplinkListInnerToJSONTyped,
 } from './GetAcoAds200ResponseDataListInnerDeeplinkListInner';
-import type { CreateSmartCreativeAdRequestCreativesInnerCallToActionListInner } from './CreateSmartCreativeAdRequestCreativesInnerCallToActionListInner';
+import type { CallToActionInfo } from './CallToActionInfo';
 import {
-    CreateSmartCreativeAdRequestCreativesInnerCallToActionListInnerFromJSON,
-    CreateSmartCreativeAdRequestCreativesInnerCallToActionListInnerFromJSONTyped,
-    CreateSmartCreativeAdRequestCreativesInnerCallToActionListInnerToJSON,
-    CreateSmartCreativeAdRequestCreativesInnerCallToActionListInnerToJSONTyped,
-} from './CreateSmartCreativeAdRequestCreativesInnerCallToActionListInner';
+    CallToActionInfoFromJSON,
+    CallToActionInfoFromJSONTyped,
+    CallToActionInfoToJSON,
+    CallToActionInfoToJSONTyped,
+} from './CallToActionInfo';
 import type { CreateAcoAdRequestTitleListInner } from './CreateAcoAdRequestTitleListInner';
 import {
     CreateAcoAdRequestTitleListInnerFromJSON,
@@ -124,10 +124,10 @@ export interface CreateAcoAdRequest {
      * If both are specified, this field will be ignored.
      * Maximum of three call-to-action texts per list.
      * 
-     * @type {Array<CreateSmartCreativeAdRequestCreativesInnerCallToActionListInner>}
+     * @type {Array<CallToActionInfo>}
      * @memberof CreateAcoAdRequest
      */
-    callToActionList?: Array<CreateSmartCreativeAdRequestCreativesInnerCallToActionListInner>;
+    callToActionList?: Array<CallToActionInfo>;
     /**
      * List of deeplinks. Length range - [0,1]
      * @type {Array<GetAcoAds200ResponseDataListInnerDeeplinkListInner>}
@@ -233,7 +233,7 @@ export function CreateAcoAdRequestFromJSONTyped(json: any, ignoreDiscriminator: 
         'adgroupId': json['adgroup_id'],
         'mediaInfoList': ((json['media_info_list'] as Array<any>).map(CreateAcoAdRequestMediaInfoListInnerFromJSON)),
         'titleList': json['title_list'] == null ? undefined : ((json['title_list'] as Array<any>).map(CreateAcoAdRequestTitleListInnerFromJSON)),
-        'callToActionList': json['call_to_action_list'] == null ? undefined : ((json['call_to_action_list'] as Array<any>).map(CreateSmartCreativeAdRequestCreativesInnerCallToActionListInnerFromJSON)),
+        'callToActionList': json['call_to_action_list'] == null ? undefined : ((json['call_to_action_list'] as Array<any>).map(CallToActionInfoFromJSON)),
         'deeplinkList': json['deeplink_list'] == null ? undefined : ((json['deeplink_list'] as Array<any>).map(GetAcoAds200ResponseDataListInnerDeeplinkListInnerFromJSON)),
         'displayNameList': json['display_name_list'] == null ? undefined : ((json['display_name_list'] as Array<any>).map(CreateAcoAdRequestDisplayNameListInnerFromJSON)),
         'pageList': json['page_list'] == null ? undefined : ((json['page_list'] as Array<any>).map(CreateAcoAdRequestPageListInnerFromJSON)),
@@ -262,7 +262,7 @@ export function CreateAcoAdRequestToJSONTyped(value?: CreateAcoAdRequest | null,
         'adgroup_id': value['adgroupId'],
         'media_info_list': ((value['mediaInfoList'] as Array<any>).map(CreateAcoAdRequestMediaInfoListInnerToJSON)),
         'title_list': value['titleList'] == null ? undefined : ((value['titleList'] as Array<any>).map(CreateAcoAdRequestTitleListInnerToJSON)),
-        'call_to_action_list': value['callToActionList'] == null ? undefined : ((value['callToActionList'] as Array<any>).map(CreateSmartCreativeAdRequestCreativesInnerCallToActionListInnerToJSON)),
+        'call_to_action_list': value['callToActionList'] == null ? undefined : ((value['callToActionList'] as Array<any>).map(CallToActionInfoToJSON)),
         'deeplink_list': value['deeplinkList'] == null ? undefined : ((value['deeplinkList'] as Array<any>).map(GetAcoAds200ResponseDataListInnerDeeplinkListInnerToJSON)),
         'display_name_list': value['displayNameList'] == null ? undefined : ((value['displayNameList'] as Array<any>).map(CreateAcoAdRequestDisplayNameListInnerToJSON)),
         'page_list': value['pageList'] == null ? undefined : ((value['pageList'] as Array<any>).map(CreateAcoAdRequestPageListInnerToJSON)),

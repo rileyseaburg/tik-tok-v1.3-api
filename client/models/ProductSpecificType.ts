@@ -14,7 +14,7 @@
 
 
 /**
- * Different dimensions to choose products
+ * Type of product specification
  * @export
  */
 export const ProductSpecificType = {

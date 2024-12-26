@@ -15,14 +15,14 @@
 
 import * as runtime from '../runtime';
 import type {
-  CreateComment400Response,
+  ErrorResponse,
   GetAudienceInsightInfo200Response,
   GetAudienceInsightInfoRequest,
   GetAudienceInsightOverlap200Response,
 } from '../models/index';
 import {
-    CreateComment400ResponseFromJSON,
-    CreateComment400ResponseToJSON,
+    ErrorResponseFromJSON,
+    ErrorResponseToJSON,
     GetAudienceInsightInfo200ResponseFromJSON,
     GetAudienceInsightInfo200ResponseToJSON,
     GetAudienceInsightInfoRequestFromJSON,
@@ -118,7 +118,7 @@ export class AudienceApi extends runtime.BaseAPI {
         }
 
         if (requestParameters['comparisonCustomAudienceIds'] != null) {
-            queryParameters['comparison_custom_audience_ids'] = requestParameters['comparisonCustomAudienceIds'];
+            queryParameters['comparison_custom_audience_ids'] = requestParameters['comparisonCustomAudienceIds']!.join(runtime.COLLECTION_FORMATS["csv"]);
         }
 
         const headerParameters: runtime.HTTPHeaders = {};

@@ -13,34 +13,41 @@
  */
 
 import { mapValues } from '../runtime';
-import type { CreateAdGroupRequestTargetingExpansion } from './CreateAdGroupRequestTargetingExpansion';
+import type { CustomAction } from './CustomAction';
 import {
-    CreateAdGroupRequestTargetingExpansionFromJSON,
-    CreateAdGroupRequestTargetingExpansionFromJSONTyped,
-    CreateAdGroupRequestTargetingExpansionToJSON,
-    CreateAdGroupRequestTargetingExpansionToJSONTyped,
-} from './CreateAdGroupRequestTargetingExpansion';
-import type { CreateAdGroupRequestAudienceRule } from './CreateAdGroupRequestAudienceRule';
+    CustomActionFromJSON,
+    CustomActionFromJSONTyped,
+    CustomActionToJSON,
+    CustomActionToJSONTyped,
+} from './CustomAction';
+import type { AdvertisingObjective } from './AdvertisingObjective';
 import {
-    CreateAdGroupRequestAudienceRuleFromJSON,
-    CreateAdGroupRequestAudienceRuleFromJSONTyped,
-    CreateAdGroupRequestAudienceRuleToJSON,
-    CreateAdGroupRequestAudienceRuleToJSONTyped,
-} from './CreateAdGroupRequestAudienceRule';
-import type { CreateAdGroupRequestIncludedCustomActionsInner } from './CreateAdGroupRequestIncludedCustomActionsInner';
+    AdvertisingObjectiveFromJSON,
+    AdvertisingObjectiveFromJSONTyped,
+    AdvertisingObjectiveToJSON,
+    AdvertisingObjectiveToJSONTyped,
+} from './AdvertisingObjective';
+import type { BehavioralCategory } from './BehavioralCategory';
 import {
-    CreateAdGroupRequestIncludedCustomActionsInnerFromJSON,
-    CreateAdGroupRequestIncludedCustomActionsInnerFromJSONTyped,
-    CreateAdGroupRequestIncludedCustomActionsInnerToJSON,
-    CreateAdGroupRequestIncludedCustomActionsInnerToJSONTyped,
-} from './CreateAdGroupRequestIncludedCustomActionsInner';
-import type { CreateAdGroupRequestActionsInner } from './CreateAdGroupRequestActionsInner';
+    BehavioralCategoryFromJSON,
+    BehavioralCategoryFromJSONTyped,
+    BehavioralCategoryToJSON,
+    BehavioralCategoryToJSONTyped,
+} from './BehavioralCategory';
+import type { TargetingExpansion } from './TargetingExpansion';
 import {
-    CreateAdGroupRequestActionsInnerFromJSON,
-    CreateAdGroupRequestActionsInnerFromJSONTyped,
-    CreateAdGroupRequestActionsInnerToJSON,
-    CreateAdGroupRequestActionsInnerToJSONTyped,
-} from './CreateAdGroupRequestActionsInner';
+    TargetingExpansionFromJSON,
+    TargetingExpansionFromJSONTyped,
+    TargetingExpansionToJSON,
+    TargetingExpansionToJSONTyped,
+} from './TargetingExpansion';
+import type { AudienceRule2 } from './AudienceRule2';
+import {
+    AudienceRule2FromJSON,
+    AudienceRule2FromJSONTyped,
+    AudienceRule2ToJSON,
+    AudienceRule2ToJSONTyped,
+} from './AudienceRule2';
 
 /**
  * 
@@ -91,11 +98,11 @@ export interface EstimateAudienceSizeRequest {
      */
     ios14Targeting?: EstimateAudienceSizeRequestIos14TargetingEnum;
     /**
-     * Campaign advertising objectives
-     * @type {string}
+     * 
+     * @type {AdvertisingObjective}
      * @memberof EstimateAudienceSizeRequest
      */
-    objectiveType: EstimateAudienceSizeRequestObjectiveTypeEnum;
+    objectiveType: AdvertisingObjective;
     /**
      * Optimization goal
      * @type {string}
@@ -156,18 +163,18 @@ export interface EstimateAudienceSizeRequest {
      * Required when shopping_ads_retargeting_type is LAB3.
      * Include conditions for retargeting.
      * 
-     * @type {Array<CreateAdGroupRequestIncludedCustomActionsInner>}
+     * @type {Array<CustomAction>}
      * @memberof EstimateAudienceSizeRequest
      */
-    includedCustomActions?: Array<CreateAdGroupRequestIncludedCustomActionsInner>;
+    includedCustomActions?: Array<CustomAction>;
     /**
      * Required when shopping_ads_retargeting_type is LAB3.
      * Exclude conditions for retargeting.
      * 
-     * @type {Array<CreateAdGroupRequestIncludedCustomActionsInner>}
+     * @type {Array<CustomAction>}
      * @memberof EstimateAudienceSizeRequest
      */
-    excludedCustomActions?: Array<CreateAdGroupRequestIncludedCustomActionsInner>;
+    excludedCustomActions?: Array<CustomAction>;
     /**
      * List of audience IDs
      * @type {Array<string>}
@@ -182,10 +189,10 @@ export interface EstimateAudienceSizeRequest {
     excludedAudienceIds?: Array<string>;
     /**
      * 
-     * @type {CreateAdGroupRequestAudienceRule}
+     * @type {AudienceRule2}
      * @memberof EstimateAudienceSizeRequest
      */
-    audienceRule?: CreateAdGroupRequestAudienceRule;
+    audienceRule?: AudienceRule2;
     /**
      * App retargeting audience type
      * @type {string}
@@ -252,10 +259,10 @@ export interface EstimateAudienceSizeRequest {
     purchaseIntentionKeywordIds?: Array<string>;
     /**
      * Targeting behavioral categories
-     * @type {Array<CreateAdGroupRequestActionsInner>}
+     * @type {Array<BehavioralCategory>}
      * @memberof EstimateAudienceSizeRequest
      */
-    actions?: Array<CreateAdGroupRequestActionsInner>;
+    actions?: Array<BehavioralCategory>;
     /**
      * Video/creator interaction category IDs, hashtags, hashtag bundles.
      * Valid only for TikTok placement.
@@ -340,10 +347,10 @@ export interface EstimateAudienceSizeRequest {
     blockedPangleAppIds?: Array<string>;
     /**
      * 
-     * @type {CreateAdGroupRequestTargetingExpansion}
+     * @type {TargetingExpansion}
      * @memberof EstimateAudienceSizeRequest
      */
-    targetingExpansion?: CreateAdGroupRequestTargetingExpansion;
+    targetingExpansion?: TargetingExpansion;
     /**
      * Whether to enable automated targeting
      * @type {boolean}
@@ -377,22 +384,6 @@ export const EstimateAudienceSizeRequestIos14TargetingEnum = {
     Ios14Plus: 'IOS14_PLUS'
 } as const;
 export type EstimateAudienceSizeRequestIos14TargetingEnum = typeof EstimateAudienceSizeRequestIos14TargetingEnum[keyof typeof EstimateAudienceSizeRequestIos14TargetingEnum];
-
-/**
- * @export
- */
-export const EstimateAudienceSizeRequestObjectiveTypeEnum = {
-    AppPromotion: 'APP_PROMOTION',
-    Conversions: 'CONVERSIONS',
-    Reach: 'REACH',
-    VideoViews: 'VIDEO_VIEWS',
-    Traffic: 'TRAFFIC',
-    LeadGeneration: 'LEAD_GENERATION',
-    ProductSales: 'PRODUCT_SALES',
-    RfReach: 'RF_REACH',
-    WebConversions: 'WEB_CONVERSIONS'
-} as const;
-export type EstimateAudienceSizeRequestObjectiveTypeEnum = typeof EstimateAudienceSizeRequestObjectiveTypeEnum[keyof typeof EstimateAudienceSizeRequestObjectiveTypeEnum];
 
 /**
  * @export
@@ -497,7 +488,7 @@ export function EstimateAudienceSizeRequestFromJSONTyped(json: any, ignoreDiscri
         'appId': json['app_id'] == null ? undefined : json['app_id'],
         'pixelId': json['pixel_id'] == null ? undefined : json['pixel_id'],
         'ios14Targeting': json['ios14_targeting'] == null ? undefined : json['ios14_targeting'],
-        'objectiveType': json['objective_type'],
+        'objectiveType': AdvertisingObjectiveFromJSON(json['objective_type']),
         'optimizationGoal': json['optimization_goal'],
         'promotionType': json['promotion_type'] == null ? undefined : json['promotion_type'],
         'productSource': json['product_source'] == null ? undefined : json['product_source'],
@@ -506,11 +497,11 @@ export function EstimateAudienceSizeRequestFromJSONTyped(json: any, ignoreDiscri
         'catalogAuthorizedBcId': json['catalog_authorized_bc_id'] == null ? undefined : json['catalog_authorized_bc_id'],
         'shoppingAdsRetargetingType': json['shopping_ads_retargeting_type'] == null ? undefined : json['shopping_ads_retargeting_type'],
         'shoppingAdsRetargetingActionsDays': json['shopping_ads_retargeting_actions_days'] == null ? undefined : json['shopping_ads_retargeting_actions_days'],
-        'includedCustomActions': json['included_custom_actions'] == null ? undefined : ((json['included_custom_actions'] as Array<any>).map(CreateAdGroupRequestIncludedCustomActionsInnerFromJSON)),
-        'excludedCustomActions': json['excluded_custom_actions'] == null ? undefined : ((json['excluded_custom_actions'] as Array<any>).map(CreateAdGroupRequestIncludedCustomActionsInnerFromJSON)),
+        'includedCustomActions': json['included_custom_actions'] == null ? undefined : ((json['included_custom_actions'] as Array<any>).map(CustomActionFromJSON)),
+        'excludedCustomActions': json['excluded_custom_actions'] == null ? undefined : ((json['excluded_custom_actions'] as Array<any>).map(CustomActionFromJSON)),
         'audienceIds': json['audience_ids'] == null ? undefined : json['audience_ids'],
         'excludedAudienceIds': json['excluded_audience_ids'] == null ? undefined : json['excluded_audience_ids'],
-        'audienceRule': json['audience_rule'] == null ? undefined : CreateAdGroupRequestAudienceRuleFromJSON(json['audience_rule']),
+        'audienceRule': json['audience_rule'] == null ? undefined : AudienceRule2FromJSON(json['audience_rule']),
         'audienceType': json['audience_type'] == null ? undefined : json['audience_type'],
         'locationIds': json['location_ids'] == null ? undefined : json['location_ids'],
         'zipcodeIds': json['zipcode_ids'] == null ? undefined : json['zipcode_ids'],
@@ -521,7 +512,7 @@ export function EstimateAudienceSizeRequestFromJSONTyped(json: any, ignoreDiscri
         'interestCategoryIds': json['interest_category_ids'] == null ? undefined : json['interest_category_ids'],
         'interestKeywordIds': json['interest_keyword_ids'] == null ? undefined : json['interest_keyword_ids'],
         'purchaseIntentionKeywordIds': json['purchase_intention_keyword_ids'] == null ? undefined : json['purchase_intention_keyword_ids'],
-        'actions': json['actions'] == null ? undefined : ((json['actions'] as Array<any>).map(CreateAdGroupRequestActionsInnerFromJSON)),
+        'actions': json['actions'] == null ? undefined : ((json['actions'] as Array<any>).map(BehavioralCategoryFromJSON)),
         'actionCategoryIds': json['action_category_ids'] == null ? undefined : json['action_category_ids'],
         'operatingSystems': json['operating_systems'] == null ? undefined : json['operating_systems'],
         'minIosVersion': json['min_ios_version'] == null ? undefined : json['min_ios_version'],
@@ -535,7 +526,7 @@ export function EstimateAudienceSizeRequestFromJSONTyped(json: any, ignoreDiscri
         'includedPangleAudiencePackageIds': json['included_pangle_audience_package_ids'] == null ? undefined : json['included_pangle_audience_package_ids'],
         'excludedPangleAudiencePackageIds': json['excluded_pangle_audience_package_ids'] == null ? undefined : json['excluded_pangle_audience_package_ids'],
         'blockedPangleAppIds': json['blocked_pangle_app_ids'] == null ? undefined : json['blocked_pangle_app_ids'],
-        'targetingExpansion': json['targeting_expansion'] == null ? undefined : CreateAdGroupRequestTargetingExpansionFromJSON(json['targeting_expansion']),
+        'targetingExpansion': json['targeting_expansion'] == null ? undefined : TargetingExpansionFromJSON(json['targeting_expansion']),
         'autoTargetingEnabled': json['auto_targeting_enabled'] == null ? undefined : json['auto_targeting_enabled'],
         'contextualTagIds': json['contextual_tag_ids'] == null ? undefined : json['contextual_tag_ids'],
     };
@@ -558,7 +549,7 @@ export function EstimateAudienceSizeRequestToJSONTyped(value?: EstimateAudienceS
         'app_id': value['appId'],
         'pixel_id': value['pixelId'],
         'ios14_targeting': value['ios14Targeting'],
-        'objective_type': value['objectiveType'],
+        'objective_type': AdvertisingObjectiveToJSON(value['objectiveType']),
         'optimization_goal': value['optimizationGoal'],
         'promotion_type': value['promotionType'],
         'product_source': value['productSource'],
@@ -567,11 +558,11 @@ export function EstimateAudienceSizeRequestToJSONTyped(value?: EstimateAudienceS
         'catalog_authorized_bc_id': value['catalogAuthorizedBcId'],
         'shopping_ads_retargeting_type': value['shoppingAdsRetargetingType'],
         'shopping_ads_retargeting_actions_days': value['shoppingAdsRetargetingActionsDays'],
-        'included_custom_actions': value['includedCustomActions'] == null ? undefined : ((value['includedCustomActions'] as Array<any>).map(CreateAdGroupRequestIncludedCustomActionsInnerToJSON)),
-        'excluded_custom_actions': value['excludedCustomActions'] == null ? undefined : ((value['excludedCustomActions'] as Array<any>).map(CreateAdGroupRequestIncludedCustomActionsInnerToJSON)),
+        'included_custom_actions': value['includedCustomActions'] == null ? undefined : ((value['includedCustomActions'] as Array<any>).map(CustomActionToJSON)),
+        'excluded_custom_actions': value['excludedCustomActions'] == null ? undefined : ((value['excludedCustomActions'] as Array<any>).map(CustomActionToJSON)),
         'audience_ids': value['audienceIds'],
         'excluded_audience_ids': value['excludedAudienceIds'],
-        'audience_rule': CreateAdGroupRequestAudienceRuleToJSON(value['audienceRule']),
+        'audience_rule': AudienceRule2ToJSON(value['audienceRule']),
         'audience_type': value['audienceType'],
         'location_ids': value['locationIds'],
         'zipcode_ids': value['zipcodeIds'],
@@ -582,7 +573,7 @@ export function EstimateAudienceSizeRequestToJSONTyped(value?: EstimateAudienceS
         'interest_category_ids': value['interestCategoryIds'],
         'interest_keyword_ids': value['interestKeywordIds'],
         'purchase_intention_keyword_ids': value['purchaseIntentionKeywordIds'],
-        'actions': value['actions'] == null ? undefined : ((value['actions'] as Array<any>).map(CreateAdGroupRequestActionsInnerToJSON)),
+        'actions': value['actions'] == null ? undefined : ((value['actions'] as Array<any>).map(BehavioralCategoryToJSON)),
         'action_category_ids': value['actionCategoryIds'],
         'operating_systems': value['operatingSystems'],
         'min_ios_version': value['minIosVersion'],
@@ -596,7 +587,7 @@ export function EstimateAudienceSizeRequestToJSONTyped(value?: EstimateAudienceS
         'included_pangle_audience_package_ids': value['includedPangleAudiencePackageIds'],
         'excluded_pangle_audience_package_ids': value['excludedPangleAudiencePackageIds'],
         'blocked_pangle_app_ids': value['blockedPangleAppIds'],
-        'targeting_expansion': CreateAdGroupRequestTargetingExpansionToJSON(value['targetingExpansion']),
+        'targeting_expansion': TargetingExpansionToJSON(value['targetingExpansion']),
         'auto_targeting_enabled': value['autoTargetingEnabled'],
         'contextual_tag_ids': value['contextualTagIds'],
     };

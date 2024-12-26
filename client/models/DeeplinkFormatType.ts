@@ -14,12 +14,13 @@
 
 
 /**
- * Format of the deeplink
+ * Format of deeplink
  * @export
  */
 export const DeeplinkFormatType = {
     UniversalOrAppLink: 'UNIVERSAL_OR_APP_LINK',
-    SchemeLink: 'SCHEME_LINK'
+    SchemeLink: 'SCHEME_LINK',
+    None: 'NONE'
 } as const;
 export type DeeplinkFormatType = typeof DeeplinkFormatType[keyof typeof DeeplinkFormatType];
 

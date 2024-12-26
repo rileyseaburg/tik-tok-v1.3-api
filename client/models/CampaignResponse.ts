@@ -13,13 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
-import type { CampaignResponseData } from './CampaignResponseData';
+import type { CampaignResponseAllOfData } from './CampaignResponseAllOfData';
 import {
-    CampaignResponseDataFromJSON,
-    CampaignResponseDataFromJSONTyped,
-    CampaignResponseDataToJSON,
-    CampaignResponseDataToJSONTyped,
-} from './CampaignResponseData';
+    CampaignResponseAllOfDataFromJSON,
+    CampaignResponseAllOfDataFromJSONTyped,
+    CampaignResponseAllOfDataToJSON,
+    CampaignResponseAllOfDataToJSONTyped,
+} from './CampaignResponseAllOfData';
 
 /**
  * 
@@ -32,31 +32,34 @@ export interface CampaignResponse {
      * @type {number}
      * @memberof CampaignResponse
      */
-    code?: number;
+    code: number;
     /**
      * Response message
      * @type {string}
      * @memberof CampaignResponse
      */
-    message?: string;
+    message: string;
     /**
-     * Unique identifier for the API request
+     * The log ID of the request
      * @type {string}
      * @memberof CampaignResponse
      */
-    requestId?: string;
+    requestId: string;
     /**
      * 
-     * @type {CampaignResponseData}
+     * @type {CampaignResponseAllOfData}
      * @memberof CampaignResponse
      */
-    data?: CampaignResponseData;
+    data?: CampaignResponseAllOfData;
 }
 
 /**
  * Check if a given object implements the CampaignResponse interface.
  */
 export function instanceOfCampaignResponse(value: object): value is CampaignResponse {
+    if (!('code' in value) || value['code'] === undefined) return false;
+    if (!('message' in value) || value['message'] === undefined) return false;
+    if (!('requestId' in value) || value['requestId'] === undefined) return false;
     return true;
 }
 
@@ -70,10 +73,10 @@ export function CampaignResponseFromJSONTyped(json: any, ignoreDiscriminator: bo
     }
     return {
         
-        'code': json['code'] == null ? undefined : json['code'],
-        'message': json['message'] == null ? undefined : json['message'],
-        'requestId': json['request_id'] == null ? undefined : json['request_id'],
-        'data': json['data'] == null ? undefined : CampaignResponseDataFromJSON(json['data']),
+        'code': json['code'],
+        'message': json['message'],
+        'requestId': json['request_id'],
+        'data': json['data'] == null ? undefined : CampaignResponseAllOfDataFromJSON(json['data']),
     };
 }
 
@@ -91,7 +94,7 @@ export function CampaignResponseToJSONTyped(value?: CampaignResponse | null, ign
         'code': value['code'],
         'message': value['message'],
         'request_id': value['requestId'],
-        'data': CampaignResponseDataToJSON(value['data']),
+        'data': CampaignResponseAllOfDataToJSON(value['data']),
     };
 }
 

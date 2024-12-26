@@ -13,13 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
-import type { UpdateAd200ResponseDataCreativesInner } from './UpdateAd200ResponseDataCreativesInner';
+import type { AdCreative2 } from './AdCreative2';
 import {
-    UpdateAd200ResponseDataCreativesInnerFromJSON,
-    UpdateAd200ResponseDataCreativesInnerFromJSONTyped,
-    UpdateAd200ResponseDataCreativesInnerToJSON,
-    UpdateAd200ResponseDataCreativesInnerToJSONTyped,
-} from './UpdateAd200ResponseDataCreativesInner';
+    AdCreative2FromJSON,
+    AdCreative2FromJSONTyped,
+    AdCreative2ToJSON,
+    AdCreative2ToJSONTyped,
+} from './AdCreative2';
 
 /**
  * 
@@ -35,10 +35,10 @@ export interface UpdateAd200ResponseData {
     adIds?: Array<string>;
     /**
      * 
-     * @type {Array<UpdateAd200ResponseDataCreativesInner>}
+     * @type {Array<AdCreative2>}
      * @memberof UpdateAd200ResponseData
      */
-    creatives?: Array<UpdateAd200ResponseDataCreativesInner>;
+    creatives?: Array<AdCreative2>;
 }
 
 /**
@@ -59,7 +59,7 @@ export function UpdateAd200ResponseDataFromJSONTyped(json: any, ignoreDiscrimina
     return {
         
         'adIds': json['ad_ids'] == null ? undefined : json['ad_ids'],
-        'creatives': json['creatives'] == null ? undefined : ((json['creatives'] as Array<any>).map(UpdateAd200ResponseDataCreativesInnerFromJSON)),
+        'creatives': json['creatives'] == null ? undefined : ((json['creatives'] as Array<any>).map(AdCreative2FromJSON)),
     };
 }
 
@@ -75,7 +75,7 @@ export function UpdateAd200ResponseDataToJSONTyped(value?: UpdateAd200ResponseDa
     return {
         
         'ad_ids': value['adIds'],
-        'creatives': value['creatives'] == null ? undefined : ((value['creatives'] as Array<any>).map(UpdateAd200ResponseDataCreativesInnerToJSON)),
+        'creatives': value['creatives'] == null ? undefined : ((value['creatives'] as Array<any>).map(AdCreative2ToJSON)),
     };
 }
 

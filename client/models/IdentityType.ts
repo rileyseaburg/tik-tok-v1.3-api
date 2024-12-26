@@ -14,14 +14,14 @@
 
 
 /**
- * Type of identity used for the ad
+ * Type of identity for ads
  * @export
  */
 export const IdentityType = {
-    CustomizedUser: 'CUSTOMIZED_USER',
+    Customized: 'CUSTOMIZED',
     AuthCode: 'AUTH_CODE',
-    TtUser: 'TT_USER',
-    BcAuthTt: 'BC_AUTH_TT'
+    BusinessId: 'BUSINESS_ID',
+    TtUser: 'TT_USER'
 } as const;
 export type IdentityType = typeof IdentityType[keyof typeof IdentityType];
 

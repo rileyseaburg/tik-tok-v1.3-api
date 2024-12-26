@@ -20,7 +20,9 @@ import type {
   CreateCampaignCopyTask200Response,
   CreateCampaignCopyTaskRequest,
   CreateCampaignRequest,
-  CreateComment400Response,
+  CreateSmartPlusCampaign200Response,
+  CreateSmartPlusCampaignRequest,
+  ErrorResponse,
   GetCampaignQuotaInfo200Response,
   GetCampaigns200Response,
   GetCampaignsFilteringParameter,
@@ -28,6 +30,8 @@ import type {
   UpdateCampaignRequest,
   UpdateCampaignStatuses200Response,
   UpdateCampaignStatusesRequest,
+  UpdateSmartPlusCampaign200Response,
+  UpdateSmartPlusCampaignRequest,
 } from '../models/index';
 import {
     CheckCampaignCopyTask200ResponseFromJSON,
@@ -40,8 +44,12 @@ import {
     CreateCampaignCopyTaskRequestToJSON,
     CreateCampaignRequestFromJSON,
     CreateCampaignRequestToJSON,
-    CreateComment400ResponseFromJSON,
-    CreateComment400ResponseToJSON,
+    CreateSmartPlusCampaign200ResponseFromJSON,
+    CreateSmartPlusCampaign200ResponseToJSON,
+    CreateSmartPlusCampaignRequestFromJSON,
+    CreateSmartPlusCampaignRequestToJSON,
+    ErrorResponseFromJSON,
+    ErrorResponseToJSON,
     GetCampaignQuotaInfo200ResponseFromJSON,
     GetCampaignQuotaInfo200ResponseToJSON,
     GetCampaigns200ResponseFromJSON,
@@ -56,6 +64,10 @@ import {
     UpdateCampaignStatuses200ResponseToJSON,
     UpdateCampaignStatusesRequestFromJSON,
     UpdateCampaignStatusesRequestToJSON,
+    UpdateSmartPlusCampaign200ResponseFromJSON,
+    UpdateSmartPlusCampaign200ResponseToJSON,
+    UpdateSmartPlusCampaignRequestFromJSON,
+    UpdateSmartPlusCampaignRequestToJSON,
 } from '../models/index';
 
 export interface CheckCampaignCopyTaskRequest {
@@ -69,6 +81,10 @@ export interface CreateCampaignOperationRequest {
 
 export interface CreateCampaignCopyTaskOperationRequest {
     createCampaignCopyTaskRequest: CreateCampaignCopyTaskRequest;
+}
+
+export interface CreateSmartPlusCampaignOperationRequest {
+    createSmartPlusCampaignRequest: CreateSmartPlusCampaignRequest;
 }
 
 export interface GetCampaignQuotaInfoRequest {
@@ -94,6 +110,10 @@ export interface UpdateCampaignOperationRequest {
 
 export interface UpdateCampaignStatusesOperationRequest {
     updateCampaignStatusesRequest: UpdateCampaignStatusesRequest;
+}
+
+export interface UpdateSmartPlusCampaignOperationRequest {
+    updateSmartPlusCampaignRequest: UpdateSmartPlusCampaignRequest;
 }
 
 /**
@@ -240,6 +260,48 @@ export class CampaignApi extends runtime.BaseAPI {
     }
 
     /**
+     * Use this endpoint to create a Smart+ Campaign. 
+     * Create a Smart+ Campaign
+     */
+    async createSmartPlusCampaignRaw(requestParameters: CreateSmartPlusCampaignOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<CreateSmartPlusCampaign200Response>> {
+        if (requestParameters['createSmartPlusCampaignRequest'] == null) {
+            throw new runtime.RequiredError(
+                'createSmartPlusCampaignRequest',
+                'Required parameter "createSmartPlusCampaignRequest" was null or undefined when calling createSmartPlusCampaign().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Access-Token"] = await this.configuration.apiKey("Access-Token"); // accessToken authentication
+        }
+
+        const response = await this.request({
+            path: `/v1.3/campaign/spc/create`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: CreateSmartPlusCampaignRequestToJSON(requestParameters['createSmartPlusCampaignRequest']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => CreateSmartPlusCampaign200ResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Use this endpoint to create a Smart+ Campaign. 
+     * Create a Smart+ Campaign
+     */
+    async createSmartPlusCampaign(requestParameters: CreateSmartPlusCampaignOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<CreateSmartPlusCampaign200Response> {
+        const response = await this.createSmartPlusCampaignRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Get quota information for Dedicated Campaigns per ad network, ad group quota under a campaign, and ad quota for an ad group within a SKAN 4.0 Dedicated Campaign. Note: iOS apps can have up to 15 or 25 (allowlist) active Dedicated Campaigns per ad network and up to 5 active ad groups within each Dedicated Campaign. 
      * Get campaign quota information
      */
@@ -324,11 +386,11 @@ export class CampaignApi extends runtime.BaseAPI {
         }
 
         if (requestParameters['fields'] != null) {
-            queryParameters['fields'] = requestParameters['fields'];
+            queryParameters['fields'] = requestParameters['fields']!.join(runtime.COLLECTION_FORMATS["csv"]);
         }
 
         if (requestParameters['excludeFieldTypesInResponse'] != null) {
-            queryParameters['exclude_field_types_in_response'] = requestParameters['excludeFieldTypesInResponse'];
+            queryParameters['exclude_field_types_in_response'] = requestParameters['excludeFieldTypesInResponse']!.join(runtime.COLLECTION_FORMATS["csv"]);
         }
 
         if (requestParameters['filtering'] != null) {
@@ -449,6 +511,48 @@ export class CampaignApi extends runtime.BaseAPI {
      */
     async updateCampaignStatuses(requestParameters: UpdateCampaignStatusesOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateCampaignStatuses200Response> {
         const response = await this.updateCampaignStatusesRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Use this endpoint to update a Smart+ Campaign. Not all information of a Smart+ Campaign can be modified (For example, placement). The endpoint supports incremental updates.  Note: You can not update a Smart+ Campaign via /campaign/update/, /adgroup/update/, and /ad/update/. 
+     * Update a Smart+ Campaign
+     */
+    async updateSmartPlusCampaignRaw(requestParameters: UpdateSmartPlusCampaignOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UpdateSmartPlusCampaign200Response>> {
+        if (requestParameters['updateSmartPlusCampaignRequest'] == null) {
+            throw new runtime.RequiredError(
+                'updateSmartPlusCampaignRequest',
+                'Required parameter "updateSmartPlusCampaignRequest" was null or undefined when calling updateSmartPlusCampaign().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Access-Token"] = await this.configuration.apiKey("Access-Token"); // accessToken authentication
+        }
+
+        const response = await this.request({
+            path: `/v1.3/campaign/spc/update`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpdateSmartPlusCampaignRequestToJSON(requestParameters['updateSmartPlusCampaignRequest']),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => UpdateSmartPlusCampaign200ResponseFromJSON(jsonValue));
+    }
+
+    /**
+     * Use this endpoint to update a Smart+ Campaign. Not all information of a Smart+ Campaign can be modified (For example, placement). The endpoint supports incremental updates.  Note: You can not update a Smart+ Campaign via /campaign/update/, /adgroup/update/, and /ad/update/. 
+     * Update a Smart+ Campaign
+     */
+    async updateSmartPlusCampaign(requestParameters: UpdateSmartPlusCampaignOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UpdateSmartPlusCampaign200Response> {
+        const response = await this.updateSmartPlusCampaignRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

@@ -13,20 +13,20 @@
  */
 
 import { mapValues } from '../runtime';
-import type { GetAds200ResponseDataPageInfo } from './GetAds200ResponseDataPageInfo';
+import type { PageInfo } from './PageInfo';
 import {
-    GetAds200ResponseDataPageInfoFromJSON,
-    GetAds200ResponseDataPageInfoFromJSONTyped,
-    GetAds200ResponseDataPageInfoToJSON,
-    GetAds200ResponseDataPageInfoToJSONTyped,
-} from './GetAds200ResponseDataPageInfo';
-import type { GetAds200ResponseDataListInner } from './GetAds200ResponseDataListInner';
+    PageInfoFromJSON,
+    PageInfoFromJSONTyped,
+    PageInfoToJSON,
+    PageInfoToJSONTyped,
+} from './PageInfo';
+import type { AdCreative1 } from './AdCreative1';
 import {
-    GetAds200ResponseDataListInnerFromJSON,
-    GetAds200ResponseDataListInnerFromJSONTyped,
-    GetAds200ResponseDataListInnerToJSON,
-    GetAds200ResponseDataListInnerToJSONTyped,
-} from './GetAds200ResponseDataListInner';
+    AdCreative1FromJSON,
+    AdCreative1FromJSONTyped,
+    AdCreative1ToJSON,
+    AdCreative1ToJSONTyped,
+} from './AdCreative1';
 
 /**
  * 
@@ -36,16 +36,16 @@ import {
 export interface GetAds200ResponseData {
     /**
      * 
-     * @type {Array<GetAds200ResponseDataListInner>}
+     * @type {Array<AdCreative1>}
      * @memberof GetAds200ResponseData
      */
-    list?: Array<GetAds200ResponseDataListInner>;
+    list?: Array<AdCreative1>;
     /**
      * 
-     * @type {GetAds200ResponseDataPageInfo}
+     * @type {PageInfo}
      * @memberof GetAds200ResponseData
      */
-    pageInfo?: GetAds200ResponseDataPageInfo;
+    pageInfo?: PageInfo;
 }
 
 /**
@@ -65,8 +65,8 @@ export function GetAds200ResponseDataFromJSONTyped(json: any, ignoreDiscriminato
     }
     return {
         
-        'list': json['list'] == null ? undefined : ((json['list'] as Array<any>).map(GetAds200ResponseDataListInnerFromJSON)),
-        'pageInfo': json['page_info'] == null ? undefined : GetAds200ResponseDataPageInfoFromJSON(json['page_info']),
+        'list': json['list'] == null ? undefined : ((json['list'] as Array<any>).map(AdCreative1FromJSON)),
+        'pageInfo': json['page_info'] == null ? undefined : PageInfoFromJSON(json['page_info']),
     };
 }
 
@@ -81,8 +81,8 @@ export function GetAds200ResponseDataToJSONTyped(value?: GetAds200ResponseData |
 
     return {
         
-        'list': value['list'] == null ? undefined : ((value['list'] as Array<any>).map(GetAds200ResponseDataListInnerToJSON)),
-        'page_info': GetAds200ResponseDataPageInfoToJSON(value['pageInfo']),
+        'list': value['list'] == null ? undefined : ((value['list'] as Array<any>).map(AdCreative1ToJSON)),
+        'page_info': PageInfoToJSON(value['pageInfo']),
     };
 }
 

@@ -13,6 +13,14 @@
  */
 
 import { mapValues } from '../runtime';
+import type { AdvertisingObjective } from './AdvertisingObjective';
+import {
+    AdvertisingObjectiveFromJSON,
+    AdvertisingObjectiveFromJSONTyped,
+    AdvertisingObjectiveToJSON,
+    AdvertisingObjectiveToJSONTyped,
+} from './AdvertisingObjective';
+
 /**
  * 
  * @export
@@ -60,11 +68,11 @@ export interface GetAdsFilteringParameter {
      */
     secondaryStatus?: string;
     /**
-     * Campaign advertising objectives
-     * @type {string}
+     * 
+     * @type {AdvertisingObjective}
      * @memberof GetAdsFilteringParameter
      */
-    objectiveType?: GetAdsFilteringParameterObjectiveTypeEnum;
+    objectiveType?: AdvertisingObjective;
     /**
      * Filter by buying types.
      * Default value - ["AUCTION", "RESERVATION_RF"]
@@ -102,22 +110,6 @@ export const GetAdsFilteringParameterCampaignSystemOriginsEnum = {
     TtAdsPlatform: 'TT_ADS_PLATFORM'
 } as const;
 export type GetAdsFilteringParameterCampaignSystemOriginsEnum = typeof GetAdsFilteringParameterCampaignSystemOriginsEnum[keyof typeof GetAdsFilteringParameterCampaignSystemOriginsEnum];
-
-/**
- * @export
- */
-export const GetAdsFilteringParameterObjectiveTypeEnum = {
-    AppPromotion: 'APP_PROMOTION',
-    Conversions: 'CONVERSIONS',
-    Reach: 'REACH',
-    VideoViews: 'VIDEO_VIEWS',
-    Traffic: 'TRAFFIC',
-    LeadGeneration: 'LEAD_GENERATION',
-    ProductSales: 'PRODUCT_SALES',
-    RfReach: 'RF_REACH',
-    WebConversions: 'WEB_CONVERSIONS'
-} as const;
-export type GetAdsFilteringParameterObjectiveTypeEnum = typeof GetAdsFilteringParameterObjectiveTypeEnum[keyof typeof GetAdsFilteringParameterObjectiveTypeEnum];
 
 /**
  * @export
@@ -175,7 +167,7 @@ export function GetAdsFilteringParameterFromJSONTyped(json: any, ignoreDiscrimin
         'adIds': json['ad_ids'] == null ? undefined : json['ad_ids'],
         'primaryStatus': json['primary_status'] == null ? undefined : json['primary_status'],
         'secondaryStatus': json['secondary_status'] == null ? undefined : json['secondary_status'],
-        'objectiveType': json['objective_type'] == null ? undefined : json['objective_type'],
+        'objectiveType': json['objective_type'] == null ? undefined : AdvertisingObjectiveFromJSON(json['objective_type']),
         'buyingTypes': json['buying_types'] == null ? undefined : json['buying_types'],
         'optimizationGoal': json['optimization_goal'] == null ? undefined : json['optimization_goal'],
         'creativeMaterialMode': json['creative_material_mode'] == null ? undefined : json['creative_material_mode'],
@@ -200,7 +192,7 @@ export function GetAdsFilteringParameterToJSONTyped(value?: GetAdsFilteringParam
         'ad_ids': value['adIds'],
         'primary_status': value['primaryStatus'],
         'secondary_status': value['secondaryStatus'],
-        'objective_type': value['objectiveType'],
+        'objective_type': AdvertisingObjectiveToJSON(value['objectiveType']),
         'buying_types': value['buyingTypes'],
         'optimization_goal': value['optimizationGoal'],
         'creative_material_mode': value['creativeMaterialMode'],

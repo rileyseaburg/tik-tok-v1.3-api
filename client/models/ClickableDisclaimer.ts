@@ -14,19 +14,19 @@
 
 import { mapValues } from '../runtime';
 /**
- * Clickable disclaimer content
+ * Interactive disclaimer with clickable elements
  * @export
  * @interface ClickableDisclaimer
  */
 export interface ClickableDisclaimer {
     /**
-     * The disclaimer text
+     * Clickable disclaimer text
      * @type {string}
      * @memberof ClickableDisclaimer
      */
     text?: string;
     /**
-     * URL for the clickable disclaimer
+     * URL for clickable disclaimer
      * @type {string}
      * @memberof ClickableDisclaimer
      */

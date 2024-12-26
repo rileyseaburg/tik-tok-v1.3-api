@@ -13,25 +13,6 @@
  */
 
 import { mapValues } from '../runtime';
-
-/**
- * @export
- * @enum {string}
- */
-export enum UpdateCustomAudienceRequestAudienceSubTypeEnum {
-    REACH_FREQUENCY = 'REACH_FREQUENCY'
-}
-
-/**
- * @export
- * @enum {string}
- */
-export enum UpdateCustomAudienceRequestActionEnum {
-    APPEND = 'APPEND',
-    REMOVE = 'REMOVE',
-    REPLACE = 'REPLACE'
-}
-
 /**
  * 
  * @export

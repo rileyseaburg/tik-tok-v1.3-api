@@ -17,9 +17,9 @@ import * as runtime from '../runtime';
 import type {
   AppealAdGroup200Response,
   BatchBindOptimizerRulesRequest,
-  CreateComment400Response,
   CreateOptimizerRule200Response,
   CreateOptimizerRuleRequest,
+  ErrorResponse,
   GetOptimizerRuleResults200Response,
   GetOptimizerRuleResultsResultDetailParameterInner,
   GetOptimizerRules200Response,
@@ -36,12 +36,12 @@ import {
     AppealAdGroup200ResponseToJSON,
     BatchBindOptimizerRulesRequestFromJSON,
     BatchBindOptimizerRulesRequestToJSON,
-    CreateComment400ResponseFromJSON,
-    CreateComment400ResponseToJSON,
     CreateOptimizerRule200ResponseFromJSON,
     CreateOptimizerRule200ResponseToJSON,
     CreateOptimizerRuleRequestFromJSON,
     CreateOptimizerRuleRequestToJSON,
+    ErrorResponseFromJSON,
+    ErrorResponseToJSON,
     GetOptimizerRuleResults200ResponseFromJSON,
     GetOptimizerRuleResults200ResponseToJSON,
     GetOptimizerRuleResultsResultDetailParameterInnerFromJSON,
@@ -222,7 +222,7 @@ export class OptimizerApi extends runtime.BaseAPI {
         }
 
         if (requestParameters['resultDetail'] != null) {
-            queryParameters['result_detail'] = requestParameters['resultDetail'];
+            queryParameters['result_detail'] = requestParameters['resultDetail']!.join(runtime.COLLECTION_FORMATS["csv"]);
         }
 
         if (requestParameters['lang'] != null) {
@@ -280,7 +280,7 @@ export class OptimizerApi extends runtime.BaseAPI {
         }
 
         if (requestParameters['ruleIds'] != null) {
-            queryParameters['rule_ids'] = requestParameters['ruleIds'];
+            queryParameters['rule_ids'] = requestParameters['ruleIds']!.join(runtime.COLLECTION_FORMATS["csv"]);
         }
 
         const headerParameters: runtime.HTTPHeaders = {};

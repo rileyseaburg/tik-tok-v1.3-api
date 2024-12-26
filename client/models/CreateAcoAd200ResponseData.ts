@@ -27,13 +27,6 @@ import {
     CreateAcoAd200ResponseDataTitleListInnerToJSON,
     CreateAcoAd200ResponseDataTitleListInnerToJSONTyped,
 } from './CreateAcoAd200ResponseDataTitleListInner';
-import type { CreateSmartCreativeAdRequestCreativesInnerMediaInfo } from './CreateSmartCreativeAdRequestCreativesInnerMediaInfo';
-import {
-    CreateSmartCreativeAdRequestCreativesInnerMediaInfoFromJSON,
-    CreateSmartCreativeAdRequestCreativesInnerMediaInfoFromJSONTyped,
-    CreateSmartCreativeAdRequestCreativesInnerMediaInfoToJSON,
-    CreateSmartCreativeAdRequestCreativesInnerMediaInfoToJSONTyped,
-} from './CreateSmartCreativeAdRequestCreativesInnerMediaInfo';
 import type { CreateAcoAd200ResponseDataLandingPageUrlsInner } from './CreateAcoAd200ResponseDataLandingPageUrlsInner';
 import {
     CreateAcoAd200ResponseDataLandingPageUrlsInnerFromJSON,
@@ -41,6 +34,13 @@ import {
     CreateAcoAd200ResponseDataLandingPageUrlsInnerToJSON,
     CreateAcoAd200ResponseDataLandingPageUrlsInnerToJSONTyped,
 } from './CreateAcoAd200ResponseDataLandingPageUrlsInner';
+import type { MediaInfo2 } from './MediaInfo2';
+import {
+    MediaInfo2FromJSON,
+    MediaInfo2FromJSONTyped,
+    MediaInfo2ToJSON,
+    MediaInfo2ToJSONTyped,
+} from './MediaInfo2';
 
 /**
  * 
@@ -62,10 +62,10 @@ export interface CreateAcoAd200ResponseData {
     adgroupId?: string;
     /**
      * 
-     * @type {Array<CreateSmartCreativeAdRequestCreativesInnerMediaInfo>}
+     * @type {Array<MediaInfo2>}
      * @memberof CreateAcoAd200ResponseData
      */
-    mediaInfoList?: Array<CreateSmartCreativeAdRequestCreativesInnerMediaInfo>;
+    mediaInfoList?: Array<MediaInfo2>;
     /**
      * 
      * @type {Array<CreateAcoAd200ResponseDataTitleListInner>}
@@ -105,7 +105,7 @@ export function CreateAcoAd200ResponseDataFromJSONTyped(json: any, ignoreDiscrim
         
         'advertiserId': json['advertiser_id'] == null ? undefined : json['advertiser_id'],
         'adgroupId': json['adgroup_id'] == null ? undefined : json['adgroup_id'],
-        'mediaInfoList': json['media_info_list'] == null ? undefined : ((json['media_info_list'] as Array<any>).map(CreateSmartCreativeAdRequestCreativesInnerMediaInfoFromJSON)),
+        'mediaInfoList': json['media_info_list'] == null ? undefined : ((json['media_info_list'] as Array<any>).map(MediaInfo2FromJSON)),
         'titleList': json['title_list'] == null ? undefined : ((json['title_list'] as Array<any>).map(CreateAcoAd200ResponseDataTitleListInnerFromJSON)),
         'commonMaterial': json['common_material'] == null ? undefined : CreateAcoAd200ResponseDataCommonMaterialFromJSON(json['common_material']),
         'landingPageUrls': json['landing_page_urls'] == null ? undefined : ((json['landing_page_urls'] as Array<any>).map(CreateAcoAd200ResponseDataLandingPageUrlsInnerFromJSON)),
@@ -125,7 +125,7 @@ export function CreateAcoAd200ResponseDataToJSONTyped(value?: CreateAcoAd200Resp
         
         'advertiser_id': value['advertiserId'],
         'adgroup_id': value['adgroupId'],
-        'media_info_list': value['mediaInfoList'] == null ? undefined : ((value['mediaInfoList'] as Array<any>).map(CreateSmartCreativeAdRequestCreativesInnerMediaInfoToJSON)),
+        'media_info_list': value['mediaInfoList'] == null ? undefined : ((value['mediaInfoList'] as Array<any>).map(MediaInfo2ToJSON)),
         'title_list': value['titleList'] == null ? undefined : ((value['titleList'] as Array<any>).map(CreateAcoAd200ResponseDataTitleListInnerToJSON)),
         'common_material': CreateAcoAd200ResponseDataCommonMaterialToJSON(value['commonMaterial']),
         'landing_page_urls': value['landingPageUrls'] == null ? undefined : ((value['landingPageUrls'] as Array<any>).map(CreateAcoAd200ResponseDataLandingPageUrlsInnerToJSON)),

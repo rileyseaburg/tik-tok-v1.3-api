@@ -19,7 +19,8 @@
  */
 export const AigcDisclosureType = {
     SelfDisclosure: 'SELF_DISCLOSURE',
-    NotDeclared: 'NOT_DECLARED'
+    NotDeclared: 'NOT_DECLARED',
+    AutoDetect: 'AUTO_DETECT'
 } as const;
 export type AigcDisclosureType = typeof AigcDisclosureType[keyof typeof AigcDisclosureType];
 

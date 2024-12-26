@@ -12,61 +12,12 @@
  * Do not edit the class manually.
  */
 
-import { mapValues } from '../runtime';
-import type { UpdateAdGroupBudgetRequestBudgetInner } from './UpdateAdGroupBudgetRequestBudgetInner';
-import {
-    UpdateAdGroupBudgetRequestBudgetInnerFromJSON,
-    UpdateAdGroupBudgetRequestBudgetInnerFromJSONTyped,
-    UpdateAdGroupBudgetRequestBudgetInnerToJSON,
-    UpdateAdGroupBudgetRequestBudgetInnerToJSONTyped,
-} from './UpdateAdGroupBudgetRequestBudgetInner';
-import type { UpdateAdGroupBudgetRequestScheduledBudgetInner } from './UpdateAdGroupBudgetRequestScheduledBudgetInner';
-import {
-    UpdateAdGroupBudgetRequestScheduledBudgetInnerFromJSON,
-    UpdateAdGroupBudgetRequestScheduledBudgetInnerFromJSONTyped,
-    UpdateAdGroupBudgetRequestScheduledBudgetInnerToJSON,
-    UpdateAdGroupBudgetRequestScheduledBudgetInnerToJSONTyped,
-} from './UpdateAdGroupBudgetRequestScheduledBudgetInner';
-
 /**
+ * @type UpdateAdGroupBudgetRequest
  * 
  * @export
- * @interface UpdateAdGroupBudgetRequest
  */
-export interface UpdateAdGroupBudgetRequest {
-    /**
-     * Advertiser ID
-     * @type {string}
-     * @memberof UpdateAdGroupBudgetRequest
-     */
-    advertiserId: string;
-    /**
-     * Information about new lifetime budgets for ad groups.
-     * Changes take effect immediately.
-     * Either budget or scheduled_budget must be set.
-     * 
-     * @type {Array<UpdateAdGroupBudgetRequestBudgetInner>}
-     * @memberof UpdateAdGroupBudgetRequest
-     */
-    budget?: Array<UpdateAdGroupBudgetRequestBudgetInner>;
-    /**
-     * Information about scheduled budget changes.
-     * Changes take effect next day at 00:00 AM.
-     * Either budget or scheduled_budget must be set.
-     * 
-     * @type {Array<UpdateAdGroupBudgetRequestScheduledBudgetInner>}
-     * @memberof UpdateAdGroupBudgetRequest
-     */
-    scheduledBudget?: Array<UpdateAdGroupBudgetRequestScheduledBudgetInner>;
-}
-
-/**
- * Check if a given object implements the UpdateAdGroupBudgetRequest interface.
- */
-export function instanceOfUpdateAdGroupBudgetRequest(value: object): value is UpdateAdGroupBudgetRequest {
-    if (!('advertiserId' in value) || value['advertiserId'] === undefined) return false;
-    return true;
-}
+export type UpdateAdGroupBudgetRequest = object;
 
 export function UpdateAdGroupBudgetRequestFromJSON(json: any): UpdateAdGroupBudgetRequest {
     return UpdateAdGroupBudgetRequestFromJSONTyped(json, false);
@@ -76,15 +27,14 @@ export function UpdateAdGroupBudgetRequestFromJSONTyped(json: any, ignoreDiscrim
     if (json == null) {
         return json;
     }
-    return {
-        
-        'advertiserId': json['advertiser_id'],
-        'budget': json['budget'] == null ? undefined : ((json['budget'] as Array<any>).map(UpdateAdGroupBudgetRequestBudgetInnerFromJSON)),
-        'scheduledBudget': json['scheduled_budget'] == null ? undefined : ((json['scheduled_budget'] as Array<any>).map(UpdateAdGroupBudgetRequestScheduledBudgetInnerFromJSON)),
-    };
+    if (instanceOfobject(json)) {
+        return objectFromJSONTyped(json, true);
+    }
+
+    return {} as any;
 }
 
-export function UpdateAdGroupBudgetRequestToJSON(json: any): UpdateAdGroupBudgetRequest {
+export function UpdateAdGroupBudgetRequestToJSON(json: any): any {
     return UpdateAdGroupBudgetRequestToJSONTyped(json, false);
 }
 
@@ -93,11 +43,10 @@ export function UpdateAdGroupBudgetRequestToJSONTyped(value?: UpdateAdGroupBudge
         return value;
     }
 
-    return {
-        
-        'advertiser_id': value['advertiserId'],
-        'budget': value['budget'] == null ? undefined : ((value['budget'] as Array<any>).map(UpdateAdGroupBudgetRequestBudgetInnerToJSON)),
-        'scheduled_budget': value['scheduledBudget'] == null ? undefined : ((value['scheduledBudget'] as Array<any>).map(UpdateAdGroupBudgetRequestScheduledBudgetInnerToJSON)),
-    };
+    if (instanceOfobject(value)) {
+        return objectToJSON(value as object);
+    }
+
+    return {};
 }
 

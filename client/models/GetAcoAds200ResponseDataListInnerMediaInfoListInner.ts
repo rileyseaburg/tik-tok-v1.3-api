@@ -13,13 +13,20 @@
  */
 
 import { mapValues } from '../runtime';
-import type { CreateSmartCreativeAdRequestCreativesInnerMediaInfo } from './CreateSmartCreativeAdRequestCreativesInnerMediaInfo';
+import type { MediaInfo2 } from './MediaInfo2';
 import {
-    CreateSmartCreativeAdRequestCreativesInnerMediaInfoFromJSON,
-    CreateSmartCreativeAdRequestCreativesInnerMediaInfoFromJSONTyped,
-    CreateSmartCreativeAdRequestCreativesInnerMediaInfoToJSON,
-    CreateSmartCreativeAdRequestCreativesInnerMediaInfoToJSONTyped,
-} from './CreateSmartCreativeAdRequestCreativesInnerMediaInfo';
+    MediaInfo2FromJSON,
+    MediaInfo2FromJSONTyped,
+    MediaInfo2ToJSON,
+    MediaInfo2ToJSONTyped,
+} from './MediaInfo2';
+import type { MaterialOperationStatus } from './MaterialOperationStatus';
+import {
+    MaterialOperationStatusFromJSON,
+    MaterialOperationStatusFromJSONTyped,
+    MaterialOperationStatusToJSON,
+    MaterialOperationStatusToJSONTyped,
+} from './MaterialOperationStatus';
 
 /**
  * 
@@ -34,28 +41,19 @@ export interface GetAcoAds200ResponseDataListInnerMediaInfoListInner {
      */
     materialId?: string;
     /**
-     * The status of the material
-     * @type {string}
+     * 
+     * @type {MaterialOperationStatus}
      * @memberof GetAcoAds200ResponseDataListInnerMediaInfoListInner
      */
-    materialOperationStatus?: GetAcoAds200ResponseDataListInnerMediaInfoListInnerMaterialOperationStatusEnum;
+    materialOperationStatus?: MaterialOperationStatus;
     /**
      * 
-     * @type {CreateSmartCreativeAdRequestCreativesInnerMediaInfo}
+     * @type {MediaInfo2}
      * @memberof GetAcoAds200ResponseDataListInnerMediaInfoListInner
      */
-    mediaInfo?: CreateSmartCreativeAdRequestCreativesInnerMediaInfo;
+    mediaInfo?: MediaInfo2;
 }
 
-
-/**
- * @export
- */
-export const GetAcoAds200ResponseDataListInnerMediaInfoListInnerMaterialOperationStatusEnum = {
-    Enable: 'ENABLE',
-    Disable: 'DISABLE'
-} as const;
-export type GetAcoAds200ResponseDataListInnerMediaInfoListInnerMaterialOperationStatusEnum = typeof GetAcoAds200ResponseDataListInnerMediaInfoListInnerMaterialOperationStatusEnum[keyof typeof GetAcoAds200ResponseDataListInnerMediaInfoListInnerMaterialOperationStatusEnum];
 
 
 /**
@@ -76,8 +74,8 @@ export function GetAcoAds200ResponseDataListInnerMediaInfoListInnerFromJSONTyped
     return {
         
         'materialId': json['material_id'] == null ? undefined : json['material_id'],
-        'materialOperationStatus': json['material_operation_status'] == null ? undefined : json['material_operation_status'],
-        'mediaInfo': json['media_info'] == null ? undefined : CreateSmartCreativeAdRequestCreativesInnerMediaInfoFromJSON(json['media_info']),
+        'materialOperationStatus': json['material_operation_status'] == null ? undefined : MaterialOperationStatusFromJSON(json['material_operation_status']),
+        'mediaInfo': json['media_info'] == null ? undefined : MediaInfo2FromJSON(json['media_info']),
     };
 }
 
@@ -93,8 +91,8 @@ export function GetAcoAds200ResponseDataListInnerMediaInfoListInnerToJSONTyped(v
     return {
         
         'material_id': value['materialId'],
-        'material_operation_status': value['materialOperationStatus'],
-        'media_info': CreateSmartCreativeAdRequestCreativesInnerMediaInfoToJSON(value['mediaInfo']),
+        'material_operation_status': MaterialOperationStatusToJSON(value['materialOperationStatus']),
+        'media_info': MediaInfo2ToJSON(value['mediaInfo']),
     };
 }
 

@@ -13,13 +13,13 @@
  */
 
 import { mapValues } from '../runtime';
-import type { CommentResponseData } from './CommentResponseData';
+import type { CommentResponseAllOfData } from './CommentResponseAllOfData';
 import {
-    CommentResponseDataFromJSON,
-    CommentResponseDataFromJSONTyped,
-    CommentResponseDataToJSON,
-    CommentResponseDataToJSONTyped,
-} from './CommentResponseData';
+    CommentResponseAllOfDataFromJSON,
+    CommentResponseAllOfDataFromJSONTyped,
+    CommentResponseAllOfDataToJSON,
+    CommentResponseAllOfDataToJSONTyped,
+} from './CommentResponseAllOfData';
 
 /**
  * 
@@ -32,31 +32,34 @@ export interface CommentResponse {
      * @type {number}
      * @memberof CommentResponse
      */
-    code?: number;
+    code: number;
     /**
      * Response message
      * @type {string}
      * @memberof CommentResponse
      */
-    message?: string;
+    message: string;
     /**
-     * Unique identifier for the API request
+     * The log ID of the request
      * @type {string}
      * @memberof CommentResponse
      */
-    requestId?: string;
+    requestId: string;
     /**
      * 
-     * @type {CommentResponseData}
+     * @type {CommentResponseAllOfData}
      * @memberof CommentResponse
      */
-    data?: CommentResponseData;
+    data?: CommentResponseAllOfData;
 }
 
 /**
  * Check if a given object implements the CommentResponse interface.
  */
 export function instanceOfCommentResponse(value: object): value is CommentResponse {
+    if (!('code' in value) || value['code'] === undefined) return false;
+    if (!('message' in value) || value['message'] === undefined) return false;
+    if (!('requestId' in value) || value['requestId'] === undefined) return false;
     return true;
 }
 
@@ -70,10 +73,10 @@ export function CommentResponseFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
-        'code': json['code'] == null ? undefined : json['code'],
-        'message': json['message'] == null ? undefined : json['message'],
-        'requestId': json['request_id'] == null ? undefined : json['request_id'],
-        'data': json['data'] == null ? undefined : CommentResponseDataFromJSON(json['data']),
+        'code': json['code'],
+        'message': json['message'],
+        'requestId': json['request_id'],
+        'data': json['data'] == null ? undefined : CommentResponseAllOfDataFromJSON(json['data']),
     };
 }
 
@@ -91,7 +94,7 @@ export function CommentResponseToJSONTyped(value?: CommentResponse | null, ignor
         'code': value['code'],
         'message': value['message'],
         'request_id': value['requestId'],
-        'data': CommentResponseDataToJSON(value['data']),
+        'data': CommentResponseAllOfDataToJSON(value['data']),
     };
 }
 

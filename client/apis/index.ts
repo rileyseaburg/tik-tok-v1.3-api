@@ -12,3 +12,4 @@ export * from './DmpApi';
 export * from './Oauth2Api';
 export * from './OptimizerApi';
 export * from './SegmentApi';
+export * from './VideoApi';

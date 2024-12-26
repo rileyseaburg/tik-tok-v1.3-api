@@ -18,7 +18,6 @@ import type {
   AppealAdGroup200Response,
   ApplyCustomAudienceRequest,
   CancelShareCustomAudienceRequest,
-  CreateComment400Response,
   CreateCustomAudience200Response,
   CreateCustomAudienceRequest,
   CreateCustomAudienceRule200Response,
@@ -28,6 +27,7 @@ import type {
   CreateSavedAudienceRequest,
   DeleteCustomAudiencesRequest,
   DeleteSavedAudiencesRequest,
+  ErrorResponse,
   GetCustomAudienceApplyLog200Response,
   GetCustomAudienceShareLog200Response,
   GetCustomAudiences200Response,
@@ -46,8 +46,6 @@ import {
     ApplyCustomAudienceRequestToJSON,
     CancelShareCustomAudienceRequestFromJSON,
     CancelShareCustomAudienceRequestToJSON,
-    CreateComment400ResponseFromJSON,
-    CreateComment400ResponseToJSON,
     CreateCustomAudience200ResponseFromJSON,
     CreateCustomAudience200ResponseToJSON,
     CreateCustomAudienceRequestFromJSON,
@@ -66,6 +64,8 @@ import {
     DeleteCustomAudiencesRequestToJSON,
     DeleteSavedAudiencesRequestFromJSON,
     DeleteSavedAudiencesRequestToJSON,
+    ErrorResponseFromJSON,
+    ErrorResponseToJSON,
     GetCustomAudienceApplyLog200ResponseFromJSON,
     GetCustomAudienceApplyLog200ResponseToJSON,
     GetCustomAudienceShareLog200ResponseFromJSON,
@@ -156,7 +156,7 @@ export interface ShareCustomAudiencesOperationRequest {
 }
 
 export interface UpdateCustomAudienceOperationRequest {
-    updateCustomAudienceRequest: UpdateCustomAudienceRequest | null;
+    updateCustomAudienceRequest: UpdateCustomAudienceRequest;
 }
 
 export interface UpdateLookalikeAudienceOperationRequest {
@@ -537,7 +537,7 @@ export class DmpApi extends runtime.BaseAPI {
         }
 
         if (requestParameters['customAudienceIds'] != null) {
-            queryParameters['custom_audience_ids'] = requestParameters['customAudienceIds'];
+            queryParameters['custom_audience_ids'] = requestParameters['customAudienceIds']!.join(runtime.COLLECTION_FORMATS["csv"]);
         }
 
         if (requestParameters['page'] != null) {
@@ -657,7 +657,7 @@ export class DmpApi extends runtime.BaseAPI {
         }
 
         if (requestParameters['customAudienceIds'] != null) {
-            queryParameters['custom_audience_ids'] = requestParameters['customAudienceIds'];
+            queryParameters['custom_audience_ids'] = requestParameters['customAudienceIds']!.join(runtime.COLLECTION_FORMATS["csv"]);
         }
 
         if (requestParameters['historySize'] != null) {
@@ -708,7 +708,7 @@ export class DmpApi extends runtime.BaseAPI {
         }
 
         if (requestParameters['customAudienceIds'] != null) {
-            queryParameters['custom_audience_ids'] = requestParameters['customAudienceIds'];
+            queryParameters['custom_audience_ids'] = requestParameters['customAudienceIds']!.join(runtime.COLLECTION_FORMATS["csv"]);
         }
 
         if (requestParameters['page'] != null) {
@@ -763,7 +763,7 @@ export class DmpApi extends runtime.BaseAPI {
         }
 
         if (requestParameters['savedAudienceIds'] != null) {
-            queryParameters['saved_audience_ids'] = requestParameters['savedAudienceIds'];
+            queryParameters['saved_audience_ids'] = requestParameters['savedAudienceIds']!.join(runtime.COLLECTION_FORMATS["csv"]);
         }
 
         const headerParameters: runtime.HTTPHeaders = {};

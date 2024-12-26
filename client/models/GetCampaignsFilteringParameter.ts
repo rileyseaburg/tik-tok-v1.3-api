@@ -13,6 +13,14 @@
  */
 
 import { mapValues } from '../runtime';
+import type { AdvertisingObjective } from './AdvertisingObjective';
+import {
+    AdvertisingObjectiveFromJSON,
+    AdvertisingObjectiveFromJSONTyped,
+    AdvertisingObjectiveToJSON,
+    AdvertisingObjectiveToJSONTyped,
+} from './AdvertisingObjective';
+
 /**
  * Filter conditions
  * @export
@@ -53,11 +61,11 @@ export interface GetCampaignsFilteringParameter {
      */
     secondaryStatus?: string;
     /**
-     * Filter by advertising objective
-     * @type {string}
+     * 
+     * @type {AdvertisingObjective}
      * @memberof GetCampaignsFilteringParameter
      */
-    objectiveType?: string;
+    objectiveType?: AdvertisingObjective;
     /**
      * Filter by buying types
      * AUCTION: Auction ads
@@ -185,7 +193,7 @@ export function GetCampaignsFilteringParameterFromJSONTyped(json: any, ignoreDis
         'campaignSystemOrigins': json['campaign_system_origins'] == null ? undefined : json['campaign_system_origins'],
         'primaryStatus': json['primary_status'] == null ? undefined : json['primary_status'],
         'secondaryStatus': json['secondary_status'] == null ? undefined : json['secondary_status'],
-        'objectiveType': json['objective_type'] == null ? undefined : json['objective_type'],
+        'objectiveType': json['objective_type'] == null ? undefined : AdvertisingObjectiveFromJSON(json['objective_type']),
         'buyingTypes': json['buying_types'] == null ? undefined : json['buying_types'],
         'isSmartPerformanceCampaign': json['is_smart_performance_campaign'] == null ? undefined : json['is_smart_performance_campaign'],
         'splitTestEnabled': json['split_test_enabled'] == null ? undefined : json['split_test_enabled'],
@@ -213,7 +221,7 @@ export function GetCampaignsFilteringParameterToJSONTyped(value?: GetCampaignsFi
         'campaign_system_origins': value['campaignSystemOrigins'],
         'primary_status': value['primaryStatus'],
         'secondary_status': value['secondaryStatus'],
-        'objective_type': value['objectiveType'],
+        'objective_type': AdvertisingObjectiveToJSON(value['objectiveType']),
         'buying_types': value['buyingTypes'],
         'is_smart_performance_campaign': value['isSmartPerformanceCampaign'],
         'split_test_enabled': value['splitTestEnabled'],

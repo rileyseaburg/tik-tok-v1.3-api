@@ -19,7 +19,7 @@ import type {
   AppealAdGroupRequest,
   CreateAdGroup200Response,
   CreateAdGroupRequest,
-  CreateComment400Response,
+  ErrorResponse,
   GetAdGroupQuota200Response,
   GetAdGroupReviewInfo200Response,
   GetAdGroups200Response,
@@ -39,8 +39,8 @@ import {
     CreateAdGroup200ResponseToJSON,
     CreateAdGroupRequestFromJSON,
     CreateAdGroupRequestToJSON,
-    CreateComment400ResponseFromJSON,
-    CreateComment400ResponseToJSON,
+    ErrorResponseFromJSON,
+    ErrorResponseToJSON,
     GetAdGroupQuota200ResponseFromJSON,
     GetAdGroupQuota200ResponseToJSON,
     GetAdGroupReviewInfo200ResponseFromJSON,
@@ -93,7 +93,7 @@ export interface UpdateAdGroupOperationRequest {
 }
 
 export interface UpdateAdGroupBudgetOperationRequest {
-    updateAdGroupBudgetRequest: UpdateAdGroupBudgetRequest | null;
+    updateAdGroupBudgetRequest: UpdateAdGroupBudgetRequest;
 }
 
 export interface UpdateAdGroupStatusOperationRequest {
@@ -258,7 +258,7 @@ export class AdgroupApi extends runtime.BaseAPI {
         }
 
         if (requestParameters['adgroupIds'] != null) {
-            queryParameters['adgroup_ids'] = requestParameters['adgroupIds'];
+            queryParameters['adgroup_ids'] = requestParameters['adgroupIds']!.join(runtime.COLLECTION_FORMATS["csv"]);
         }
 
         if (requestParameters['lang'] != null) {
@@ -309,11 +309,11 @@ export class AdgroupApi extends runtime.BaseAPI {
         }
 
         if (requestParameters['fields'] != null) {
-            queryParameters['fields'] = requestParameters['fields'];
+            queryParameters['fields'] = requestParameters['fields']!.join(runtime.COLLECTION_FORMATS["csv"]);
         }
 
         if (requestParameters['excludeFieldTypesInResponse'] != null) {
-            queryParameters['exclude_field_types_in_response'] = requestParameters['excludeFieldTypesInResponse'];
+            queryParameters['exclude_field_types_in_response'] = requestParameters['excludeFieldTypesInResponse']!.join(runtime.COLLECTION_FORMATS["csv"]);
         }
 
         if (requestParameters['filtering'] != null) {

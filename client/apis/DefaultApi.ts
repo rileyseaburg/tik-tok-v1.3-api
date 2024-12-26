@@ -15,25 +15,28 @@
 
 import * as runtime from '../runtime';
 import type {
+  ErrorResponse,
   GetBusinessProfile200Response,
-  GetBusinessProfile400Response,
-  GetBusinessProfile401Response,
   GetVideoComments200Response,
   GetVideoList200Response,
+  GetVideoList400Response,
+  GetVideoList401Response,
   GetVideoListFiltersParameter,
   GetVideoSettings200Response,
 } from '../models/index';
 import {
+    ErrorResponseFromJSON,
+    ErrorResponseToJSON,
     GetBusinessProfile200ResponseFromJSON,
     GetBusinessProfile200ResponseToJSON,
-    GetBusinessProfile400ResponseFromJSON,
-    GetBusinessProfile400ResponseToJSON,
-    GetBusinessProfile401ResponseFromJSON,
-    GetBusinessProfile401ResponseToJSON,
     GetVideoComments200ResponseFromJSON,
     GetVideoComments200ResponseToJSON,
     GetVideoList200ResponseFromJSON,
     GetVideoList200ResponseToJSON,
+    GetVideoList400ResponseFromJSON,
+    GetVideoList400ResponseToJSON,
+    GetVideoList401ResponseFromJSON,
+    GetVideoList401ResponseToJSON,
     GetVideoListFiltersParameterFromJSON,
     GetVideoListFiltersParameterToJSON,
     GetVideoSettings200ResponseFromJSON,
@@ -114,7 +117,7 @@ export class DefaultApi extends runtime.BaseAPI {
         }
 
         if (requestParameters['fields'] != null) {
-            queryParameters['fields'] = requestParameters['fields'];
+            queryParameters['fields'] = requestParameters['fields']!.join(runtime.COLLECTION_FORMATS["csv"]);
         }
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -183,7 +186,7 @@ export class DefaultApi extends runtime.BaseAPI {
         }
 
         if (requestParameters['commentIds'] != null) {
-            queryParameters['comment_ids'] = requestParameters['commentIds'];
+            queryParameters['comment_ids'] = requestParameters['commentIds']!.join(runtime.COLLECTION_FORMATS["csv"]);
         }
 
         if (requestParameters['includeReplies'] != null) {
@@ -265,7 +268,7 @@ export class DefaultApi extends runtime.BaseAPI {
         }
 
         if (requestParameters['fields'] != null) {
-            queryParameters['fields'] = requestParameters['fields'];
+            queryParameters['fields'] = requestParameters['fields']!.join(runtime.COLLECTION_FORMATS["csv"]);
         }
 
         if (requestParameters['filters'] != null) {

@@ -14,19 +14,18 @@
 
 
 /**
- * Campaign advertising objectives
+ * Advertising objective for the campaign
  * @export
  */
 export const AdvertisingObjective = {
-    AppPromotion: 'APP_PROMOTION',
-    Conversions: 'CONVERSIONS',
     Reach: 'REACH',
     VideoViews: 'VIDEO_VIEWS',
     Traffic: 'TRAFFIC',
+    AppPromotion: 'APP_PROMOTION',
     LeadGeneration: 'LEAD_GENERATION',
+    Conversions: 'CONVERSIONS',
     ProductSales: 'PRODUCT_SALES',
-    RfReach: 'RF_REACH',
-    WebConversions: 'WEB_CONVERSIONS'
+    Engagement: 'ENGAGEMENT'
 } as const;
 export type AdvertisingObjective = typeof AdvertisingObjective[keyof typeof AdvertisingObjective];
 
