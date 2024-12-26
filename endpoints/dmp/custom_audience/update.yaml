@@ -1,0 +1,54 @@
+post:
+  summary: Update a custom audience
+  description: Modify an existing custom audience
+  operationId: updateCustomAudience
+  tags:
+    - dmp
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - advertiser_id
+            - audience_id
+          properties:
+            advertiser_id:
+              type: string
+              description: Advertiser ID
+            audience_id:
+              type: string
+              description: Custom audience ID to update
+            name:
+              type: string
+              description: New custom audience name
+            description:
+              type: string
+              description: New description for the custom audience
+  responses:
+    '200':
+      description: Successfully updated custom audience
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                properties:
+                  audience_id:
+                    type: string
+                    description: Updated custom audience ID
+                  name:
+                    type: string
+                    description: Updated custom audience name

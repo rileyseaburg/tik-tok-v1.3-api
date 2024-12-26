@@ -1,0 +1,206 @@
+get:
+  summary: Get audience details
+  description: |
+    Get details of specified audiences including status and modification history.
+    Returns details for both owned and shared audiences.
+    Use is_creator to check audience ownership.
+    Maximum 100 audiences per request.
+  operationId: getCustomAudiences
+  tags:
+    - dmp
+  security:
+    - accessToken: []
+  parameters:
+    - name: advertiser_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Advertiser ID
+    - name: custom_audience_ids
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+        minItems: 1
+        maxItems: 100
+      description: List of Audience IDs (1-100)
+    - name: history_size
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+      description: Size of requested history data
+  responses:
+    '200':
+      description: Successfully retrieved audience details
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                properties:
+                  list:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        audience_history:
+                          type: array
+                          description: List of audience modification history
+                          items:
+                            type: object
+                            properties:
+                              action:
+                                type: string
+                                description: |
+                                  Modification made:
+                                  modify: Name edited (custom_audience_name passed)
+                                  upload - replace: Files replaced (file_paths passed, action=REPLACE)
+                                  upload - add: Files added (file_paths passed, action=APPEND)
+                                  upload remove: Files removed (file_paths passed, action=REMOVE)
+                                  convert_to_rf: Enabled for R&F campaigns (audience_sub_type=REACH_FREQUENCY)
+                              action_detail:
+                                type: string
+                                description: Modification result
+                              editor:
+                                type: string
+                                description: Operator (open_api for API modifications)
+                              msg:
+                                type: string
+                                description: Information for partial success operations
+                              opt_time:
+                                type: string
+                                description: Operation time (YYYY-MM-DD HH:MM:SS)
+                        audience_details:
+                          type: object
+                          properties:
+                            audience_id:
+                              type: string
+                              description: Audience ID
+                            msg:
+                              type: string
+                              description: Audience status information
+                            audience_sub_type:
+                              type: string
+                              description: |
+                                Audience sub type:
+                                NORMAL: For non-R&F ads
+                                REACH_FREQUENCY: For R&F ads only
+                            error_msg:
+                              type: string
+                              description: Error information from creation/modification
+                            is_valid:
+                              type: boolean
+                              description: |
+                                Audience availability.
+                                Available after processing, invalid after expiration.
+                            is_expiring:
+                              type: boolean
+                              description: Whether expiring (<60 days to expiration)
+                            expired_time:
+                              type: string
+                              description: Expiration time (YYYY-MM-DD HH:MM:SS)
+                            name:
+                              type: string
+                              description: Audience name
+                            rule:
+                              type: string
+                              description: Creation rule for engagement/app/website audiences
+                            is_auto_refresh:
+                              type: boolean
+                              description: Daily refresh setting for engagement/app/website audiences
+                            shared:
+                              type: boolean
+                              description: Whether audience is shared with others
+                            is_creator:
+                              type: boolean
+                              description: |
+                                Whether advertiser owns the audience:
+                                shared=true, is_creator=true: Owner, shared to others
+                                shared=true, is_creator=false: Not owner, shared by others
+                                shared=false, is_creator=true: Owner, not shared
+                            owner_id:
+                              type: string
+                              description: |
+                                Advertiser ID of audience creator.
+                                If is_creator=true: matches request advertiser_id
+                                If is_creator=false: ID of creating advertiser
+                            create_time:
+                              type: string
+                              description: Creation time (YYYY-MM-DD HH:MM:SS)
+                            type:
+                              type: string
+                              description: |
+                                Audience type:
+                                Customer File Audience
+                                Engagement Audience
+                                App Activity Audience
+                                Website Audience
+                                Lookalike Audience
+                                Lead Generation
+                                Rule Business Account
+                                Rule ad shop
+                                Partner
+                                Challenge
+                                Preferred Population
+                                Note: Partner, Challenge, Premium not creatable via API
+                            cover_num:
+                              type: integer
+                              description: Number of matched TikTok users
+                            calculate_type:
+                              type: string
+                              description: |
+                                Encryption type for customer file audiences.
+                                See Enumeration - Encryption Type.
+                            lookalike_spec:
+                              type: array
+                              description: Lookalike audience-specific information
+                              items:
+                                type: object
+                                properties:
+                                  source_audience_id:
+                                    type: string
+                                    description: Source (seed) audience ID
+                                  include_source:
+                                    type: boolean
+                                    description: Whether to include source audience
+                                  mobile_os:
+                                    type: string
+                                    description: |
+                                      Device operating systems:
+                                      ALL, ANDROID, IOS
+                                  placements:
+                                    type: string
+                                    description: |
+                                      Ad delivery apps:
+                                      TikTok, TopBuzz & BuzzVideo, Pangle
+                                  location_ids:
+                                    type: array
+                                    items:
+                                      type: string
+                                    description: Target location IDs
+                                  audience_size:
+                                    type: string
+                                    description: |
+                                      Lookalike audience size:
+                                      NARROW, BALANCED, BROAD
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

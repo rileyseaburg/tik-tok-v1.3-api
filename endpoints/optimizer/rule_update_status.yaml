@@ -1,0 +1,79 @@
+post:
+  summary: Update the statuses of rules
+  description: |
+    Turn on, turn off, or delete a group of rules.
+    Note: If updating one rule fails, the whole operation fails and no rules are updated.
+  operationId: updateOptimizerRuleStatuses
+  tags:
+    - optimizer
+  security:
+    - accessToken: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - advertiser_id
+            - rule_ids
+            - operate_type
+          properties:
+            advertiser_id:
+              type: string
+              description: Advertiser ID
+            rule_ids:
+              type: array
+              description: IDs of rules to update status
+              items:
+                type: string
+            operate_type:
+              type: string
+              description: Operation type
+              enum:
+                - TURN_ON
+                - TURN_OFF
+                - DELETE
+            lang:
+              type: string
+              description: |
+                Error message language
+                ZH: Simplified Chinese
+                EN: English (default)
+                JA: Japanese
+              default: EN
+              enum:
+                - ZH
+                - EN
+                - JA
+  responses:
+    '200':
+      description: Successfully updated rule statuses
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                properties:
+                  rule_ids:
+                    type: array
+                    description: Successfully updated rule IDs
+                    items:
+                      type: string
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

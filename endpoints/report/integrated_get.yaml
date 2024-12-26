@@ -1,0 +1,295 @@
+.get:
+  operationId: getIntegratedReport
+  summary: Run a synchronous report
+  description: |
+    Use this endpoint to create a synchronous report task.
+
+    This endpoint can currently return the reporting data of up to 20,000 advertisements. If your number of advertisements exceeds 20,000, please use campaign_ids / adgroup_ids / ad_ids as a filter to obtain the reporting data of all advertisements in batches. If you use campaign_ids / adgroup_ids / ad_ids as a filter, you can pass in up to 100 IDs at a time.
+
+    Note:
+    If you compare the synchronous report with a report downloaded from TTAM (TikTok Ads Manager), you will discover data inconsistency because the downloaded report should be compared with its counterpart, an asynchronous report, rather than a synchronous report. Both the TTAM downloaded report and the API asynchronous report do not implement the 20,000-truncation for ads.
+
+    Changes from v1.2 to v1.3:
+    - Endpoint path changed from /v1.2/reports/integrated/get/ to /v1.3/report/integrated/get/
+    - Parameter name changed: filters → filtering
+    - Parameter types changed:
+      * advertiser_id: number → string
+      * campaign_id: number → string
+      * adgroup_id: number → string
+      * ad_id: number → string
+    - Parameter deprecated: lifetime (replaced by query_lifetime)
+    - New parameters added:
+      * query_lifetime
+      * bc_id
+      * enable_total_metrics
+      * advertiser_ids
+    - New response parameters:
+      * X-Tt-Ads-Throttle: string
+      * contextual_tag: string
+  tags:
+    - report
+  parameters:
+    - name: advertiser_id
+      in: query
+      schema:
+        type: string
+      description: |
+        You need to pass in either advertiser_id/advertiser_ids or bc_id.
+        When report_type is set to BASIC or AUDIENCE, pass in advertiser_id or advertiser_ids.
+        When report_type is set to PLAYABLE_MATERIAL, CATALOG, or TT_SHOP, pass in advertiser_id.
+        When report_type is set to BC, pass in bc_id.
+    - name: advertiser_ids
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+        maxItems: 5
+      description: |
+        When report_type is set to BASIC or AUDIENCE, you need to pass in either advertiser_id or advertiser_ids.
+        A list of advertiser IDs. Max size: 5.
+        Note: The advertisers should all belong to the same TikTok for Business user.
+    - name: bc_id
+      in: query
+      schema:
+        type: string
+      description: |
+        ID of a Business Center that you have access to.
+        Required when report_type is BC.
+    - name: service_type
+      in: query
+      schema:
+        type: string
+        enum:
+          - AUCTION
+          - RESERVATION
+        default: AUCTION
+      description: |
+        Ad service type.
+        Not supported when report_type is BC.
+        Default value when report_type is not BC: AUCTION
+    - name: report_type
+      in: query
+      required: true
+      schema:
+        type: string
+        enum:
+          - BASIC
+          - AUDIENCE
+          - PLAYABLE_MATERIAL
+          - CATALOG
+          - BC
+          - TT_SHOP
+      description: Report type
+    - name: data_level
+      in: query
+      schema:
+        type: string
+        enum:
+          - AUCTION_AD
+          - AUCTION_ADGROUP
+          - AUCTION_CAMPAIGN
+          - AUCTION_ADVERTISER
+          - RESERVATION_AD
+          - RESERVATION_ADGROUP
+          - RESERVATION_CAMPAIGN
+          - RESERVATION_ADVERTISER
+      description: |
+        The data level to query in reports.
+        Required when report_type is BASIC, AUDIENCE or CATALOG.
+        Not supported when report_type is BC.
+    - name: dimensions
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+      description: |
+        Grouping conditions. For example: ["campaign_id", "stat_time_day"].
+        Different report types support different dimensions.
+    - name: metrics
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+      description: |
+        Metrics to query.
+        Different report types support different metrics.
+    - name: enable_total_metrics
+      in: query
+      schema:
+        type: boolean
+      description: |
+        Whether to enable the total added-up data for your requested metrics.
+        Only supports auction basic reports and GMV max ads reports.
+    - name: start_date
+      in: query
+      schema:
+        type: string
+        format: date
+      description: |
+        Query start date (YYYY-MM-DD).
+        Required when query_lifetime is false or not specified.
+    - name: end_date
+      in: query
+      schema:
+        type: string
+        format: date
+      description: |
+        Query end date (YYYY-MM-DD).
+        Required when query_lifetime is false or not specified.
+    - name: query_lifetime
+      in: query
+      schema:
+        type: boolean
+        default: false
+      description: |
+        Whether to request lifetime metrics.
+        Supported when report_type is BASIC or PLAYABLE_MATERIAL.
+    - name: multi_adv_report_in_utc_time
+      in: query
+      schema:
+        type: boolean
+        default: false
+      description: |
+        Whether to set the returned metrics in UTC+0 timezone for all advertisers.
+        Only valid when using advertiser_ids.
+    - name: order_field
+      in: query
+      schema:
+        type: string
+      description: Sorting field. All supported metrics (excluding attribute metrics) support sorting.
+    - name: order_type
+      in: query
+      schema:
+        type: string
+        enum:
+          - ASC
+          - DESC
+        default: DESC
+      description: Sorting order
+    - name: filtering
+      in: query
+      schema:
+        type: array
+        items:
+          type: object
+          required:
+            - field_name
+            - filter_type
+            - filter_value
+          properties:
+            field_name:
+              type: string
+              description: Filter field name
+            filter_type:
+              type: string
+              enum:
+                - IN
+                - MATCH
+                - GREATER_EQUAL
+                - GREATER_THAN
+                - LOWER_EQUAL
+                - LOWER_THAN
+                - BETWEEN
+              description: Filter type
+            filter_value:
+              type: string
+              description: The value to filter
+      description: |
+        Filtering conditions.
+        Supported when report_type is BASIC, AUDIENCE, PLAYABLE_MATERIAL, CATALOG, or BC.
+    - name: page
+      in: query
+      schema:
+        type: integer
+        default: 1
+      description: Current page number
+    - name: page_size
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 1000
+        default: 10
+      description: Pagination size (1-1,000)
+  responses:
+    '200':
+      description: Successfully retrieved report data
+      headers:
+        X-Tt-Ads-Throttle:
+          schema:
+            type: string
+          description: Warning message to indicate request's over limit issue
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - code
+              - message
+              - data
+              - request_id
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              data:
+                type: object
+                properties:
+                  total_metrics:
+                    type: object
+                    description: Total added-up data when enable_total_metrics is true
+                    additionalProperties:
+                      type: string
+                  list:
+                    type: array
+                    description: Data list
+                    items:
+                      type: object
+                      properties:
+                        dimensions:
+                          type: object
+                          description: Requested dimension data
+                          additionalProperties:
+                            type: string
+                        metrics:
+                          type: object
+                          description: Requested metric data
+                          additionalProperties:
+                            type: string
+                  page_info:
+                    type: object
+                    properties:
+                      page:
+                        type: integer
+                        description: Current page number
+                      page_size:
+                        type: integer
+                        description: Page size
+                      total_number:
+                        type: integer
+                        description: Total number of results
+                      total_page:
+                        type: integer
+                        description: Total pages of results
+              request_id:
+                type: string
+                description: The log ID of the request
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../schemas/responses.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../schemas/responses.yaml#/components/responses/NotFound'
+    '429':
+      $ref: '../schemas/responses.yaml#/components/responses/TooManyRequests'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

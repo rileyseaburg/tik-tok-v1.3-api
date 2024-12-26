@@ -1,0 +1,95 @@
+post:
+  summary: Update ad group budgets
+  description: |
+    Update ad group budgets:
+    - Update lifetime budgets immediately
+    - Schedule daily/dynamic daily budget changes for next day
+
+    Notes:
+    - Scheduled changes take effect at 00:00 AM in ad account timezone
+    - Cannot set/update during budget lock time (23:55-00:00)
+    - See Currency documentation for budget limits
+  operationId: updateAdGroupBudget
+  tags:
+    - adgroup
+  security:
+    - accessToken: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - advertiser_id
+          oneOf:
+            - required: [budget]
+            - required: [scheduled_budget]
+          properties:
+            advertiser_id:
+              type: string
+              description: Advertiser ID
+            budget:
+              type: array
+              description: |
+                Information about new lifetime budgets for ad groups.
+                Changes take effect immediately.
+                Either budget or scheduled_budget must be set.
+              items:
+                type: object
+                required:
+                  - adgroup_id
+                  - budget
+                properties:
+                  adgroup_id:
+                    type: string
+                    description: Ad group ID
+                  budget:
+                    type: number
+                    format: float
+                    description: New lifetime budget for the ad group
+            scheduled_budget:
+              type: array
+              description: |
+                Information about scheduled budget changes.
+                Changes take effect next day at 00:00 AM.
+                Either budget or scheduled_budget must be set.
+              items:
+                type: object
+                required:
+                  - adgroup_id
+                  - scheduled_budget
+                properties:
+                  adgroup_id:
+                    type: string
+                    description: Ad group ID
+                  scheduled_budget:
+                    type: number
+                    format: float
+                    description: New daily/dynamic daily budget for the ad group
+  responses:
+    '200':
+      description: Successfully updated ad group budgets
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                description: Return data
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

@@ -1,0 +1,73 @@
+get:
+  operationId: getLanguages
+  summary: Get languages
+  description: |
+    Use this endpoint to get the enum values of language codes.
+
+    After you obtain the language codes, you can pass them to languages in /adgroup/create/ for language targeting.
+
+    Changes from v1.2 to v1.3:
+    - Endpoint path changed from /v1.2/tools/language/ to /v1.3/tool/language/
+    - advertiser_id type changed from number to string
+  tags:
+    - tool
+  parameters:
+    - name: advertiser_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Advertiser ID
+  responses:
+    '200':
+      description: Successfully retrieved language codes
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - code
+              - message
+              - request_id
+              - data
+            properties:
+              code:
+                type: integer
+                description: Return code
+              message:
+                type: string
+                description: Return message
+              request_id:
+                type: string
+                description: The log id of a request, which uniquely identifies the request
+              data:
+                type: object
+                properties:
+                  languages:
+                    type: array
+                    description: Language list
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                          description: |
+                            Language code. You can pass the value of this field to languages in /adgroup/create/ for language targeting.
+                            Example: en
+                        name:
+                          type: string
+                          description: |
+                            Language name.
+                            Example: English
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../schemas/responses.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../schemas/responses.yaml#/components/responses/NotFound'
+    '429':
+      $ref: '../schemas/responses.yaml#/components/responses/TooManyRequests'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

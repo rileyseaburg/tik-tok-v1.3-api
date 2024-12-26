@@ -1,0 +1,72 @@
+get:
+  operationId: validateUrl
+  summary: Get the verification results of a URL
+  description: |
+    Use this endpoint to check whether a URL is a custom URL scheme, Apple's universal link, or Android App Link, and whether the URL is valid.
+  tags:
+    - tool
+  parameters:
+    - name: advertiser_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Advertiser ID
+    - name: url
+      in: query
+      required: true
+      schema:
+        type: string
+      description: The URL that you want to get verification results for
+  responses:
+    '200':
+      description: Successfully validated URL
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - code
+              - message
+              - request_id
+              - data
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: The log ID of a request, which uniquely identifies the request
+              data:
+                type: object
+                properties:
+                  url_info:
+                    type: object
+                    properties:
+                      validate_info:
+                        type: object
+                        properties:
+                          is_scheme_link:
+                            type: boolean
+                            description: Whether the URL is a custom URL scheme
+                          is_valid_url:
+                            type: boolean
+                            description: Whether the URL is a valid URL (Apple's universal link, Android App Link, or custom URL scheme)
+                          is_valid_scheme:
+                            type: boolean
+                            description: Whether the URL is a valid custom URL scheme
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../schemas/responses.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../schemas/responses.yaml#/components/responses/NotFound'
+    '429':
+      $ref: '../schemas/responses.yaml#/components/responses/TooManyRequests'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

@@ -1,0 +1,78 @@
+post:
+  summary: Apply audiences to ad groups
+  description: |
+    Apply audience to or disconnect audience from multiple ad groups.
+    
+    Notes:
+    - adgroup_ids and custom_audience_id must be under the same advertiser account
+    - Lookalike Audience cannot be used in Reach & Frequency ads:
+      * Cannot apply Lookalike Audience to R&F ad groups
+      * Cannot use Lookalike Audience with REACH_FREQUENCY subtype
+  operationId: applyCustomAudience
+  tags:
+    - dmp
+  security:
+    - accessToken: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - advertiser_id
+            - custom_audience_id
+            - adgroup_ids
+            - action_mode
+          properties:
+            advertiser_id:
+              type: string
+              description: Advertiser ID
+            custom_audience_id:
+              type: string
+              description: Custom audience ID (only one allowed)
+            adgroup_ids:
+              type: array
+              description: List of ad group IDs
+              items:
+                type: string
+            action_mode:
+              type: string
+              description: Operation to perform on the audience
+              enum:
+                - Apply
+                - Disconnect
+            usage_mode:
+              type: string
+              description: |
+                Whether to include or exclude audience from ad groups
+                Required when action_mode is Apply
+              enum:
+                - Include
+                - Exclude
+  responses:
+    '200':
+      description: Successfully applied/disconnected audience
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                description: Returned data
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

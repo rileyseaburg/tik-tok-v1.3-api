@@ -1,0 +1,171 @@
+get:
+  summary: Get Business Profile Data
+  description: |
+    Access detailed analytics and insights about a TikTok account's follower base and profile engagement.
+    Note: Some metrics have a 24-48 hour delay in availability and require specific permissions.
+  operationId: getBusinessProfile
+  parameters:
+    - name: Access-Token
+      in: header
+      required: true
+      schema:
+        type: string
+      description: Access token authorized by TikTok creators. Obtain via /tt_user/oauth2/token/
+    - name: business_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Application specific unique identifier for the TikTok account (open_id from OAuth token)
+    - name: start_date
+      in: query
+      schema:
+        type: string
+        format: date
+      description: |
+        Query start date (UTC), format YYYY-MM-DD.
+        Default: [current date - 7 days]
+        Maximum look-back period: 60 days
+    - name: end_date
+      in: query
+      schema:
+        type: string
+        format: date
+      description: |
+        Query end date (UTC), format YYYY-MM-DD.
+        Default: [current date - 1 day]
+    - name: fields
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+        default: ["display_name", "profile_image"]
+      description: |
+        Requested fields. Default fields are display_name and profile_image.
+        Some fields require specific permissions - check scope via /tt_user/token_info/get/
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Unique identifier for the API request
+              data:
+                type: object
+                properties:
+                  is_business_account:
+                    type: boolean
+                    description: Whether the account is a TikTok Business Account
+                  username:
+                    type: string
+                    description: Username of TikTok account
+                  display_name:
+                    type: string
+                    description: Display name for TikTok account
+                  profile_image:
+                    type: string
+                    description: Temporary URL for profile image
+                  bio_description:
+                    type: string
+                    description: The bio description of the TikTok account
+                  profile_deep_link:
+                    type: string
+                    description: Link to the profile page
+                  is_verified:
+                    type: boolean
+                    description: Whether account has verified badge
+                  following_count:
+                    type: integer
+                    description: Lifetime number of accounts being followed
+                  total_likes:
+                    type: integer
+                    description: Lifetime number of likes received
+                  videos_count:
+                    type: integer
+                    description: Lifetime number of public videos posted
+                  followers_count:
+                    type: integer
+                    description: Current total number of followers
+                  audience_countries:
+                    type: array
+                    description: Country distribution of followers (requires 100+ followers)
+                    items:
+                      type: object
+                      properties:
+                        country:
+                          type: string
+                          description: ISO 3166-1 alpha-2 country code
+                        percentage:
+                          type: number
+                          format: float
+                          description: Percentage of audience from country
+                  audience_genders:
+                    type: array
+                    description: Gender distribution of followers (requires 100+ followers)
+                    items:
+                      type: object
+                      properties:
+                        gender:
+                          type: string
+                          enum: [Female, Male, Other]
+                        percentage:
+                          type: number
+                          format: float
+                          description: Percentage of audience of specified gender
+                  metrics:
+                    type: array
+                    description: Daily metrics with 24-48 hour delay
+                    items:
+                      type: object
+                      properties:
+                        date:
+                          type: string
+                          format: date
+                          description: Date in YYYY-MM-DD format (UTC)
+                        followers_count:
+                          type: integer
+                          description: Net followers gained on specified day
+                        profile_views:
+                          type: integer
+                          description: Profile views on specified day
+                        video_views:
+                          type: integer
+                          description: Video views on specified day
+                        likes:
+                          type: integer
+                          description: Likes received on specified day
+                        comments:
+                          type: integer
+                          description: Comments received on specified day
+                        shares:
+                          type: integer
+                          description: Shares on specified day
+                        audience_activity:
+                          type: array
+                          description: Hourly follower activity (requires 100+ followers)
+                          items:
+                            type: object
+                            properties:
+                              hour:
+                                type: string
+                                description: Hour of day (0-23)
+                              count:
+                                type: integer
+                                description: Number of followers online
+    '400':
+      $ref: '../../swagger.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../../swagger.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../../swagger.yaml#/components/responses/InternalError'

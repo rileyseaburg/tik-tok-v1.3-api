@@ -1,0 +1,68 @@
+get:
+  operationId: getSmartPlusCampaigns
+  summary: Get Smart+ Campaigns
+  description: |
+    Use this endpoint to obtain detailed information of Smart+ Campaigns and Smart Performance Web Campaigns.
+
+    Note: Smart Performance Web Campaigns will be deprecated in the next API version. To ensure a smooth API integration, we recommend that you upgrade to Smart+ Web Campaigns as soon as possible.
+  tags:
+    - campaign
+  parameters:
+    - name: advertiser_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Advertiser ID
+    - name: campaign_ids
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+        maxItems: 100
+      description: |
+        A list of campaign IDs.
+        Max size: 100.
+  responses:
+    '200':
+      description: Successfully retrieved Smart+ Campaigns
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - code
+              - message
+              - request_id
+              - data
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                properties:
+                  list:
+                    type: array
+                    items:
+                      $ref: 'endpoints/schemas/types.yaml#/components/schemas/SmartPlusCampaign'
+     '400':
+       $ref: 'endpoints/schemas/responses.yaml#/components/responses/BadRequest'
+     '401':
+       $ref: 'endpoints/schemas/responses.yaml#/components/responses/Unauthorized'
+     '403':
+       $ref: 'endpoints/schemas/responses.yaml#/components/responses/Forbidden'
+     '404':
+       $ref: 'endpoints/schemas/responses.yaml#/components/responses/NotFound'
+     '429':
+       $ref: 'endpoints/schemas/responses.yaml#/components/responses/TooManyRequests'
+     '500':
+       $ref: 'endpoints/schemas/responses.yaml#/components/responses/InternalError'

@@ -1,0 +1,526 @@
+post:
+  summary: Create an asynchronous campaign copy task
+  description: |
+    Create an asynchronous campaign copy task.
+    Only one campaign can be copied at a time.
+    Use /campaign/copy/task/check/ to check results.
+    Note: This is an allowlist-only feature.
+  operationId: createCampaignCopyTask
+  tags:
+    - campaign
+  security:
+    - accessToken: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - advertiser_id
+            - campaign_id
+            - request_id
+          properties:
+            advertiser_id:
+              type: string
+              description: Advertiser ID
+            campaign_id:
+              type: string
+              description: |
+                Campaign ID to copy
+                Cannot copy:
+                - iOS Dedicated Campaigns without SAN
+                - Campaigns with Playable Ads (after Sep 30, 2024)
+                - Smart Performance Campaigns
+                - ACO ad groups
+                - Split test groups
+            request_id:
+              type: string
+              description: |
+                Request ID for idempotency
+                64-bit integer as string
+                10-second cache time
+            operation_status:
+              type: string
+              description: |
+                New campaign status
+                Default: DISABLE
+              enum:
+                - ENABLE
+                - DISABLE
+            campaign_name:
+              type: string
+              description: |
+                New campaign name
+                Max 512 chars, no emoji
+                Default: COPIED_{original_name}
+            is_advanced_dedicated_campaign:
+              type: boolean
+              description: |
+                Enable advanced delivery models
+                Inherits from original if not specified
+                Cannot update after creation
+            budget:
+              type: number
+              description: |
+                New campaign budget
+                Default: original budget
+            rta_id:
+              type: string
+              description: RTA strategy identifier
+            schedule_type:
+              type: string
+              description: |
+                Schedule type for all new ad groups
+                SCHEDULE_START_END: Set start/end time
+                SCHEDULE_FROM_NOW: Set start time only
+              enum:
+                - SCHEDULE_START_END
+                - SCHEDULE_FROM_NOW
+            schedule_start_time:
+              type: string
+              description: |
+                Schedule start time (UTC+0)
+                Format: YYYY-MM-DD HH:MM:SS
+                Max 12 hours earlier than current time
+                Max 2028-01-01 00:00:00
+            schedule_end_time:
+              type: string
+              description: |
+                Schedule end time (UTC+0)
+                Format: YYYY-MM-DD HH:MM:SS
+                Required for SCHEDULE_START_END
+                Max 2038-01-01 00:00:00
+            deep_copy_mode:
+              type: string
+              description: |
+                Copy mode for ad groups/ads
+                DEFAULT: Copy all undeleted items
+                CUSTOM: Copy specified items only
+              enum:
+                - DEFAULT
+                - CUSTOM
+              default: DEFAULT
+            adgroup_list:
+              type: array
+              description: |
+                Custom settings for new ad groups
+                Required for CUSTOM mode
+                Max 20 ad groups
+              maxItems: 20
+              items:
+                type: object
+                properties:
+                  adgroup_id:
+                    type: string
+                    description: |
+                      Ad group ID to copy
+                      Must belong to original campaign
+                  operation_status:
+                    type: string
+                    description: |
+                      New ad group status
+                      Default: ENABLE
+                    enum:
+                      - ENABLE
+                      - DISABLE
+                  adgroup_name:
+                    type: string
+                    description: |
+                      New ad group name
+                      Default: original name
+                  location_ids:
+                    type: array
+                    description: |
+                      Target location IDs
+                      Max 3000 total with zipcode_ids
+                    items:
+                      type: string
+                  zipcode_ids:
+                    type: array
+                    description: |
+                      Target zip/postal code IDs
+                      Max 3000 total with location_ids
+                    items:
+                      type: string
+                  audience_ids:
+                    type: array
+                    description: Target audience IDs
+                    items:
+                      type: string
+                  excluded_audience_ids:
+                    type: array
+                    description: Excluded audience IDs
+                    items:
+                      type: string
+                  age_groups:
+                    type: array
+                    description: Target age groups
+                    items:
+                      type: string
+                  budget:
+                    type: number
+                    description: New ad group budget
+                  schedule_type:
+                    type: string
+                    description: |
+                      Schedule type for this ad group
+                      Overrides campaign-level schedule
+                    enum:
+                      - SCHEDULE_START_END
+                      - SCHEDULE_FROM_NOW
+                  schedule_start_time:
+                    type: string
+                    description: |
+                      Schedule start time (UTC+0)
+                      Format: YYYY-MM-DD HH:MM:SS
+                  schedule_end_time:
+                    type: string
+                    description: |
+                      Schedule end time (UTC+0)
+                      Format: YYYY-MM-DD HH:MM:SS
+                  ad_list:
+                    type: array
+                    description: |
+                      Settings for new ads
+                      Required for non-ACO non-Smart Creative
+                      Max 50 ads per ad group
+                    maxItems: 50
+                    items:
+                      type: object
+                      properties:
+                        ad_id:
+                          type: string
+                          description: |
+                            Ad ID to copy
+                            Must belong to original ad group
+                        operation_status:
+                          type: string
+                          description: |
+                            New ad status
+                            Default: ENABLE
+                          enum:
+                            - ENABLE
+                            - DISABLE
+                        ad_name:
+                          type: string
+                          description: |
+                            New ad name
+                            Default: COPIED_{original_name}_{original_id}
+                        identity_type:
+                          type: string
+                          description: Identity type
+                          enum:
+                            - CUSTOMIZED_USER
+                            - AUTH_CODE
+                            - TT_USER
+                            - BC_AUTH_TT
+                        identity_id:
+                          type: string
+                          description: Identity ID
+                        identity_authorized_bc_id:
+                          type: string
+                          description: |
+                            Business Center ID
+                            Required for BC_AUTH_TT identity
+                        ad_format:
+                          type: string
+                          description: |
+                            Ad format
+                            Required for format conversion
+                          enum:
+                            - SINGLE_VIDEO
+                            - SINGLE_IMAGE
+                            - CAROUSEL_ADS
+                        video_id:
+                          type: string
+                          description: Video ID
+                        image_ids:
+                          type: array
+                          description: Image IDs
+                          items:
+                            type: string
+                        music_id:
+                          type: string
+                          description: Music ID for Carousel
+                        tiktok_item_id:
+                          type: string
+                          description: TikTok post ID for Spark Ads
+                        ad_text:
+                          type: string
+                          description: |
+                            Ad text
+                            Max 100 chars, no emoji
+                        aigc_disclosure_type:
+                          type: string
+                          description: |
+                            AI-generated content disclosure
+                            Default: NOT_DECLARED
+                          enum:
+                            - SELF_DISCLOSURE
+                            - NOT_DECLARED
+                        tracking_pixel_id:
+                          type: string
+                          description: Pixel ID for tracking
+                        tracking_app_id:
+                          type: string
+                          description: App ID for tracking
+                  smart_creative_info:
+                    type: object
+                    description: |
+                      Smart Creative ad settings
+                      Optional for Smart Creative ad groups
+                    properties:
+                      media_info_list:
+                        type: array
+                        description: Media information list
+                        maxItems: 30
+                        items:
+                          type: object
+                          properties:
+                            media_info:
+                              type: object
+                              description: Material information
+                              properties:
+                                image_info:
+                                  type: array
+                                  description: Image information
+                                  items:
+                                    type: object
+                                    properties:
+                                      web_uri:
+                                        type: string
+                                        description: Image ID
+                                      file_name:
+                                        type: string
+                                        description: Image name
+                                video_info:
+                                  type: object
+                                  description: Video information
+                                  properties:
+                                    video_id:
+                                      type: string
+                                      description: Video ID
+                                    file_name:
+                                      type: string
+                                      description: Video name
+                                    aigc_disclosure_type:
+                                      type: string
+                                      description: |
+                                        AI content disclosure
+                                        Default: NOT_DECLARED
+                                      enum:
+                                        - SELF_DISCLOSURE
+                                        - NOT_DECLARED
+                                tiktok_item_id:
+                                  type: string
+                                  description: TikTok post ID
+                                identity_id:
+                                  type: string
+                                  description: Identity ID
+                                identity_type:
+                                  type: string
+                                  description: Identity type
+                                  enum:
+                                    - AUTH_CODE
+                                    - TT_USER
+                      title_list:
+                        type: array
+                        description: Ad titles
+                        maxItems: 5
+                        items:
+                          type: object
+                          properties:
+                            title:
+                              type: string
+                              description: |
+                                Ad title text
+                                12-40 chars, no emoji
+                      call_to_action_list:
+                        type: array
+                        description: Call-to-action list
+                        maxItems: 3
+                        items:
+                          type: object
+                          properties:
+                            call_to_action:
+                              type: string
+                              description: CTA text
+                      deeplink_list:
+                        type: array
+                        description: Deeplink list
+                        maxItems: 1
+                        items:
+                          type: object
+                          properties:
+                            deeplink:
+                              type: string
+                              description: Deeplink URL
+                            deeplink_type:
+                              type: string
+                              description: |
+                                Deeplink type
+                                Default: NORMAL
+                              enum:
+                                - NORMAL
+                                - DEFERRED_DEEPLINK
+                      display_name_list:
+                        type: array
+                        description: Display names
+                        items:
+                          type: object
+                          properties:
+                            app_name:
+                              type: string
+                              description: |
+                                App display name
+                                Max 40 chars
+                            landing_page_name:
+                              type: string
+                              description: |
+                                Landing page name
+                                Max 40 chars
+                      page_list:
+                        type: array
+                        description: Page IDs
+                        maxItems: 3
+                        items:
+                          type: object
+                          properties:
+                            page_id:
+                              type: string
+                              description: Page ID
+                      card_list:
+                        type: array
+                        description: Creative portfolio IDs
+                        maxItems: 1
+                        items:
+                          type: object
+                          properties:
+                            card_id:
+                              type: string
+                              description: Portfolio ID
+                      landing_page_urls:
+                        type: array
+                        description: |
+                          Landing page URLs
+                          Required for WEBSITE fallback
+                        maxItems: 1
+                        items:
+                          type: object
+                          properties:
+                            landing_page_url:
+                              type: string
+                              description: Landing page URL
+                      common_material:
+                        type: object
+                        description: Common material settings
+                        properties:
+                          identity_id:
+                            type: string
+                            description: Identity ID
+                          identity_type:
+                            type: string
+                            description: Identity type
+                            enum:
+                              - CUSTOMIZED_USER
+                          ad_name:
+                            type: string
+                            description: |
+                              Ad name
+                              Max 512 chars, no emoji
+                          call_to_action_id:
+                            type: string
+                            description: CTA portfolio ID
+                          creative_authorized:
+                            type: string
+                            description: |
+                              Allow display in Creative Center
+                              Non-US advertisers only
+                              Default: false
+                          playable_url:
+                            type: string
+                            description: |
+                              Playable material URL
+                              Pangle placement only
+                          fallback_type:
+                            type: string
+                            description: |
+                              Fallback type
+                              Not for Deferred Deeplinks
+                            enum:
+                              - APP_INSTALL
+                              - WEBSITE
+                          tracking_info:
+                            type: object
+                            description: Tracking settings
+                            properties:
+                              impression_tracking_urls:
+                                type: array
+                                description: Impression tracking URLs
+                                maxItems: 1
+                                items:
+                                  type: string
+                              click_tracking_urls:
+                                type: array
+                                description: Click tracking URLs
+                                maxItems: 1
+                                items:
+                                  type: string
+                              tracking_pixel_id:
+                                type: string
+                                description: Pixel ID for tracking
+                              tracking_app_id:
+                                type: string
+                                description: App ID for tracking
+                              tracking_offline_event_set_ids:
+                                type: array
+                                description: |
+                                  Offline Event set IDs
+                                  Max 50 IDs
+                                maxItems: 50
+                                items:
+                                  type: string
+  responses:
+    '200':
+      description: Successfully created campaign copy task
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                properties:
+                  task_id:
+                    type: string
+                    description: |
+                      Async task ID
+                      Empty if errors occurred
+                  adgroup_error_list:
+                    type: array
+                    description: Ad group copy errors
+                    items:
+                      type: object
+                      properties:
+                        adgroup_id:
+                          type: string
+                          description: Failed ad group ID
+                        error_message:
+                          type: string
+                          description: Error message
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

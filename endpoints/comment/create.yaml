@@ -1,0 +1,80 @@
+post:
+  summary: Create a comment on a TikTok video
+  description: Create a new comment on an owned TikTok video.
+  operationId: createComment
+  tags:
+    - comment
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - business_id
+            - video_id
+            - text
+          properties:
+            business_id:
+              type: string
+              description: Application specific unique identifier for the TikTok account. Pass the value of the open_id field returned in the response of /tt_user/oauth2/token/.
+            video_id:
+              type: string
+              description: Unique identifier for owned TikTok video to create comments on. This can be accessed via the /business/video/list/ endpoint as the item_id for each video listed.
+            text:
+              type: string
+              description: Text content of the comment to create. Length limit - 150 characters (UTF-8 encoding).
+              maxLength: 150
+              example: "This is a comment #comment 🙂"
+  responses:
+    '200':
+      description: Comment created successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+                example: 0
+              message:
+                type: string
+                description: Response message
+                example: "OK"
+              request_id:
+                type: string
+                description: Unique identifier for the API request
+              data:
+                type: object
+                properties:
+                  unique_identifier:
+                    type: string
+                    description: A globally unique identifier assigned to each user commenting
+                    example: "+ABc1D2/E0fGhijklMNOrD34vDW/zDiZUNRH5Jyahue6OcA7b8ZpwnqXV9u1Uh+k"
+                  comment_id:
+                    type: string
+                    description: Unique identifier for the newly created comment
+                    example: "6990565363377392901"
+                  text:
+                    type: string
+                    description: Text content of the comment
+                    example: "This is a comment #comment 🙂"
+                  video_id:
+                    type: string
+                    description: Unique identifier for the owned video the comment was created on
+                    example: "6990565363377392901"
+                  create_time:
+                    type: string
+                    description: Unix/Epoch date-time when the comment was created
+                    example: "1717489600"
+                  user_id:
+                    type: string
+                    description: Developer application and TikTok account scoped unique identifier (To be deprecated)
+                    example: "ce9b7be629b0447af777a0ad945783f61b7f790982b49fbda04a23b4722eaffe"
+    '400':
+      $ref: '../../swagger.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../../swagger.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../../swagger.yaml#/components/responses/InternalError'

@@ -1,0 +1,71 @@
+get:
+  operationId: getBrandSafetyPartnerStatus
+  summary: Get the authorization status of a Brand Safety partner
+  description: |
+    Use this endpoint to get the authorization status of your Brand Safety partner.
+
+    For Zefr, please go to https://measurement.zefr.com/tiktok/connect to complete setup.
+
+    Changes from v1.2 to v1.3:
+    - Endpoint path changed from /v1.2/tools/brand_safety/partner/authentication/ to /v1.3/tool/brand_safety/partner/authorize/status/
+    - advertiser_id type changed from number to string
+  tags:
+    - tool
+  parameters:
+    - name: advertiser_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Advertiser ID
+    - name: partner
+      in: query
+      required: true
+      schema:
+        type: string
+        enum:
+          - Zefr
+      description: Brand Safety post bid measurement partner
+  responses:
+    '200':
+      description: Successfully retrieved authorization status
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - code
+              - message
+              - request_id
+              - data
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: The log id of a request, which uniquely identifies the request
+              data:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: Authorization status
+                    enum:
+                      - OK
+                      - NOT_FOUND
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../schemas/responses.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../schemas/responses.yaml#/components/responses/NotFound'
+    '429':
+      $ref: '../schemas/responses.yaml#/components/responses/TooManyRequests'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

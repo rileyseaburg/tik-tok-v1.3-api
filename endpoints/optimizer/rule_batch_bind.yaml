@@ -1,0 +1,93 @@
+post:
+  summary: Bind/Unbind rules
+  description: Bind objects to an existing rule, or unbind objects from a rule
+  operationId: batchBindOptimizerRules
+  tags:
+    - optimizer
+  security:
+    - accessToken: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - advertiser_id
+            - bind_info
+          properties:
+            advertiser_id:
+              type: string
+              description: Advertiser ID
+            bind_info:
+              type: array
+              description: Binding information
+              items:
+                type: object
+                required:
+                  - rule_id
+                  - dimension
+                  - dimension_ids
+                  - bind_type
+                properties:
+                  rule_id:
+                    type: string
+                    description: Rule ID to bind objects to
+                  dimension:
+                    type: string
+                    description: Object category
+                    enum:
+                      - CAMPAIGN
+                      - ADGROUP
+                      - AD
+                  dimension_ids:
+                    type: array
+                    description: Object IDs to bind
+                    items:
+                      type: string
+                  bind_type:
+                    type: string
+                    description: |
+                      BIND: Bind objects to rule
+                      UNBIND: Unbind objects from rule
+                    enum:
+                      - BIND
+                      - UNBIND
+            lang:
+              type: string
+              description: |
+                Message language
+                ZH: Simplified Chinese
+                EN: English (default)
+                JA: Japanese
+              default: EN
+              enum:
+                - ZH
+                - EN
+                - JA
+  responses:
+    '200':
+      description: Successfully bound/unbound objects
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                description: Returned data
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

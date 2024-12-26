@@ -1,0 +1,185 @@
+get:
+  summary: Get details of Saved Audiences
+  description: Get details of Saved Audiences associated with an ad account
+  operationId: listSavedAudiences
+  tags:
+    - dmp
+  security:
+    - accessToken: []
+  parameters:
+    - name: advertiser_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Advertiser ID
+    - name: saved_audience_ids
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+        maxItems: 100
+      description: |
+        IDs of Saved Audiences to retrieve
+        Max size: 100
+  responses:
+    '200':
+      description: Successfully retrieved Saved Audiences
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                properties:
+                  saved_audiences:
+                    type: array
+                    description: List of Saved Audiences
+                    items:
+                      type: object
+                      properties:
+                        saved_audience_id:
+                          type: string
+                          description: Saved Audience ID
+                        saved_audience_name:
+                          type: string
+                          description: Saved Audience name
+                        location_ids:
+                          type: array
+                          description: Target location IDs
+                          items:
+                            type: string
+                        gender:
+                          type: string
+                          description: |
+                            Target gender
+                            Enum: GENDER_FEMALE, GENDER_MALE, GENDER_UNLIMITED
+                        age_groups:
+                          type: array
+                          description: Target age groups
+                          items:
+                            type: string
+                        languages:
+                          type: array
+                          description: Target language codes
+                          items:
+                            type: string
+                        audience_ids:
+                          type: array
+                          description: Included audience IDs
+                          items:
+                            type: string
+                        excluded_audience_ids:
+                          type: array
+                          description: Excluded audience IDs
+                          items:
+                            type: string
+                        interest_category_ids:
+                          type: array
+                          description: Interest category IDs
+                          items:
+                            type: string
+                        interest_keyword_ids:
+                          type: array
+                          description: Interest keyword IDs
+                          items:
+                            type: string
+                        actions:
+                          type: array
+                          description: Action targeting settings
+                          items:
+                            type: object
+                            properties:
+                              action_category_ids:
+                                type: array
+                                description: Action category IDs
+                                items:
+                                  type: string
+                              action_scene:
+                                type: string
+                                description: |
+                                  Action source
+                                  Enum: VIDEO_RELATED, CREATOR_RELATED, HASHTAG_RELATED
+                              action_period:
+                                type: integer
+                                description: |
+                                  Action timeframe (days)
+                                  0 = no timeframe
+                              video_user_actions:
+                                type: array
+                                description: |
+                                  Video actions:
+                                  VIDEO_RELATED: WATCHED_TO_END, LIKED, COMMENTED, SHARED
+                                  CREATOR_RELATED: FOLLOWING, VIEW_HOMEPAGE
+                                  HASHTAG_RELATED: VIEW_HASHTAG
+                                items:
+                                  type: string
+                        operating_systems:
+                          type: array
+                          description: |
+                            Target operating systems
+                            Enum: ANDROID, IOS (one only)
+                          items:
+                            type: string
+                        min_android_version:
+                          type: string
+                          description: Minimum Android version
+                        min_ios_version:
+                          type: string
+                          description: Minimum iOS version
+                        device_model_ids:
+                          type: array
+                          description: Target device model IDs
+                          items:
+                            type: string
+                        network_types:
+                          type: array
+                          description: Target connection types
+                          items:
+                            type: string
+                        carrier_ids:
+                          type: array
+                          description: Target carrier IDs
+                          items:
+                            type: string
+                        device_price_ranges:
+                          type: array
+                          description: |
+                            Target device price ranges
+                            10000 = 1000+
+                            Note: Upper limit increased by 50 internally
+                          items:
+                            type: integer
+                  page_info:
+                    type: object
+                    description: Pagination information
+                    properties:
+                      page:
+                        type: integer
+                        description: Current page number
+                      page_size:
+                        type: integer
+                        description: Page size
+                      total_number:
+                        type: integer
+                        description: Total number of results
+                      total_page:
+                        type: integer
+                        description: Total number of pages
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

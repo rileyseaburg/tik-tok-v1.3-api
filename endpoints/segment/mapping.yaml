@@ -1,0 +1,78 @@
+post:
+  summary: Create segment mapping
+  description: Map a segment to targeting criteria
+  operationId: createSegmentMapping
+  tags:
+    - segment
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - advertiser_id
+            - segment_id
+            - target_type
+          properties:
+            advertiser_id:
+              type: string
+              description: Advertiser ID
+            segment_id:
+              type: string
+              description: Segment ID to map
+            target_type:
+              type: string
+              description: Type of targeting to map to
+              enum:
+                - INTEREST
+                - BEHAVIOR
+                - DEMOGRAPHIC
+                - LOCATION
+            target_id:
+              type: string
+              description: ID of the targeting criteria
+            mapping_type:
+              type: string
+              description: Type of mapping relationship
+              enum:
+                - INCLUDE
+                - EXCLUDE
+  responses:
+    '200':
+      description: Successfully created mapping
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                properties:
+                  mapping_id:
+                    type: string
+                    description: Created mapping ID
+                  segment_id:
+                    type: string
+                    description: Segment ID
+                  target_type:
+                    type: string
+                    description: Type of targeting
+                  target_id:
+                    type: string
+                    description: Targeting criteria ID
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

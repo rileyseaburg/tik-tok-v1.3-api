@@ -1,0 +1,230 @@
+get:
+  summary: Get campaign quota information
+  description: |
+    Get quota information for Dedicated Campaigns per ad network, ad group quota under a campaign,
+    and ad quota for an ad group within a SKAN 4.0 Dedicated Campaign.
+    Note: iOS apps can have up to 15 or 25 (allowlist) active Dedicated Campaigns per ad network
+    and up to 5 active ad groups within each Dedicated Campaign.
+  operationId: getCampaignQuotaInfo
+  tags:
+    - campaign
+  security:
+    - accessToken: []
+  parameters:
+    - name: advertiser_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Advertiser ID
+    - name: app_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Application ID of promoted app
+    - name: campaign_id
+      in: query
+      schema:
+        type: string
+      description: |
+        Dedicated Campaign ID
+        Required for getting ad group quota
+        Must be a Dedicated Campaign ID
+    - name: adgroup_id
+      in: query
+      schema:
+        type: string
+      description: |
+        Ad group ID within SKAN 4.0 Dedicated Campaign
+        Required for getting ad quota
+        Must be within SKAN 4.0 Dedicated Campaign
+    - name: has_advertiser_quota
+      in: query
+      schema:
+        type: boolean
+        default: false
+      description: |
+        Return quota info by advertiser IDs
+        Default: false
+  responses:
+    '200':
+      description: Successfully retrieved quota information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                properties:
+                  split_test_quota:
+                    type: object
+                    description: Split test quota information
+                    properties:
+                      max_test_number:
+                        type: integer
+                        description: Maximum test groups per split-test (2)
+                      available_test_group:
+                        type: integer
+                        description: Available split-test groups
+                      used_test_group:
+                        type: integer
+                        description: Used split-test groups
+                      releasing_test_group:
+                        type: integer
+                        description: Releasing split-test groups
+                      used_quota:
+                        type: integer
+                        description: Used quota
+                      releasing_quota:
+                        type: integer
+                        description: Releasing quota
+                  campaign_quota_info:
+                    type: object
+                    description: Campaign quota information
+                    properties:
+                      tiktok_campaign_quota_info:
+                        type: object
+                        description: TikTok network quota
+                        properties:
+                          total_campaign_quota_info:
+                            type: object
+                            description: Total quota under app ID
+                            properties:
+                              total_campaign_quota:
+                                type: integer
+                                description: Total active campaign quota (15/25)
+                              used_campaign_quota:
+                                type: integer
+                                description: Used campaign quota
+                              releasing_campaign_quota:
+                                type: integer
+                                description: Releasing campaign quota
+                              available_campaign_quota:
+                                type: integer
+                                description: Available campaign quota
+                              used_campaign_ids:
+                                type: array
+                                description: Used campaign IDs
+                                items:
+                                  type: string
+                              releasing_campaign_ids:
+                                type: array
+                                description: Releasing campaign IDs
+                                items:
+                                  type: string
+                          campaign_quota_by_adv:
+                            type: array
+                            description: Quota by advertiser ID
+                            items:
+                              type: object
+                              properties:
+                                used_campaign_quota:
+                                  type: integer
+                                  description: Used campaign quota
+                                releasing_campaign_quota:
+                                  type: integer
+                                  description: Releasing campaign quota
+                                advertiser_id:
+                                  type: string
+                                  description: Advertiser ID
+                      pangle_campaign_quota_info:
+                        type: object
+                        description: Pangle network quota
+                        properties:
+                          total_campaign_quota_info:
+                            type: object
+                            description: Total quota under app ID
+                            properties:
+                              total_campaign_quota:
+                                type: integer
+                                description: Total active campaign quota (15/25)
+                              used_campaign_quota:
+                                type: integer
+                                description: Used campaign quota
+                              releasing_campaign_quota:
+                                type: integer
+                                description: Releasing campaign quota
+                              available_campaign_quota:
+                                type: integer
+                                description: Available campaign quota
+                              used_campaign_ids:
+                                type: array
+                                description: Used campaign IDs
+                                items:
+                                  type: string
+                              releasing_campaign_ids:
+                                type: array
+                                description: Releasing campaign IDs
+                                items:
+                                  type: string
+                          campaign_quota_by_adv:
+                            type: array
+                            description: Quota by advertiser ID
+                            items:
+                              type: object
+                              properties:
+                                used_campaign_quota:
+                                  type: integer
+                                  description: Used campaign quota
+                                releasing_campaign_quota:
+                                  type: integer
+                                  description: Releasing campaign quota
+                                advertiser_id:
+                                  type: string
+                                  description: Advertiser ID
+                  adgroup_quota_info:
+                    type: object
+                    description: Ad group quota under campaign
+                    properties:
+                      total_adgroup_quota:
+                        type: integer
+                        description: Active ad group quota (5)
+                      used_adgroup_quota:
+                        type: integer
+                        description: Used ad group quota
+                      available_adgroup_quota:
+                        type: integer
+                        description: Available ad group quota
+                      placements:
+                        type: array
+                        description: Allowed placements
+                        items:
+                          type: string
+                      campaign_id:
+                        type: string
+                        description: Campaign ID
+                  ad_quota_info:
+                    type: object
+                    description: |
+                      Ad quota under SKAN 4.0 ad group
+                      Null if not SKAN 4.0 ad group
+                    properties:
+                      total_ad_quota:
+                        type: integer
+                        description: Active ad quota (9 for regular)
+                      used_ad_quota:
+                        type: integer
+                        description: Used ad quota
+                      available_ad_quota:
+                        type: integer
+                        description: Available ad quota
+                      adgroup_id:
+                        type: string
+                        description: Ad group ID
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

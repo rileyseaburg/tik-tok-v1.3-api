@@ -1,0 +1,194 @@
+get:
+  summary: Get ad groups
+  description: |
+    Obtain detailed information of an ad group or ad groups.
+    The returned information can be customized by specifying fields in the request.
+    Use filtering to specify which ad groups are returned.
+
+    Note: To include deleted data, either specify STATUS_DELETE in primary_status field or
+    ADGROUP_STATUS_DELETE/ADGROUP_STATUS_CAMPAIGN_DELETE in secondary_status field.
+    Deleted data is not queried by default.
+
+    Changes from v1.2:
+    - Parameter name changes:
+      * create_start_time -> creation_filter_start_time
+      * create_end_time -> creation_filter_end_time
+      * status -> secondary_status
+    - Data type changes:
+      * advertiser_id: number -> string
+      * campaign_ids: number[] -> string[]
+      * adgroup_ids: number[] -> string[]
+    - New parameters added for v1.3
+  operationId: getAdGroups
+  tags:
+    - adgroup
+  security:
+    - accessToken: []
+  parameters:
+    - name: advertiser_id
+      in: query
+      required: true
+      description: Advertiser ID
+      schema:
+        type: string
+    - name: fields
+      in: query
+      required: false
+      description: Fields to return. If not specified, all fields are returned by default.
+      schema:
+        type: array
+        items:
+          type: string
+    - name: exclude_field_types_in_response
+      in: query
+      required: false
+      description: Types of fields to remove from response
+      schema:
+        type: array
+        items:
+          type: string
+          enum: [NULL_FIELD]
+    - name: filtering
+      in: query
+      required: false
+      description: Filter conditions
+      schema:
+        type: object
+        properties:
+          campaign_ids:
+            type: array
+            description: List of campaign IDs. Max size - 100.
+            maxItems: 100
+            items:
+              type: string
+          campaign_system_origins:
+            type: array
+            description: Origins of campaigns that ad groups belong to
+            items:
+              type: string
+              enum: [PROMOTE, TT_ADS_PLATFORM]
+            default: ["TT_ADS_PLATFORM"]
+          adgroup_ids:
+            type: array
+            description: List of Ad group IDs. Max size - 100.
+            maxItems: 100
+            items:
+              type: string
+          adgroup_name:
+            type: string
+            description: Ad group name
+          primary_status:
+            type: string
+            description: Primary status
+          secondary_status:
+            type: string
+            description: Ad group secondary status
+          objective_type:
+            $ref: '../../swagger.yaml#/components/schemas/AdvertisingObjective'
+          buying_types:
+            type: array
+            description: |
+              Filter by buying types.
+              Note: RESERVATION_TOP_VIEW cannot be combined with other values.
+            items:
+              type: string
+              enum: [AUCTION, RESERVATION_RF, RESERVATION_TOP_VIEW]
+            default: ["AUCTION", "RESERVATION_RF"]
+          optimization_goal:
+            type: string
+            description: Optimization goal
+          promotion_type:
+            type: string
+            description: |
+              Promotion type to filter by.
+              See Appendix-Mapping between different promotion types.
+            enum:
+              - APP
+              - WEBSITE
+              - INSTANT_FORM
+              - LEAD_GEN_CLICK_TO_TT_DIRECT_MESSAGE
+              - LEAD_GEN_CLICK_TO_SOCIAL_MEDIA_APP_MESSAGE
+              - LEAD_GEN_CLICK_TO_CALL
+          bid_strategy:
+            type: string
+            description: Bidding strategy
+            enum:
+              - BID_STRATEGY_COST_CAP
+              - BID_STRATEGY_BID_CAP
+              - BID_STRATEGY_MAX_CONVERSION
+              - BID_STRATEGY_LOWEST_COST
+          creative_material_mode:
+            type: string
+            description: Creative delivery strategy
+            enum: [CUSTOM, DYNAMIC, SMART_CREATIVE]
+          billing_events:
+            type: array
+            description: Events to pay for
+            items:
+              type: string
+          creation_filter_start_time:
+            type: string
+            description: |
+              Filter by lower range of creation time (UTC+0)
+              Format: YYYY-MM-DD HH:MM:SS
+              Suggestion: Use 6 month range
+          creation_filter_end_time:
+            type: string
+            description: |
+              Filter by higher range of creation time (UTC+0)
+              Format: YYYY-MM-DD HH:MM:SS
+              Suggestion: Use 6 month range
+          split_test_enabled:
+            type: boolean
+            description: Filter by split test status
+    - name: page
+      in: query
+      required: false
+      description: Current page number. Default - 1. Range - ≥ 1
+      schema:
+        type: integer
+        default: 1
+        minimum: 1
+    - name: page_size
+      in: query
+      required: false
+      description: |
+        Page size. Default - 10. Range - 1-1,000.
+        Note: Max 100 for TopView ads.
+      schema:
+        type: integer
+        default: 10
+        minimum: 1
+        maximum: 1000
+  responses:
+    '200':
+      description: Successfully retrieved ad groups
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                properties:
+                  list:
+                    type: array
+                    items:
+                      $ref: '../../swagger.yaml#/components/schemas/AdGroupResponse'
+                  page_info:
+                    $ref: '../../swagger.yaml#/components/schemas/PageInfo'
+    '400':
+      $ref: '../../swagger.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../../swagger.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../../swagger.yaml#/components/responses/InternalError'

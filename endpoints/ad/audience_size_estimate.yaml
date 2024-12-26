@@ -1,0 +1,325 @@
+post:
+  summary: Estimate audience size
+  description: |
+    Get the estimated audience size. The parameters are similar to creating an ad group.
+
+    Note: Due to data security requirements, estimated audience size does not include audiences under 18 years of age.
+    Ad delivery as permitted by applicable laws will not be affected.
+
+    Changes from v1.2:
+    - Parameter name changes:
+      * placement -> placements
+      * ios_target_device -> ios14_targeting
+      * optimize_goal -> optimization_goal
+      * dpa_retargeting_type -> shopping_ads_retargeting_type
+      * dpa_retargeting_actions_days -> shopping_ads_retargeting_actions_days
+      * age -> age_groups
+      * action_v2 -> actions
+      * user_actions -> video_user_actions
+      * operation_system -> operating_systems
+      * ios_osv -> min_ios_version
+      * android_osv -> min_android_version
+      * connection_type -> network_types
+      * device_price -> device_price_ranges
+      * include_custom_actions -> included_custom_actions
+      * exclude_custom_actions -> excluded_custom_actions
+      * enable_expansion -> expansion_enabled
+    - Data type changes:
+      * advertiser_id: number -> string
+      * app_id: number -> string
+      * pixel_id: number -> string
+      * catalog_id: number -> string
+      * product_set_id: number -> string
+    - New parameters added for v1.3
+  operationId: estimateAudienceSize
+  tags:
+    - ad
+  security:
+    - accessToken: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - advertiser_id
+            - objective_type
+            - optimization_goal
+          properties:
+            advertiser_id:
+              type: string
+              description: Advertiser ID
+            placement_type:
+              type: string
+              description: |
+                Placement type.
+                Default value - PLACEMENT_TYPE_NORMAL
+              enum: [PLACEMENT_TYPE_AUTOMATIC, PLACEMENT_TYPE_NORMAL]
+              default: PLACEMENT_TYPE_NORMAL
+            placements:
+              type: array
+              description: |
+                Apps for ad delivery. Required when placement_type is PLACEMENT_TYPE_NORMAL.
+                Currently supports PLACEMENT_TIKTOK, PLACEMENT_PANGLE and PLACEMENT_GLOBAL_APP_BUNDLE.
+              items:
+                type: string
+            app_id:
+              type: string
+              description: Required when campaign objective is APP_PROMOTION. ID of promoted app.
+            pixel_id:
+              type: string
+              description: Pixel ID for landing pages
+            ios14_targeting:
+              type: string
+              description: |
+                iOS device targeting.
+                Required when campaign_type is IOS14_CAMPAIGN and must be IOS14_PLUS.
+              enum: [UNSET, IOS14_MINUS, IOS14_PLUS]
+            objective_type:
+              $ref: '../schemas/types.yaml#/components/schemas/AdvertisingObjective'
+            optimization_goal:
+              type: string
+              description: Optimization goal
+            promotion_type:
+              type: string
+              description: |
+                Required when objective_type = PRODUCT_SALES.
+                Promotion type for product promotion.
+            product_source:
+              type: string
+              description: |
+                Required when objective_type = PRODUCT_SALES.
+                Product source for promotion.
+              enum: [UNSET, CATALOG, STORE]
+            catalog_id:
+              type: string
+              description: Required when objective_type=PRODUCT_SALES. Catalog ID.
+            product_set_id:
+              type: string
+              description: ProductSet ID. 0 means all product sets. Default - 0.
+            catalog_authorized_bc_id:
+              type: string
+              description: Business Center ID that catalog belongs to
+            shopping_ads_retargeting_type:
+              type: string
+              description: |
+                Shopping ads retargeting type.
+                Valid when campaign objective_type is PRODUCT_SALES.
+              enum: [LAB1, LAB2, LAB3, OFF]
+            shopping_ads_retargeting_actions_days:
+              type: integer
+              description: |
+                Required when shopping_ads_retargeting_type is LAB1 or LAB2.
+                Valid time range for audience action.
+              enum: [1, 2, 3, 7, 14, 30, 60, 90, 180]
+            included_custom_actions:
+              type: array
+              description: |
+                Required when shopping_ads_retargeting_type is LAB3.
+                Include conditions for retargeting.
+              items:
+                $ref: '../schemas/types.yaml#/components/schemas/CustomAction'
+            excluded_custom_actions:
+              type: array
+              description: |
+                Required when shopping_ads_retargeting_type is LAB3.
+                Exclude conditions for retargeting.
+              items:
+                $ref: '../schemas/types.yaml#/components/schemas/CustomAction'
+            audience_ids:
+              type: array
+              description: List of audience IDs
+              items:
+                type: string
+            excluded_audience_ids:
+              type: array
+              description: List of audience IDs to exclude
+              items:
+                type: string
+            audience_rule:
+              $ref: '../schemas/types.yaml#/components/schemas/AudienceRule'
+            audience_type:
+              type: string
+              description: App retargeting audience type
+            location_ids:
+              type: array
+              description: |
+                IDs of locations to target.
+                Max size - 3,000 combined with zipcode_ids.
+              items:
+                type: string
+              maxItems: 3000
+            zipcode_ids:
+              type: array
+              description: |
+                Zip/postal code IDs to target.
+                Max size - 3,000 combined with location_ids.
+              items:
+                type: string
+              maxItems: 3000
+            isp_ids:
+              type: array
+              description: Internet service provider IDs
+              items:
+                type: string
+            gender:
+              type: string
+              description: Target gender
+              enum: [GENDER_FEMALE, GENDER_MALE, GENDER_UNLIMITED]
+            age_groups:
+              type: array
+              description: Target age groups
+              items:
+                type: string
+            languages:
+              type: array
+              description: Target language codes
+              items:
+                type: string
+            interest_category_ids:
+              type: array
+              description: General interest category IDs
+              items:
+                type: string
+            interest_keyword_ids:
+              type: array
+              description: Additional interest category IDs
+              items:
+                type: string
+            purchase_intention_keyword_ids:
+              type: array
+              description: Purchase intention category IDs
+              items:
+                type: string
+            actions:
+              type: array
+              description: Targeting behavioral categories
+              items:
+                $ref: '../schemas/types.yaml#/components/schemas/BehavioralCategory'
+            action_category_ids:
+              type: array
+              description: |
+                Video/creator interaction category IDs, hashtags, hashtag bundles.
+                Valid only for TikTok placement.
+              items:
+                type: string
+            operating_systems:
+              type: array
+              description: Target operating systems. Only one value allowed.
+              items:
+                type: string
+                enum: [ANDROID, IOS]
+              maxItems: 1
+            min_ios_version:
+              type: string
+              description: Minimum iOS version
+            min_android_version:
+              type: string
+              description: Minimum Android version
+            device_model_ids:
+              type: array
+              description: Target device model IDs
+              items:
+                type: string
+            network_types:
+              type: array
+              description: Target connection types
+              items:
+                type: string
+            household_income:
+              type: array
+              description: Target household income
+              items:
+                type: string
+                enum: [TOP5, TOP10, TOP10_25, TOP25_50]
+            spending_power:
+              type: string
+              description: Target spending power
+              enum: [ALL, HIGH]
+            device_price_ranges:
+              type: array
+              description: |
+                Target device price ranges.
+                10000 means 1000+. Numbers must be multiples of 50.
+              items:
+                type: number
+            carrier_ids:
+              type: array
+              description: Target carrier IDs
+              items:
+                type: string
+            included_pangle_audience_package_ids:
+              type: array
+              description: Include Pangle audience IDs
+              items:
+                type: string
+            excluded_pangle_audience_package_ids:
+              type: array
+              description: Exclude Pangle audience IDs
+              items:
+                type: string
+            blocked_pangle_app_ids:
+              type: array
+              description: Pangle app block list IDs
+              items:
+                type: string
+            targeting_expansion:
+              $ref: '../schemas/types.yaml#/components/schemas/TargetingExpansion'
+            auto_targeting_enabled:
+              type: boolean
+              description: Whether to enable automated targeting
+            contextual_tag_ids:
+              type: array
+              description: Contextual tag IDs
+              items:
+                type: string
+  responses:
+    '200':
+      description: Successfully estimated audience size
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                properties:
+                  user_count_stage:
+                    type: integer
+                    description: |
+                      Evaluation of estimated audience size:
+                      1: Too Narrow (<10k, <20% possible)
+                      2: Narrow (≥10k, <20% possible)
+                      3: Balanced (20-80% possible)
+                      4: Fairly Broad (>80% possible)
+                    enum: [1, 2, 3, 4]
+                  user_count:
+                    type: object
+                    properties:
+                      lower_end:
+                        type: integer
+                        description: Lower-end of estimated range
+                      upper_end:
+                        type: integer
+                        description: Upper-end of estimated range
+                  purchase_intention_keyword_ids:
+                    type: array
+                    description: Purchase intention keyword IDs
+                    items:
+                      type: string
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

@@ -1,0 +1,49 @@
+get:
+  operationId: downloadReportTask
+  summary: Download the output of an async report task
+  description: |
+    Use this endpoint to download the output of the report after an asynchronous report task has completed.
+
+    Changes from v1.2 to v1.3:
+    - Endpoint path changed from /v1.2/reports/task/download/ to /v1.3/report/task/download/
+    - Parameter type changed: advertiser_id (number → string)
+    - New response parameters added:
+      * code: number
+      * message: string
+      * data: object
+      * download_url: string
+      * file_name: string
+      * output_format: string
+      * request_id: string
+  tags:
+    - report
+  parameters:
+    - name: advertiser_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: |
+        Advertiser ID.
+        Note: If you use advertiser_ids when calling /report/task/create/ (POST method), you need to set this field to one of the Advertiser IDs specified via advertiser_ids.
+    - name: task_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: The ID of the asynchronous report task
+  responses:
+    '200':
+      $ref: '../schemas/responses.yaml#/components/responses/ReportTaskDownload'
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../schemas/responses.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../schemas/responses.yaml#/components/responses/NotFound'
+    '429':
+      $ref: '../schemas/responses.yaml#/components/responses/TooManyRequests'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

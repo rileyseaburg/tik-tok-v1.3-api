@@ -1,0 +1,24 @@
+post:
+  summary: Cancel report task
+  description: Cancel a pending or in-progress report generation task
+  operationId: cancelReportTask
+  tags:
+    - report
+  parameters:
+    - name: task_id
+      in: query
+      required: true
+      description: ID of the report task to cancel
+      schema:
+        type: string
+  responses:
+    '200':
+      $ref: '../../schemas/responses.yaml#/components/responses/ReportTaskCanceled'
+    '400':
+      $ref: '../../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../../schemas/responses.yaml#/components/responses/Unauthorized'
+    '404':
+      $ref: '../../schemas/responses.yaml#/components/responses/NotFound'
+    '500':
+      $ref: '../../schemas/responses.yaml#/components/responses/InternalError'

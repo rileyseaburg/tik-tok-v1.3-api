@@ -1,0 +1,73 @@
+post:
+  summary: Create audience segment
+  description: Create a new audience segment for targeting
+  operationId: createAudienceSegment
+  tags:
+    - segment
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - advertiser_id
+            - name
+            - segment_type
+          properties:
+            advertiser_id:
+              type: string
+              description: Advertiser ID
+            name:
+              type: string
+              description: Segment name
+            segment_type:
+              type: string
+              description: Type of segment
+              enum:
+                - CUSTOM
+                - LOOKALIKE
+                - BEHAVIORAL
+            description:
+              type: string
+              description: Description of the segment
+            retention_days:
+              type: integer
+              description: Number of days to retain audience data
+              minimum: 1
+              maximum: 180
+  responses:
+    '200':
+      description: Successfully created segment
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                properties:
+                  segment_id:
+                    type: string
+                    description: Created segment ID
+                  name:
+                    type: string
+                    description: Segment name
+                  segment_type:
+                    type: string
+                    description: Type of segment
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

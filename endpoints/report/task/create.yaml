@@ -1,0 +1,58 @@
+post:
+  summary: Create a new report task
+  description: Create a new task to generate a report based on specified parameters
+  operationId: createReportTask
+  tags:
+    - report
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - service_type
+            - report_type
+            - data_level
+            - dimensions
+            - metrics
+          properties:
+            service_type:
+              $ref: '../../schemas/types.yaml#/components/schemas/ServiceType'
+            report_type:
+              $ref: '../../schemas/types.yaml#/components/schemas/ReportType'
+            data_level:
+              $ref: '../../schemas/types.yaml#/components/schemas/ReportDataLevel'
+            dimensions:
+              type: array
+              items:
+                type: string
+              description: Dimensions to include in the report
+            metrics:
+              type: array
+              items:
+                type: string
+              description: Metrics to include in the report
+            start_date:
+              type: string
+              format: date
+              description: Start date for report data (YYYY-MM-DD)
+            end_date:
+              type: string
+              format: date
+              description: End date for report data (YYYY-MM-DD)
+            output_format:
+              $ref: '../../schemas/types.yaml#/components/schemas/ReportOutputFormat'
+            filtering:
+              type: array
+              items:
+                $ref: '../../schemas/types.yaml#/components/schemas/ReportFilter'
+  responses:
+    '200':
+      $ref: '../../schemas/responses.yaml#/components/responses/ReportTaskCreated'
+    '400':
+      $ref: '../../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../../schemas/responses.yaml#/components/responses/InternalError'

@@ -1,0 +1,104 @@
+post:
+  summary: Create audience by file
+  description: |
+    Create an audience using previously uploaded data files.
+    Requires file_path obtained from file upload endpoint.
+
+    Notes:
+    - Maximum 400 audiences per advertiser account
+    - New audiences take up to 48 hours to process
+    - Only 'available' audiences (is_valid=true) can be used
+    - Expired audiences become 'Unavailable' (is_valid=false)
+    - Campaigns need targeting beyond just audience targeting
+    - Invalid file_paths can be fixed via Update endpoint
+
+    See Customer File API documentation for email normalization rules.
+  operationId: createCustomAudience
+  tags:
+    - dmp
+  security:
+    - accessToken: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - advertiser_id
+            - custom_audience_name
+            - file_paths
+            - calculate_type
+          properties:
+            advertiser_id:
+              type: string
+              description: Advertiser ID
+            custom_audience_name:
+              type: string
+              description: |
+                Audience name.
+                Maximum 128 characters.
+              maxLength: 128
+            audience_sub_type:
+              type: string
+              description: |
+                Audience sub type indicating usage:
+                NORMAL - For non-R&F ads
+                REACH_FREQUENCY - For R&F ads only
+              enum: [NORMAL, REACH_FREQUENCY]
+              default: NORMAL
+            file_paths:
+              type: array
+              description: |
+                List of file paths from file upload.
+                Recommended size <50 for stable requests.
+                Additional files can be added via update endpoint.
+              items:
+                type: string
+            calculate_type:
+              type: string
+              description: |
+                Encryption type.
+                Must match encryption used in uploaded files.
+            retention_in_days:
+              type: integer
+              description: |
+                Days to retain audience.
+                Range: 1-365 days.
+                If specified:
+                - Expires after specified days from creation
+                - Operations cannot reset expiration
+                If not specified:
+                - Expires 365 days after last active use/modification
+                - Active use/modifications reset expiration
+              minimum: 1
+              maximum: 365
+  responses:
+    '200':
+      description: Successfully created audience
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                properties:
+                  custom_audience_id:
+                    type: string
+                    description: Custom audience ID
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

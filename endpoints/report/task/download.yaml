@@ -1,0 +1,24 @@
+get:
+  summary: Download report
+  description: Get the download URL for a completed report
+  operationId: downloadReport
+  tags:
+    - report
+  parameters:
+    - name: task_id
+      in: query
+      required: true
+      description: ID of the completed report task
+      schema:
+        type: string
+  responses:
+    '200':
+      $ref: '../../schemas/responses.yaml#/components/responses/ReportTaskDownload'
+    '400':
+      $ref: '../../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../../schemas/responses.yaml#/components/responses/Unauthorized'
+    '404':
+      $ref: '../../schemas/responses.yaml#/components/responses/NotFound'
+    '500':
+      $ref: '../../schemas/responses.yaml#/components/responses/InternalError'

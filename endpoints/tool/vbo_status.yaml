@@ -1,0 +1,255 @@
+get:
+  operationId: checkVboStatus
+  summary: Check Value-Based Optimization eligibility
+  description: |
+    Use this endpoint to check whether certain settings are eligible for Value-Based Optimization (VBO), and to get the available VBO bidding strategies for the specified settings.
+
+    To learn about how to enable VBO, refer to Enable Value-Based Optimization.
+
+    Note:
+    If you specify through the request an allowlist-only VBO feature, and you are not allowlisted for the feature, the response will indicate that your settings are ineligible for VBO (vo_status = NOT_SUPPORT).
+  tags:
+    - tool
+  parameters:
+    - name: advertiser_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Advertiser ID
+    - name: objective_type
+      in: query
+      required: true
+      schema:
+        type: string
+      description: |
+        Advertising objective.
+        Set this field to APP_PROMOTION, WEB_CONVERSIONS, or PRODUCT_SALES.
+        When you set this field to any other objective, vo_status will be NOT_SUPPORT because these objectives are not supported for VBO.
+        For enum values and descriptions, see Objectives.
+        Note: When objective_type is set to PRODUCT_SALES and promotion_type is set to LIVE_SHOPPING or VIDEO_SHOPPING, do not pass in pixel_id or app_id. Otherwise, pass in either pixel_id or app_id.
+    - name: app_promotion_type
+      in: query
+      schema:
+        type: string
+        enum:
+          - APP_INSTALL
+          - APP_RETARGETING
+      description: |
+        Required when objective_type is APP_PROMOTION.
+        App promotion type:
+        - APP_INSTALL: Get new users to install your app
+        - APP_RETARGETING: Re-engage existing users to take action in your app
+        Note: Only APP_INSTALL can be used in an iOS14 Dedicated Campaign
+    - name: campaign_type
+      in: query
+      schema:
+        type: string
+        enum:
+          - REGULAR_CAMPAIGN
+          - IOS14_CAMPAIGN
+      description: |
+        Do not pass campaign_type and ios14_quota_type at the same time. If both fields are passed, ios14_quota_type will be ignored.
+        Campaign type:
+        - REGULAR_CAMPAIGN: non-iOS 14 Dedicated Campaign
+        - IOS14_CAMPAIGN: iOS 14 Dedicated Campaign
+        The value IOS14_CAMPAIGN can only be used when:
+        - objective_type is PRODUCT_SALES
+        - objective_type is APP_PROMOTION and app_promotion_type is APP_INSTALL
+    - name: promotion_type
+      in: query
+      required: true
+      schema:
+        type: string
+      description: |
+        Promotion type and you can decide where you'd like to promote your products using this field.
+        For enum values, see Enumeration - Promotion Type.
+        Note: When objective_type is set to PRODUCT_SALES and promotion_type is set to LIVE_SHOPPING or VIDEO_SHOPPING, do not pass in pixel_id or app_id. Otherwise, pass in either pixel_id or app_id.
+    - name: placements
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+      description: |
+        The apps where you want to deliver your ads.
+        Note:
+        - Currently, we support PLACEMENT_TIKTOK, PLACEMENT_PANGLE and PLACEMENT_GLOBAL_APP_BUNDLE
+        - For Product Sales campaigns (objective_type = PRODUCT_SALES), only TikTok placement (PLACEMENT_TIKTOK) is supported
+    - name: ios14_quota_type
+      in: query
+      schema:
+        type: string
+        enum:
+          - OCCUPIED
+          - UNOCCUPIED
+      description: |
+        To be deprecated. Do not pass campaign_type and ios14_quota_type at the same time.
+        If both fields are passed, ios14_quota_type will be ignored.
+        We recommend using campaign_type alone when you specify an iOS 14 Dedicated Campaign.
+    - name: campaign_app_profile_page_state
+      in: query
+      schema:
+        type: string
+        enum:
+          - ON
+          - OFF
+      description: |
+        Whether to use App Profile Page at the campaign level to optimize delivery.
+        You can use the field only when objective_type is APP_PROMOTION and your campaign is an iOS14 Dedicated Campaign.
+    - name: pixel_id
+      in: query
+      schema:
+        type: string
+      description: |
+        Not supported when objective_type is set to PRODUCT_SALES and promotion_type is set to LIVE_SHOPPING or VIDEO_SHOPPING.
+        Otherwise, pass in either pixel_id or app_id.
+        When you pass in this field, you need to specify optimization_event at the same time.
+    - name: app_id
+      in: query
+      schema:
+        type: string
+      description: |
+        Not supported when objective_type is set to PRODUCT_SALES and promotion_type is set to LIVE_SHOPPING or VIDEO_SHOPPING.
+        Otherwise, pass in either pixel_id or app_id.
+        The Application ID of the promoted app.
+    - name: optimization_event
+      in: query
+      schema:
+        type: string
+      description: |
+        Required when pixel_id is passed.
+        Ignored when app_id is passed.
+        Conversion event for the ad group.
+    - name: store_id
+      in: query
+      schema:
+        type: string
+      description: |
+        Valid only when objective_type is PRODUCT_SALES.
+        ID of the TikTok Shop.
+    - name: is_smart_performance_campaign
+      in: query
+      schema:
+        type: boolean
+      description: Whether the campaign is a Smart+ Campaign or not
+    - name: budget_optimize_on
+      in: query
+      schema:
+        type: boolean
+      description: |
+        Whether to enable Campaign Budget Optimization (CBO).
+        For details about CBO, see Campaign Budget Optimization.
+  responses:
+    '200':
+      description: Successfully checked VBO eligibility
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - code
+              - message
+              - request_id
+              - data
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: The log ID of a request, which uniquely identifies the request
+              data:
+                type: object
+                properties:
+                  vo_status:
+                    type: string
+                    description: |
+                      The status of VBO for Web or VBO IAP for App for the settings in the request.
+                    enum:
+                      - QUALIFIED
+                      - NO_EVENT
+                      - NO_VALUE
+                      - INSUFFICIENT_EVENTS
+                      - NOT_SUPPORT
+                  vo_min:
+                    type: string
+                    description: |
+                      The status of the Cost Cap bidding strategy.
+                      Note: The Cost Cap bidding strategy is no longer supported for VBO. Therefore, the value of this field is always NOT_SUPPORT.
+                    enum:
+                      - QUALIFIED
+                      - NO_EVENT
+                      - NO_VALUE
+                      - INSUFFICIENT_EVENTS
+                      - NOT_SUPPORT
+                  vo_min_roas:
+                    type: string
+                    description: The status of the bidding strategy Minimum ROAS
+                    enum:
+                      - QUALIFIED
+                      - NO_EVENT
+                      - NO_VALUE
+                      - INSUFFICIENT_EVENTS
+                      - NOT_SUPPORT
+                  vo_highest_value:
+                    type: string
+                    description: The status of the bidding strategy Highest Value
+                    enum:
+                      - QUALIFIED
+                      - NO_EVENT
+                      - NO_VALUE
+                      - INSUFFICIENT_EVENTS
+                      - NOT_SUPPORT
+                  vo_iaa_min_roas:
+                    type: string
+                    description: The status of the Day 7 bidding strategy Minimum ROAS (Day 7 ROAS)
+                    enum:
+                      - QUALIFIED
+                      - NO_EVENT
+                      - NO_VALUE
+                      - INSUFFICIENT_EVENTS
+                      - NOT_SUPPORT
+                  vo_iaa_highest_value:
+                    type: string
+                    description: The status of the Day 7 bidding strategy Highest Value (Day 7 Highest Value)
+                    enum:
+                      - QUALIFIED
+                      - NO_EVENT
+                      - NO_VALUE
+                      - INSUFFICIENT_EVENTS
+                      - NOT_SUPPORT
+                  vo_iaa_min_roas_zero_day:
+                    type: string
+                    description: The status of the Day 0 bidding strategy Minimum ROAS (Day 0 ROAS)
+                    enum:
+                      - QUALIFIED
+                      - NO_EVENT
+                      - NO_VALUE
+                      - INSUFFICIENT_EVENTS
+                      - NOT_SUPPORT
+                  vo_iaa_highest_value_zero_day:
+                    type: string
+                    description: The status of the Day 0 bidding strategy Highest Value (Day 0 Highest Value)
+                    enum:
+                      - QUALIFIED
+                      - NO_EVENT
+                      - NO_VALUE
+                      - INSUFFICIENT_EVENTS
+                      - NOT_SUPPORT
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../schemas/responses.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../schemas/responses.yaml#/components/responses/NotFound'
+    '429':
+      $ref: '../schemas/responses.yaml#/components/responses/TooManyRequests'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

@@ -1,0 +1,119 @@
+get:
+  summary: Get Video Privacy Settings
+  description: Obtain the post privacy settings of a TikTok account, including privacy level options and feature availability.
+  operationId: getVideoSettings
+  parameters:
+    - name: Access-Token
+      in: header
+      required: true
+      schema:
+        type: string
+      description: Access token authorized by TikTok creators. Obtain via /tt_user/oauth2/token/
+    - name: business_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Application specific unique identifier for the TikTok account (open_id from OAuth token)
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: The log ID of a request, which uniquely identifies the request
+              data:
+                type: object
+                properties:
+                  privacy_level_options:
+                    type: array
+                    items:
+                      type: string
+                      enum: 
+                        - PUBLIC_TO_EVERYONE
+                        - MUTUAL_FOLLOW_FRIENDS
+                        - SELF_ONLY
+                        - FOLLOWER_OF_CREATOR
+                    description: |
+                      Available privacy level options for posts.
+                      For public accounts: PUBLIC_TO_EVERYONE, MUTUAL_FOLLOW_FRIENDS, SELF_ONLY
+                      For private accounts: FOLLOWER_OF_CREATOR, MUTUAL_FOLLOW_FRIENDS, SELF_ONLY
+                  comment_disabled:
+                    type: boolean
+                    description: |
+                      Whether the "Allow comments" setting is available.
+                      true: unavailable (comments set to "No one")
+                      false: available (can be enabled/disabled)
+                  duet_disabled:
+                    type: boolean
+                    description: |
+                      Whether the "Allow Duets" setting is available.
+                      true: unavailable (Duet privacy set to "Only you" or private account)
+                      false: available (can be enabled/disabled)
+                  stitch_disabled:
+                    type: boolean
+                    description: |
+                      Whether the "Allow Stitch" setting is available.
+                      true: unavailable (Stitch privacy set to "Only you" or private account)
+                      false: available (can be enabled/disabled)
+                  max_video_post_duration_sec:
+                    type: number
+                    description: Maximum duration (in seconds) for video posts that can be published
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+              message:
+                type: string
+              request_id:
+                type: string
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+              message:
+                type: string
+              request_id:
+                type: string
+              errors:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    field:
+                      type: string
+                    message:
+                      type: string
+    '500':
+      description: Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+              message:
+                type: string
+              request_id:
+                type: string

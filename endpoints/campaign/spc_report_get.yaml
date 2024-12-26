@@ -1,0 +1,196 @@
+get:
+  operationId: getSmartPlusCampaignReport
+  summary: Run a Smart+ Campaign report
+  description: |
+    Use this endpoint to run a report on Smart+ Campaigns and Smart Performance Web Campaigns at the creative level (video, ad text, Spark Ad post, catalog video, or catalog carousel).
+
+    Note:
+    - The data returned via this endpoint might have a latency of 30 minutes.
+    - Smart Performance Web Campaigns will be deprecated in the next API version.
+  tags:
+    - campaign
+  parameters:
+    - name: advertiser_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Advertiser ID
+    - name: campaign_ids
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+        maxItems: 1
+      description: |
+        List of campaign IDs.
+        Max size: 1.
+    - name: material_type
+      in: query
+      required: true
+      schema:
+        type: string
+        enum:
+          - SPC_VIDEO
+          - SPC_AD_TEXT
+          - SPC_SPARK
+          - SPC_CATALOG_VIDEO
+          - SPC_CATALOG_CAROUSEL
+      description: |
+        Creative material type:
+        - SPC_VIDEO: Video data with basic, video play, interaction metrics
+        - SPC_AD_TEXT: Ad text data with basic, interaction metrics
+        - SPC_SPARK: Spark Ad post data with basic, interaction metrics
+        - SPC_CATALOG_VIDEO: Catalog video data with basic, interaction metrics
+        - SPC_CATALOG_CAROUSEL: Catalog carousel data with basic, interaction metrics
+    - name: is_include_removed_material
+      in: query
+      schema:
+        type: boolean
+        default: true
+      description: |
+        Valid only for SPC_VIDEO, SPC_AD_TEXT, or SPC_SPARK.
+        Whether to include data of deleted materials.
+    - name: metrics
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+        default: ["spend", "impressions"]
+      description: |
+        Metrics to query.
+        See Metrics in Smart+ Campaign reports for supported metrics.
+    - name: query_lifetime
+      in: query
+      schema:
+        type: boolean
+        default: false
+      description: |
+        Whether to request lifetime metrics.
+        If true, start_date and end_date are ignored.
+    - name: start_date
+      in: query
+      schema:
+        type: string
+        format: date
+      description: |
+        Required when query_lifetime is false.
+        Query start date (YYYY-MM-DD).
+    - name: end_date
+      in: query
+      schema:
+        type: string
+        format: date
+      description: |
+        Required when query_lifetime is false.
+        Query end date (YYYY-MM-DD).
+        Must be within 365 days of start_date.
+    - name: page
+      in: query
+      schema:
+        type: integer
+        default: 1
+      description: Current page number
+    - name: page_size
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 10
+      description: Page size (1-100)
+  responses:
+    '200':
+      description: Successfully retrieved report
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - code
+              - message
+              - request_id
+              - data
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                properties:
+                  list:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        dimensions:
+                          type: object
+                          properties:
+                            material_id:
+                              type: string
+                              description: Material ID
+                            campaign_id:
+                              type: string
+                              description: Campaign ID (for video/text/Spark)
+                            catalog_id:
+                              type: string
+                              description: Catalog ID (for catalog materials)
+                        metrics:
+                          type: object
+                          properties:
+                            is_removed_from_spc:
+                              type: string
+                              enum: ["0", "1"]
+                              description: Whether material is removed
+                            video_id:
+                              type: string
+                              description: Video ID (for SPC_VIDEO)
+                            file_name:
+                              type: string
+                              description: Video name (for SPC_VIDEO)
+                            ad_text:
+                              type: string
+                              description: Ad text (for SPC_AD_TEXT)
+                            identity_id:
+                              type: string
+                              description: Identity ID (for SPC_SPARK)
+                            tiktok_item_id:
+                              type: string
+                              description: TikTok post ID (for SPC_SPARK)
+                            tiktok_name:
+                              type: string
+                              description: TikTok username (for SPC_SPARK)
+                            catalog_name:
+                              type: string
+                              description: Catalog name (for catalog materials)
+                            catalog_create_time:
+                              type: string
+                              format: date-time
+                              description: Catalog creation time
+                            catalog_modify_time:
+                              type: string
+                              format: date-time
+                              description: Catalog modification time
+                  page_info:
+                    $ref: 'endpoints/schemas/types.yaml#/components/schemas/PageInfo'
+     '400':
+       $ref: 'endpoints/schemas/responses.yaml#/components/responses/BadRequest'
+     '401':
+       $ref: 'endpoints/schemas/responses.yaml#/components/responses/Unauthorized'
+     '403':
+       $ref: 'endpoints/schemas/responses.yaml#/components/responses/Forbidden'
+     '404':
+       $ref: 'endpoints/schemas/responses.yaml#/components/responses/NotFound'
+     '429':
+       $ref: 'endpoints/schemas/responses.yaml#/components/responses/TooManyRequests'
+     '500':
+       $ref: 'endpoints/schemas/responses.yaml#/components/responses/InternalError'

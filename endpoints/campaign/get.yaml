@@ -1,0 +1,171 @@
+get:
+  summary: Get campaigns
+  description: |
+    Get all campaigns for an ad account. Optionally use filters to return only certain campaigns.
+    Note: Deleted campaigns are not queried by default. To query deleted campaigns, specify STATUS_DELETE in primary_status or CAMPAIGN_STATUS_DELETE in secondary_status.
+  operationId: getCampaigns
+  tags:
+    - campaign
+  security:
+    - accessToken: []
+  parameters:
+    - name: advertiser_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Advertiser ID
+    - name: fields
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+      description: |
+        Fields to return
+        Default: all fields
+    - name: exclude_field_types_in_response
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - NULL_FIELD
+      description: Field types to exclude from response
+    - name: filtering
+      in: query
+      schema:
+        type: object
+        description: Filter conditions
+        properties:
+          campaign_ids:
+            type: array
+            items:
+              type: string
+            maxItems: 100
+            description: Filter by campaign IDs
+          campaign_name:
+            type: string
+            description: Filter by campaign name (fuzzy match)
+          campaign_system_origins:
+            type: array
+            items:
+              type: string
+              enum:
+                - PROMOTE
+                - TT_ADS_PLATFORM
+            default: ["TT_ADS_PLATFORM"]
+            description: |
+              Filter by campaign origins
+              PROMOTE: Created through TikTok mobile App
+              TT_ADS_PLATFORM: Created through API/TikTok Ads Manager
+          primary_status:
+            type: string
+            description: Filter by primary status
+          secondary_status:
+            type: string
+            description: Filter by secondary status
+          objective_type:
+            $ref: '../../swagger.yaml#/components/schemas/AdvertisingObjective'
+          buying_types:
+            type: array
+            items:
+              type: string
+              enum:
+                - AUCTION
+                - RESERVATION_RF
+                - RESERVATION_TOP_VIEW
+            default: ["AUCTION", "RESERVATION_RF"]
+            description: |
+              Filter by buying types
+              AUCTION: Auction ads
+              RESERVATION_RF: Reach & Frequency/TikTok Pulse ads
+              RESERVATION_TOP_VIEW: TopView ads
+          is_smart_performance_campaign:
+            type: boolean
+            description: |
+              Filter by automated campaign type
+              true: Smart+ Campaign/Smart Performance Web Campaign
+              false: Standard campaign type
+          split_test_enabled:
+            type: boolean
+            description: Filter by split test status
+          campaign_product_source:
+            type: string
+            enum:
+              - CATALOG
+              - STORE
+            description: |
+              Filter by product source
+              CATALOG: Catalog
+              STORE: TikTok Shop/Showcase
+          optimization_goal:
+            type: string
+            description: Filter by optimization goal
+          campaign_type:
+            type: string
+            enum:
+              - REGULAR_CAMPAIGN
+              - IOS14_CAMPAIGN
+            description: Filter regular/iOS 14 campaigns
+          creation_filter_start_time:
+            type: string
+            description: |
+              Filter by creation time range start (UTC+0)
+              Format: YYYY-MM-DD HH:MM:SS
+              Suggestion: Use 6 month range
+          creation_filter_end_time:
+            type: string
+            description: |
+              Filter by creation time range end (UTC+0)
+              Format: YYYY-MM-DD HH:MM:SS
+              Suggestion: Use 6 month range
+    - name: page
+      in: query
+      schema:
+        type: integer
+        default: 1
+        minimum: 1
+      description: Current page number (default 1)
+    - name: page_size
+      in: query
+      schema:
+        type: integer
+        default: 10
+        minimum: 1
+        maximum: 1000
+      description: Page size (default 10, max 1000)
+  responses:
+    '200':
+      description: Successfully retrieved campaigns
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                properties:
+                  list:
+                    type: array
+                    description: List of campaigns
+                    items:
+                      $ref: '../../swagger.yaml#/components/schemas/SmartPlusCampaign'
+                  page_info:
+                    $ref: '../../swagger.yaml#/components/schemas/PageInfo'
+    '400':
+      $ref: '../../swagger.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../../swagger.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../../swagger.yaml#/components/responses/InternalError'

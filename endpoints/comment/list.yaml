@@ -1,0 +1,269 @@
+get:
+  summary: Get Video Comments
+  description: |
+    Access all comments or specified comments (both public and hidden) on a specific organic video posted by an owned TikTok Account.
+    Note:
+    - Only hidden comments created by the video owner are returned
+    - For comment replies, parent_comment_id will be included to distinguish from top-level comments
+    - Comment webhook event comment.update provides notifications within 5 minutes of comment changes
+  operationId: getVideoComments
+  parameters:
+    - name: Access-Token
+      in: header
+      required: true
+      schema:
+        type: string
+      description: Access token authorized by TikTok creators. Obtain via /tt_user/oauth2/token/
+    - name: business_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Application specific unique identifier for the TikTok account (open_id from OAuth token)
+    - name: video_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Unique identifier for owned TikTok video to list comments on
+    - name: comment_ids
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+        maxItems: 30
+      description: List of specific comment or reply IDs to filter by (max 30)
+    - name: include_replies
+      in: query
+      schema:
+        type: boolean
+        default: false
+      description: |
+        Whether to include replies to top-level comments.
+        If true, returns up to 3 replies per comment, sorted by smart algorithm.
+        Use /business/comment/reply/list/ to get all replies.
+    - name: status
+      in: query
+      schema:
+        type: string
+        enum: [PUBLIC, ALL]
+        default: ALL
+      description: |
+        Filter comments by visibility status:
+        - PUBLIC: Comments viewable by all TikTok users
+        - ALL: Both hidden and public comments
+    - name: sort_field
+      in: query
+      schema:
+        type: string
+        enum: [likes, replies, create_time]
+        default: create_time
+      description: |
+        Field to sort comments by:
+        - likes: Sort by number of likes
+        - replies: Sort by number of replies
+        - create_time: Sort chronologically
+        Note: For >500 comments, first 500 use specified sort, remainder sorted by likes
+    - name: sort_order
+      in: query
+      schema:
+        type: string
+        enum: [asc, desc, smart]
+        default: smart
+      description: |
+        Sort order:
+        - asc: Ascending order
+        - desc: Descending order
+        - smart: Algorithm-based sorting
+    - name: cursor
+      in: query
+      schema:
+        type: integer
+        default: 0
+      description: Cursor for pagination. Pass returned cursor for next page.
+    - name: max_count
+      in: query
+      schema:
+        type: integer
+        default: 20
+        minimum: 1
+        maximum: 30
+      description: Maximum number of comments per page (1-30)
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Unique identifier for the API request
+              data:
+                type: object
+                properties:
+                  comments:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        comment_id:
+                          type: string
+                          description: Unique identifier for the comment or reply
+                        video_id:
+                          type: string
+                          description: Unique identifier for the video
+                        user_id:
+                          type: string
+                          description: Developer application and TikTok account scoped unique identifier (deprecated)
+                        unique_identifier:
+                          type: string
+                          description: Globally unique identifier for the commenting user
+                        create_time:
+                          type: string
+                          description: Unix timestamp when comment was created
+                        text:
+                          type: string
+                          description: Comment text content
+                        likes:
+                          type: integer
+                          description: Number of likes received
+                        replies:
+                          type: integer
+                          description: Number of replies received
+                        owner:
+                          type: boolean
+                          description: Whether video owner made the comment
+                        liked:
+                          type: boolean
+                          description: Whether video owner liked the comment
+                        pinned:
+                          type: boolean
+                          description: Whether comment is pinned
+                        status:
+                          type: string
+                          enum: [HIDDEN, PUBLIC]
+                          description: Comment visibility status
+                        username:
+                          type: string
+                          description: Username of commenting user
+                        display_name:
+                          type: string
+                          description: Display name of commenting user
+                        profile_image:
+                          type: string
+                          description: Temporary URL for user's profile image
+                        parent_comment_id:
+                          type: string
+                          description: ID of parent comment (for replies only)
+                        reply_list:
+                          type: array
+                          description: List of replies (max 3, when include_replies=true)
+                          items:
+                            type: object
+                            properties:
+                              video_id:
+                                type: string
+                                description: Video identifier
+                              comment_id:
+                                type: string
+                                description: Reply identifier
+                              create_time:
+                                type: string
+                                description: Unix timestamp of reply creation
+                              text:
+                                type: string
+                                description: Reply text content
+                              status:
+                                type: string
+                                enum: [HIDDEN, PUBLIC]
+                                description: Reply visibility status
+                              liked:
+                                type: boolean
+                                description: Whether video owner liked the reply
+                              likes:
+                                type: integer
+                                description: Number of likes on reply
+                              owner:
+                                type: boolean
+                                description: Whether video owner made the reply
+                              user_id:
+                                type: string
+                                description: User identifier (deprecated)
+                              unique_identifier:
+                                type: string
+                                description: Globally unique user identifier
+                              username:
+                                type: string
+                                description: Username of replying user
+                              display_name:
+                                type: string
+                                description: Display name of replying user
+                              profile_image:
+                                type: string
+                                description: Profile image URL of replying user
+                              parent_comment_id:
+                                type: string
+                                description: ID of parent comment
+                  cursor:
+                    type: integer
+                    description: Cursor for next page of results
+                  has_more:
+                    type: boolean
+                    description: Whether more results are available
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+              message:
+                type: string
+              request_id:
+                type: string
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+              message:
+                type: string
+              request_id:
+                type: string
+              errors:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    field:
+                      type: string
+                    message:
+                      type: string
+    '500':
+      description: Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+              message:
+                type: string
+              request_id:
+                type: string

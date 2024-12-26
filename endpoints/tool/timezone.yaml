@@ -1,0 +1,71 @@
+get:
+  operationId: getTimezones
+  summary: Get time zones
+  description: |
+    Use this endpoint to get time zone enumeration values, and their offsets from GMT.
+
+    Be aware that the returned offsets (gmt_offset) remain fixed and do not account for daylight saving time changes.
+    For instance, for New York (America/New_York), the offset will always be GMT-05:00, regardless of whether New York is currently observing daylight saving time.
+
+    Changes from v1.2 to v1.3:
+    - Endpoint path changed from /v1.2/tools/timezone/ to /v1.3/tool/timezone/
+    - advertiser_id type changed from number to string
+    - Response parameter name changed: time_zone_list → timezones
+  tags:
+    - tool
+  parameters:
+    - name: advertiser_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Advertiser ID
+  responses:
+    '200':
+      description: Successfully retrieved time zones
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - code
+              - message
+              - request_id
+              - data
+            properties:
+              code:
+                type: integer
+                description: The return code
+              message:
+                type: string
+                description: The return message
+              request_id:
+                type: string
+                description: The log ID of a request, which uniquely identifies the request
+              data:
+                type: object
+                properties:
+                  timezones:
+                    type: array
+                    description: Time Zone list
+                    items:
+                      type: object
+                      properties:
+                        timezone:
+                          type: string
+                          description: Time zone. For example, "Pacific/Auckland"
+                        gmt_offset:
+                          type: string
+                          description: Offset from GMT. For example, "GMT+12:00"
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../schemas/responses.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../schemas/responses.yaml#/components/responses/NotFound'
+    '429':
+      $ref: '../schemas/responses.yaml#/components/responses/TooManyRequests'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

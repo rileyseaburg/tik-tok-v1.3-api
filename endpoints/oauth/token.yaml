@@ -1,0 +1,95 @@
+post:
+  summary: Get access token
+  description: Use this endpoint to get an access token. Supports both "application/x-www-form-urlencoded" and "application/json" content types.
+  operationId: getOAuthToken
+  tags:
+    - oauth
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - client_id
+            - client_secret
+            - code
+            - grant_type
+          properties:
+            client_id:
+              type: string
+              description: ID of your developer application. You can find the App ID by navigating to My Apps > App Detail > Basic Information.
+            client_secret:
+              type: string
+              description: Secret of your developer application. You can find the Secret by navigating to My Apps > App Detail > Basic Information.
+            code:
+              type: string
+              description: The authorization code (auth_code) in the callback URL. The code is valid for 1 hour and can only be used once.
+            grant_type:
+              type: string
+              description: The way of generating the access token.
+              enum: [authorization_code]
+      application/x-www-form-urlencoded:
+        schema:
+          type: object
+          required:
+            - client_id
+            - client_secret
+            - code
+            - grant_type
+          properties:
+            client_id:
+              type: string
+              description: ID of your developer application. You can find the App ID by navigating to My Apps > App Detail > Basic Information.
+            client_secret:
+              type: string
+              description: Secret of your developer application. You can find the Secret by navigating to My Apps > App Detail > Basic Information.
+            code:
+              type: string
+              description: The authorization code (auth_code) in the callback URL. The code is valid for 1 hour and can only be used once.
+            grant_type:
+              type: string
+              description: The way of generating the access token.
+              enum: [authorization_code]
+  responses:
+    '200':
+      description: Successfully generated access token
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                description: Response code
+                example: 0
+              message:
+                type: string
+                description: Response message
+                example: "OK"
+              request_id:
+                type: string
+                description: The log ID of a request, which uniquely identifies the request
+              access_token:
+                type: string
+                description: The token for permission verification
+              token_type:
+                type: string
+                description: Token type
+                enum: [Bearer]
+              advertiser_ids:
+                type: array
+                description: The list of ad accounts that the token can access
+                items:
+                  type: string
+              scope:
+                type: array
+                description: The endpoints that the token can access
+                items:
+                  type: number
+    '400':
+      $ref: 'endpoints/schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: 'endpoints/schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: 'endpoints/schemas/responses.yaml#/components/responses/InternalError'

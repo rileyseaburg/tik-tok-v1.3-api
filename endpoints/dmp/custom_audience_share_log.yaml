@@ -1,0 +1,65 @@
+get:
+  summary: Get the sharing log of an audience
+  description: Get information about which advertisers an audience has been shared with
+  operationId: getCustomAudienceShareLog
+  tags:
+    - dmp
+  security:
+    - accessToken: []
+  parameters:
+    - name: custom_audience_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Custom audience to get sharing log for
+    - name: advertiser_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Advertiser ID
+  responses:
+    '200':
+      description: Successfully retrieved sharing log
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                properties:
+                  list:
+                    type: array
+                    description: List of audience sharing records
+                    items:
+                      type: object
+                      properties:
+                        shared_advertiser_id:
+                          type: string
+                          description: ID of advertiser the audience is shared with
+                        shared_advertiser_name:
+                          type: string
+                          description: Name of advertiser the audience is shared with
+                        custom_audience_id:
+                          type: string
+                          description: ID of the shared audience
+                        status:
+                          type: string
+                          description: Audience status
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

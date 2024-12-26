@@ -1,0 +1,308 @@
+post:
+  operationId: updateSmartPlusCampaign
+  summary: Update a Smart+ Campaign
+  description: |
+    Use this endpoint to update a Smart+ Campaign. Not all information of a Smart+ Campaign can be modified (For example, placement). The endpoint supports incremental updates.
+
+    Note: You can not update a Smart+ Campaign via /campaign/update/, /adgroup/update/, and /ad/update/.
+  tags:
+    - campaign
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - advertiser_id
+            - campaign_id
+          properties:
+            advertiser_id:
+              type: string
+              description: Advertiser ID
+            campaign_id:
+              type: string
+              description: Campaign ID
+            campaign_name:
+              type: string
+              description: Campaign name
+            special_industries:
+              type: array
+              items:
+                type: string
+                enum:
+                  - HOUSING
+                  - EMPLOYMENT
+                  - CREDIT
+              description: |
+                Ad categories. Only supported for US/Canada advertisers:
+                - HOUSING: Real estate, homeowners insurance, mortgage loans
+                - EMPLOYMENT: Job offers, internships, certification programs
+                - CREDIT: Credit cards, auto loans, long-term financing
+                Note: Currently, we only support clearing this field.
+            product_specific_type:
+              type: string
+              enum:
+                - ALL
+                - PRODUCT_SET
+                - CUSTOMIZED_PRODUCTS
+              description: |
+                Different dimensions to choose products:
+                - ALL: Dynamic choice from all products
+                - PRODUCT_SET: Choose from specified product set
+                - CUSTOMIZED_PRODUCTS: Choose specific products
+            product_set_id:
+              type: string
+              description: |
+                Required when product_specific_type is PRODUCT_SET.
+                ID of the product set.
+            product_ids:
+              type: array
+              items:
+                type: string
+              maxItems: 20
+              description: |
+                Required when product_specific_type is CUSTOMIZED_PRODUCTS.
+                IDs of specific products to use.
+            bid_price:
+              type: number
+              format: float
+              description: |
+                Valid when:
+                - spc_type is WEB_ALL_IN_ONE
+                - optimization_goal is CLICK
+                - bid_type is BID_TYPE_CUSTOM
+                Target cost per click.
+            conversion_bid_price:
+              type: number
+              format: float
+              description: |
+                Valid when:
+                - spc_type is WEB_ALL_IN_ONE
+                - optimization_goal is CONVERT/TRAFFIC_LANDING_PAGE_VIEW
+                - bid_type is BID_TYPE_CUSTOM
+                Target cost per conversion/landing page view.
+            roas_bid:
+              type: number
+              format: float
+              minimum: 0.01
+              maximum: 1000
+              description: Target ROAS for Value-Based Optimization
+            location_ids:
+              type: array
+              items:
+                type: string
+              description: |
+                IDs of locations to target.
+                Note: If you add the US as your target location, then you can not remove the US after campaign creation.
+            languages:
+              type: array
+              items:
+                type: string
+              description: Language codes to target
+            gender:
+              type: string
+              enum:
+                - GENDER_FEMALE
+                - GENDER_MALE
+                - GENDER_UNLIMITED
+              description: Gender targeting (allowlist only)
+            exclude_age_under_eighteen:
+              type: boolean
+              description: |
+                Exclude under 18 audience.
+                Can only be updated from false to true.
+            excluded_audience_ids:
+              type: array
+              items:
+                type: string
+              description: Audience IDs to exclude
+            comment_disabled:
+              type: boolean
+              default: false
+              description: Whether to disable comments
+            blocked_pangle_app_ids:
+              type: array
+              items:
+                type: string
+              description: Pangle app block IDs
+            budget:
+              type: number
+              format: float
+              description: Campaign budget
+            schedule_type:
+              type: string
+              enum:
+                - SCHEDULE_START_END
+                - SCHEDULE_FROM_NOW
+              description: Schedule type
+            schedule_start_time:
+              type: string
+              format: date-time
+              description: |
+                Schedule start time (UTC+0).
+                Format: YYYY-MM-DD HH:MM:SS
+                Can be up to 12 hours earlier.
+            schedule_end_time:
+              type: string
+              format: date-time
+              description: |
+                Schedule end time (UTC+0).
+                Format: YYYY-MM-DD HH:MM:SS
+            dayparting:
+              type: string
+              description: |
+                48x7 character string for 30-min delivery windows.
+                1=delivery, 0=no delivery.
+                First char is Mon 0:01-0:30.
+            identity_id:
+              type: string
+              description: Identity ID for non-Spark ads
+            media_info_list:
+              type: array
+              items:
+                type: object
+                properties:
+                  media_info:
+                    type: object
+                    properties:
+                      video_info:
+                        type: object
+                        properties:
+                          video_id:
+                            type: string
+                            description: Video ID from /file/video/ad/upload/
+                          file_name:
+                            type: string
+                            description: Video name
+                      image_info:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            web_uri:
+                              type: string
+                              description: Image ID from /file/image/ad/upload/
+                      music_info:
+                        type: object
+                        properties:
+                          music_id:
+                            type: string
+                            description: Music ID for catalog carousel ads
+                      aigc_disclosure_type:
+                        type: string
+                        enum:
+                          - SELF_DISCLOSURE
+                          - NOT_DECLARED
+                        default: NOT_DECLARED
+                        description: |
+                          AI-generated content disclosure:
+                          - SELF_DISCLOSURE: Declare AI content
+                          - NOT_DECLARED: No declaration
+                      tiktok_item_id:
+                        type: string
+                        description: TikTok post ID for Spark Ads
+                      identity_type:
+                        type: string
+                        enum:
+                          - AUTH_CODE
+                          - TT_USER
+                        description: Identity type for Spark Ads
+                      identity_id:
+                        type: string
+                        description: Identity ID for Spark Ads
+            catalog_creative_toggle:
+              type: boolean
+              default: false
+              description: |
+                Enable auto-selection of catalog creatives.
+                Requires music_info when true.
+            title_list:
+              type: array
+              items:
+                type: object
+                properties:
+                  title:
+                    type: string
+                    description: Ad title/text
+            call_to_action_id:
+              type: string
+              description: CTA portfolio ID
+            call_to_action_list:
+              type: array
+              items:
+                type: object
+                properties:
+                  call_to_action:
+                    type: string
+                    description: CTA text
+            card_list:
+              type: array
+              maxItems: 1
+              items:
+                type: object
+                properties:
+                  card_id:
+                    type: string
+                    description: Creative portfolio ID
+            page_list:
+              type: array
+              maxItems: 1
+              items:
+                type: object
+                properties:
+                  page_id:
+                    type: string
+                    description: Page ID (form/instant/profile)
+            deeplink_type:
+              type: string
+              enum:
+                - DEFERRED_DEEPLINK
+              description: Deep link type
+            deeplink:
+              type: string
+              description: Deep link location for installed app users
+            landing_page_urls:
+              type: array
+              items:
+                type: object
+                properties:
+                  landing_page_url:
+                    type: string
+                    description: Landing page URL
+                  video_id:
+                    type: string
+                    description: Video ID for multiple landing pages
+                  tiktok_item_id:
+                    type: string
+                    description: Post ID for multiple landing pages
+            impression_tracking_url:
+              type: string
+              description: Default impression tracking URL
+            click_tracking_url:
+              type: string
+              description: Click tracking URL
+  responses:
+    '200':
+      description: Successfully updated Smart+ Campaign
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - code
+              - message
+              - request_id
+              - data
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                $ref: '../schemas/types.yaml#/components/schemas/SmartPlusCampaign'

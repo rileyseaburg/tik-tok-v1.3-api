@@ -1,0 +1,55 @@
+get:
+  summary: Get dynamic quota on active ad groups
+  description: |
+    Get the dynamic quota on the number of active auction ad groups that an advertiser can have.
+
+    Notes:
+    - If advertiser is subject to fixed active ad group quota, response will show total_adgroup_quota = 5000 and used_adgroup_quota = 0
+    - If advertiser is being punished, no active ad groups are allowed. Both quotas will be 0.
+    - When advertiser has used up all dynamic active ad group quota (total = used):
+      * Additional ad groups can be created but will be automatically deactivated
+      * Cannot use /adgroup/status/update/ to reactivate deactivated ad groups
+  operationId: getAdGroupQuota
+  tags:
+    - adgroup
+  security:
+    - accessToken: []
+  parameters:
+    - name: advertiser_id
+      in: query
+      required: true
+      description: Advertiser ID
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Successfully retrieved ad group quota
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: The log ID of a request, which uniquely identifies the request
+              data:
+                type: object
+                properties:
+                  total_adgroup_quota:
+                    type: integer
+                    description: Maximum number of active ad groups allowed for the advertiser
+                  used_adgroup_quota:
+                    type: integer
+                    description: Current number of active ad groups for the advertiser
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

@@ -1,0 +1,81 @@
+post:
+  summary: Create a Smart Creative ad
+  description: Create a Smart Creative ad using the provided parameters
+  operationId: createSmartCreativeAd
+  tags:
+    - ad
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - advertiser_id
+            - adgroup_id
+            - creatives
+          properties:
+            advertiser_id:
+              type: string
+              description: Advertiser ID
+            adgroup_id:
+              type: string
+              description: Ad group ID
+            creatives:
+              type: array
+              description: Advertising creatives
+              items:
+                type: object
+                required:
+                  - ad_name
+                  - identity_type
+                  - identity_id
+                  - ad_format
+                properties:
+                  ad_name:
+                    type: string
+                    description: Ad name
+                  identity_type:
+                    type: string
+                    description: Identity type
+                  identity_id:
+                    type: string
+                    description: Identity ID
+                  ad_format:
+                    $ref: '../schemas/types.yaml#/components/schemas/AdFormat'
+                  is_smart_creative:
+                    type: boolean
+                    description: Flag to indicate if this is a Smart Creative ad
+                    default: true
+                  media_info:
+                    $ref: '../schemas/types.yaml#/components/schemas/MediaInfo'
+                  call_to_action_list:
+                    type: array
+                    description: List of call-to-action texts (max 3, no duplicates)
+                    maxItems: 3
+                    uniqueItems: true
+                    items:
+                      $ref: '../schemas/types.yaml#/components/schemas/CallToActionInfo'
+                  title_list:
+                    type: array
+                    description: List of ad titles (max 5, no duplicates)
+                    maxItems: 5
+                    uniqueItems: true
+                    items:
+                      type: string
+                  page_id:
+                    type: string
+                    description: ID of the instant page
+  responses:
+    '200':
+      description: Successfully created Smart Creative ad
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/responses.yaml#/components/schemas/AdResponse'
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

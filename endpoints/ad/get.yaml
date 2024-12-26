@@ -1,0 +1,183 @@
+get:
+  summary: Get ads data
+  description: |
+    Use this endpoint to get the data of regular ads and ACO ads.
+
+    Note: To return deleted ads, either specify STATUS_DELETE in primary_status field or 
+    ADGROUP_STATUS_DELETE/ADGROUP_STATUS_CAMPAIGN_DELETE/AD_STATUS_DELETE in secondary_status field.
+    Deleted data is not queried by default.
+
+    Changes from v1.2:
+    - Parameter name changes:
+      * create_start_time -> creation_filter_start_time
+      * create_end_time -> creation_filter_end_time
+      * status -> secondary_status
+    - Data type changes:
+      * advertiser_id: number -> string
+      * campaign_ids: number[] -> string[]
+      * adgroup_ids: number[] -> string[]
+      * ad_ids: number[] -> string[]
+    - Deprecated parameters:
+      * ad_text
+      * billing_events
+    - New parameters:
+      * exclude_field_types_in_response
+      * destination
+      * creative_material_mode
+      * optimization_goal
+      * campaign_system_origins
+      * buying_types
+      * modified_after
+  operationId: getAds
+  tags:
+    - ad
+  parameters:
+    - name: advertiser_id
+      in: query
+      required: true
+      description: Advertiser ID
+      schema:
+        type: string
+    - name: fields
+      in: query
+      required: false
+      description: Fields that you want to get. If not set, all fields are returned by default.
+      schema:
+        type: array
+        items:
+          type: string
+    - name: exclude_field_types_in_response
+      in: query
+      required: false
+      description: The type of fields to remove from the response
+      schema:
+        type: array
+        items:
+          type: string
+          enum: [NULL_FIELD]
+    - name: filtering
+      in: query
+      required: false
+      description: Filters on the data
+      schema:
+        type: object
+        properties:
+          campaign_ids:
+            type: array
+            items:
+              type: string
+            description: A list of Campaign IDs. Max size - 100.
+          campaign_system_origins:
+            type: array
+            items:
+              type: string
+              enum: [PROMOTE, TT_ADS_PLATFORM]
+            description: |
+              The origins (sources) of the campaigns that the ads belong to.
+              Default value - ["TT_ADS_PLATFORM"]
+          adgroup_ids:
+            type: array
+            items:
+              type: string
+            description: A list of Ad group IDs. Max size - 100.
+          ad_ids:
+            type: array
+            items:
+              type: string
+            description: A list of Ad IDs. Max size - 100.
+          primary_status:
+            type: string
+            description: Primary status. For enum values, see Enumeration - Primary status.
+          secondary_status:
+            type: string
+            description: |
+              Ad secondary status. For enum values, see Enumeration - Ad Status - Secondary Status.
+              Note: This field is not returned in the sandbox environment because the ad is not actually delivered.
+          objective_type:
+            $ref: '../../swagger.yaml#/components/schemas/AdvertisingObjective'
+          buying_types:
+            type: array
+            items:
+              type: string
+              enum: [AUCTION, RESERVATION_RF, RESERVATION_TOP_VIEW]
+            description: |
+              Filter by buying types.
+              Default value - ["AUCTION", "RESERVATION_RF"]
+          optimization_goal:
+            type: string
+            description: Optimization goal. For enum values, see Enumeration - Optimization Goal.
+          creative_material_mode:
+            type: string
+            description: The strategy that your creatives will be delivered
+            enum: [CUSTOM, DYNAMIC, SMART_CREATIVE]
+          destination:
+            type: string
+            description: The destination page type to filter by
+            enum: [APP, TIKTOK_INSTANT_PAGE, WEBSITE, SOCIAL_MEDIA_APP, PHONE_CALL]
+    - name: creation_filter_start_time
+      in: query
+      required: false
+      description: Filter ads created later than this time (UTC)
+      schema:
+        $ref: '../../swagger.yaml#/components/schemas/Timestamp'
+    - name: creation_filter_end_time
+      in: query
+      required: false
+      description: Filter ads created earlier than this time (UTC)
+      schema:
+        $ref: '../../swagger.yaml#/components/schemas/Timestamp'
+    - name: modified_after
+      in: query
+      required: false
+      description: Filter ads modified after this time (UTC)
+      schema:
+        $ref: '../../swagger.yaml#/components/schemas/Timestamp'
+    - name: page
+      in: query
+      required: false
+      description: Current page number. Default - 1. Range - ≥ 1
+      schema:
+        type: integer
+        default: 1
+        minimum: 1
+    - name: page_size
+      in: query
+      required: false
+      description: Page size. Default - 10. Range - 1-1,000
+      schema:
+        type: integer
+        default: 10
+        minimum: 1
+        maximum: 1000
+  responses:
+    '200':
+      description: Successfully retrieved ads data
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: The log ID of the request
+              data:
+                type: object
+                properties:
+                  list:
+                    type: array
+                    items:
+                      $ref: '../../swagger.yaml#/components/schemas/AdCreative'
+                  page_info:
+                    $ref: '../../swagger.yaml#/components/schemas/PageInfo'
+    '400':
+      $ref: '../../swagger.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../../swagger.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../../swagger.yaml#/components/responses/InternalError'

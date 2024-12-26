@@ -1,0 +1,68 @@
+post:
+  summary: Get long-term access token
+  description: Use this endpoint to get a long-term access token that does not expire. Only supports Content-Type as "application/json".
+  operationId: getOAuth2AccessToken
+  tags:
+    - oauth2
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - app_id
+            - auth_code
+            - secret
+          properties:
+            app_id:
+              type: string
+              description: The App ID applied by the developer. It can be found in the Basic Information section for your app under My Apps.
+            auth_code:
+              type: string
+              description: Authorization code provided once the callback is complete. It is valid for 1 hour and can only be used once.
+            secret:
+              type: string
+              description: The private key of the developer's App. It can be found in the Basic Information section for your app under My Apps.
+  responses:
+    '200':
+      description: Successfully generated access token
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                description: Return code
+                example: 0
+              message:
+                type: string
+                description: Response message
+                example: "OK"
+              data:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    description: Token for permission verification
+                  advertiser_ids:
+                    type: array
+                    description: List of accounts that the token can access
+                    items:
+                      type: string
+                  scope:
+                    type: array
+                    description: The endpoints that the token can access
+                    items:
+                      type: number
+              request_id:
+                type: string
+                description: The log ID of a request, which uniquely identifies the request
+                example: "2020042715295501023125104093250"
+    '400':
+      $ref: 'endpoints/schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: 'endpoints/schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: 'endpoints/schemas/responses.yaml#/components/responses/InternalError'

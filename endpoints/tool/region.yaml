@@ -1,0 +1,326 @@
+get:
+  operationId: getRegions
+  summary: Get available locations by different settings
+  description: |
+    Use this endpoint to get codes of locations that your ads can be delivered to based on your objectives, placements, and optionally targeting operating systems, and brand safety settings.
+
+    If you want to get available locations that your ads can be delivered to based on your advertiser IDs, use the /search/region/ endpoint.
+
+    Note:
+    - Targeting the newly available countries or regions (Azerbaijan, Bulgaria, Bolivia, Cyprus, Algeria, Estonia, Croatia, Kenya, Sri Lanka, Lithuania, Latvia, Nigeria, Puerto Rico, Paraguay, Serbia, Slovenia, Slovakia) using the advertising objective TRAFFIC, LEAD_GENERATION, APP_PROMOTION, or WEB_CONVERSIONS and the TikTok placement are currently separate allowlist-only features. Contact your TikTok representative for access. A separate allowlist is needed for each country/region.
+    
+    - Targeting these same countries using REACH, VIDEO_VIEWS, or ENGAGEMENT objectives and TikTok placement also requires separate allowlists. When targeting these countries with these objectives, pre-bid third-party Brand Safety solutions are not supported (cannot set brand_safety_type to THIRD_PARTY).
+    
+    - The level of locations follows a hierarchy:
+      * Country
+      * Province/DMA/Metropolitan (same level)
+      * City
+      * District
+      
+      Province, City, and District are administrative areas (area_type: ADMIN).
+      DMA and Metropolitan are metropolitan areas (area_type: METROPOLITAN_OR_DMA).
+
+    Changes from v1.2 to v1.3:
+    - Endpoint path changed from /v1.2/tools/regions/ to /v1.3/tool/region/
+    - Parameter names changed: placement → placements, brand_safety → brand_safety_type
+    - advertiser_id type changed from number to string
+    - New parameters added: rf_campaign_type, promotion_target_type, shopping_ads_type, promotion_type, language
+    - Response parameter types changed: parent_id and next_level_ids from number to string
+    - Response parameter renamed: id → location_id in region_info object
+  tags:
+    - tool
+  parameters:
+    - name: advertiser_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Advertiser ID
+    - name: placements
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+      description: The apps where you want to deliver your ads
+    - name: objective_type
+      in: query
+      required: true
+      schema:
+        type: string
+        enum:
+          - REACH
+          - TRAFFIC
+          - VIDEO_VIEWS
+          - LEAD_GENERATION
+          - ENGAGEMENT
+          - APP_PROMOTION
+          - WEB_CONVERSIONS
+          - PRODUCT_SALES
+          - RF_REACH
+      description: Your objective type
+    - name: level_range
+      in: query
+      schema:
+        type: string
+        enum:
+          - ALL
+          - TO_COUNTRY
+          - TO_PROVINCE
+          - TO_CITY
+          - TO_DISTRICT
+      description: |
+        Location level you want to get:
+        - ALL: all levels
+        - TO_COUNTRY: only country or region level
+        - TO_PROVINCE: country and province level; DMA and Metropolitan are at province level
+        - TO_CITY: country, province, and city levels
+        - TO_DISTRICT: country, province, city, and district levels
+    - name: language
+      in: query
+      schema:
+        type: string
+        default: en
+        enum:
+          - af # Afrikaans
+          - am # Amharic
+          - ar # Arabic
+          - az # Azerbaijani
+          - be # Belarusian
+          - bg # Bulgarian
+          - bn # Bengali
+          - bs # Bosnian
+          - ca # Catalan
+          - cs # Czech
+          - da # Danish
+          - de # German
+          - el # Greek
+          - en # English
+          - es # Spanish
+          - et # Estonian
+          - eu # Basque
+          - fa # Farsi
+          - fi # Finnish
+          - fil # Filipino
+          - fr # French
+          - gl # Galician
+          - gu # Gujarati
+          - hi # Hindi
+          - hr # Croatian
+          - hu # Hungarian
+          - hy # Armenian
+          - id # Indonesian
+          - is # Icelandic
+          - it # Italian
+          - ja # Japanese
+          - ka # Georgian
+          - kk # Kazakh
+          - km # Khmer
+          - kn # Kannada
+          - ko # Korean
+          - ky # Kyrgyz
+          - lo # Lao
+          - lt # Lithuanian
+          - lv # Latvian
+          - mk # Macedonian
+          - ml # Malayalam
+          - mn # Mongolian
+          - mr # Marathi
+          - ms # Malay
+          - my # Burmese
+          - ne # Nepali
+          - nl # Dutch
+          - no # Norwegian
+          - pa # Punjabi
+          - pl # Polish
+          - pt # Portuguese
+          - pt-BR # Portuguese (Brazil)
+          - ro # Romanian
+          - ru # Russian
+          - si # Sinhalese
+          - sk # Slovak
+          - sl # Slovenian
+          - sq # Albanian
+          - sr # Serbian
+          - sv # Swedish
+          - sw # Swahili
+          - ta # Tamil
+          - te # Telugu
+          - th # Thai
+          - tr # Turkish
+          - uk # Ukrainian
+          - ur # Urdu
+          - uz # Uzbek
+          - vi # Vietnamese
+          - zh # Chinese
+          - zh-CN # Chinese (Simplified)
+          - zh-HK # Chinese (Hong Kong)
+          - zh-TW # Chinese (Traditional)
+          - zu # Zulu
+      description: |
+        The language of the returned location name (name).
+        Default value: en (English)
+
+        Note:
+        - If the specified language is not supported, it will be ignored and the default value en will be used
+        - If a supported non-English language is specified, the names of locations outside the native country or region associated with that language might not be translated
+        - For example, if you set language to ja (Japanese), the names of locations outside Japan might not be translated
+    - name: shopping_ads_type
+      in: query
+      schema:
+        type: string
+        enum:
+          - VIDEO
+          - LIVE
+          - PRODUCT_SHOPPING_ADS
+      description: |
+        Valid only when objective_type is PRODUCT_SALES.
+        Shopping ads type:
+        - VIDEO: Video Shopping Ads
+        - LIVE: Live Shopping Ads
+        - PRODUCT_SHOPPING_ADS: Product Shopping Ads
+    - name: promotion_type
+      in: query
+      schema:
+        type: string
+      description: Promotion type (Optimization location)
+    - name: promotion_target_type
+      in: query
+      schema:
+        type: string
+        enum:
+          - INSTANT_PAGE
+          - EXTERNAL_WEBSITE
+      description: |
+        Valid when objective_type is LEAD_GENERATION.
+        The promotion type for Lead Generation objective:
+        - INSTANT_PAGE: Instant Form
+        - EXTERNAL_WEBSITE: Website Form
+    - name: operating_system
+      in: query
+      schema:
+        type: string
+        enum:
+          - ANDROID
+          - IOS
+      description: Operating systems that you want to target
+    - name: brand_safety_type
+      in: query
+      schema:
+        type: string
+        enum:
+          - NO_BRAND_SAFETY
+          - EXPANDED_INVENTORY
+          - STANDARD_INVENTORY
+          - LIMITED_INVENTORY
+          - THIRD_PARTY
+        default: NO_BRAND_SAFETY
+      description: |
+        Brand safety type. Valid only when placements is set as PLACEMENT_TIKTOK.
+        Default value: NO_BRAND_SAFETY
+    - name: brand_safety_partner
+      in: query
+      schema:
+        type: string
+        enum:
+          - IAS
+          - OPEN_SLATE
+      description: |
+        Required when brand_safety_type is THIRD_PARTY.
+        Brand safety partner.
+    - name: rf_campaign_type
+      in: query
+      schema:
+        type: string
+        enum:
+          - STANDARD
+          - PULSE
+      description: |
+        When objective_type is RF_REACH, use this field to set the campaign as a TikTok Pulse campaign.
+        - STANDARD: Reach & Frequency campaign
+        - PULSE: TikTok Pulse campaign
+        Note: Only one location_id will be returned when set to PULSE
+  responses:
+    '200':
+      description: Successfully retrieved available locations
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - code
+              - message
+              - request_id
+              - data
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: The log ID of a request, which uniquely identifies the request
+              data:
+                type: object
+                properties:
+                  region_list:
+                    type: array
+                    description: List of country or region codes
+                    items:
+                      type: string
+                  region_info:
+                    type: array
+                    description: Information about the available locations
+                    items:
+                      type: object
+                      properties:
+                        location_id:
+                          type: string
+                          description: Location ID
+                        name:
+                          type: string
+                          description: Location name
+                        parent_id:
+                          type: string
+                          description: ID of the parent location. Returns 0 if no parents
+                        region_code:
+                          type: string
+                          description: Country or region code. For example, "DE"
+                        next_level_ids:
+                          type: array
+                          description: List of children locations
+                          items:
+                            type: string
+                        area_type:
+                          type: string
+                          description: Location type
+                          enum:
+                            - ADMIN
+                            - METROPOLITAN_OR_DMA
+                        level:
+                          type: string
+                          description: |
+                            Location level. DMA and metropolitans are at the province level
+                          enum:
+                            - COUNTRY
+                            - PROVINCE
+                            - CITY
+                            - DISTRICT
+                        support_below_18:
+                          type: boolean
+                          description: Whether the location supports ads to be delivered to people under 18 years of age
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../schemas/responses.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../schemas/responses.yaml#/components/responses/NotFound'
+    '429':
+      $ref: '../schemas/responses.yaml#/components/responses/TooManyRequests'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

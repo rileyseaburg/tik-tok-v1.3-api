@@ -1,0 +1,45 @@
+post:
+  operationId: cancelReportTask
+  summary: Cancel an asynchronous report task
+  description: |
+    Use this endpoint to cancel an asynchronous report task that is either queued or currently being processed.
+
+    Canceling an incorrect or long-running task can help save you time by allowing other queued tasks to proceed to the processing stage.
+  tags:
+    - report
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - advertiser_id
+            - task_id
+          properties:
+            advertiser_id:
+              type: string
+              description: |
+                Advertiser ID.
+                Note: If you use advertiser_ids when calling /report/task/create/ (POST method), you need to set this field to one of the Advertiser IDs specified via advertiser_ids.
+            task_id:
+              type: string
+              description: |
+                The ID of an asynchronous report task that is either queued or currently being processed.
+                To obtain such a task ID, first use /report/task/create/ to create an asynchronous report task.
+                Then use /report/task/check/ to confirm that the status of the task is QUEUING or PROCESSING before attempting to cancel it.
+  responses:
+    '200':
+      $ref: '../schemas/responses.yaml#/components/responses/ReportTaskCanceled'
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../schemas/responses.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../schemas/responses.yaml#/components/responses/NotFound'
+    '429':
+      $ref: '../schemas/responses.yaml#/components/responses/TooManyRequests'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

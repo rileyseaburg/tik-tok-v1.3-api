@@ -1,0 +1,271 @@
+post:
+  summary: Create a campaign
+  description: |
+    Create a campaign. Each ad account can have up to 999 campaigns.
+    A campaign can contain one or more ad groups.
+
+    Important:
+    By using this endpoint, you agree to TikTok's Online Data Terms.
+    This includes Business Products (Data) Terms, Controller to Controller Data Terms
+    and all component parts.
+  operationId: createCampaign
+  tags:
+    - campaign
+  security:
+    - accessToken: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - advertiser_id
+            - objective_type
+            - campaign_name
+          properties:
+            advertiser_id:
+              type: string
+              description: Advertiser ID
+            objective_type:
+              type: string
+              description: |
+                Advertising objective
+                See Objectives for enum values
+            app_promotion_type:
+              type: string
+              description: |
+                Required when objective_type is APP_PROMOTION
+                APP_INSTALL: Get new users to install app
+                APP_RETARGETING: Re-engage existing users
+                APP_PREREGISTRATION: Get pre-registrations
+              enum:
+                - APP_INSTALL
+                - APP_RETARGETING
+                - APP_PREREGISTRATION
+            campaign_type:
+              type: string
+              description: |
+                Campaign type
+                REGULAR_CAMPAIGN: Regular campaign
+                IOS14_CAMPAIGN: iOS 14 campaign
+              enum:
+                - REGULAR_CAMPAIGN
+                - IOS14_CAMPAIGN
+            app_id:
+              type: string
+              description: |
+                Required for iOS 14 campaigns with PRODUCT_SALES
+                or APP_PROMOTION (APP_INSTALL) objective
+                Application ID of promoted app
+            is_advanced_dedicated_campaign:
+              type: boolean
+              description: |
+                Whether campaign uses advanced delivery models
+                Default: false
+                Cannot be updated after creation
+            campaign_app_profile_page_state:
+              type: string
+              description: |
+                Use app profile page to optimize delivery
+                Only for iOS14 APP_PROMOTION campaigns
+                Default: OFF
+              enum:
+                - ON
+                - OFF
+            rf_campaign_type:
+              type: string
+              description: |
+                For RF_REACH objective
+                STANDARD: Reach & Frequency campaign
+                PULSE: TikTok Pulse campaign
+              enum:
+                - STANDARD
+                - PULSE
+            campaign_product_source:
+              type: string
+              description: |
+                Required for PRODUCT_SALES objective
+                CATALOG: Catalog
+                STORE: TikTok Shop/Showcase
+              enum:
+                - CATALOG
+                - STORE
+            campaign_name:
+              type: string
+              description: |
+                Campaign name
+                Max 512 characters
+                No emoji support
+            request_id:
+              type: string
+              description: |
+                Request ID for duplicate name handling
+                Must be 64-bit integer as string
+            special_industries:
+              type: array
+              description: |
+                Special ad categories
+                Limits targeting options for compliance
+              items:
+                type: string
+                enum:
+                  - HOUSING
+                  - EMPLOYMENT
+                  - CREDIT
+            budget_optimize_on:
+              type: boolean
+              description: |
+                Enable Campaign Budget Optimization
+                true: enabled
+            budget_mode:
+              type: string
+              description: |
+                Budget mode
+                Required when objective_type not RF_REACH
+              enum:
+                - BUDGET_MODE_TOTAL
+                - BUDGET_MODE_DAY
+                - BUDGET_MODE_DYNAMIC_DAILY_BUDGET
+                - BUDGET_MODE_INFINITE
+            budget:
+              type: number
+              description: |
+                Campaign budget
+                Required for BUDGET_MODE_DAY/TOTAL/DYNAMIC_DAILY_BUDGET
+            rta_id:
+              type: string
+              description: |
+                Realtime API (RTA) ID
+                Strategy identifier for RTA
+            rta_product_selection_enabled:
+              type: boolean
+              description: |
+                Use RTA for automatic product selection
+                Default: false
+            operation_status:
+              type: string
+              description: |
+                Campaign status on creation
+                Default: ENABLE
+                Not DISABLE for RF campaigns
+              enum:
+                - ENABLE
+                - DISABLE
+            postback_window_mode:
+              type: string
+              description: |
+                SKAN 4.0 postback mode for iOS14 campaigns
+                MODE1: 0-2 day window (4 day wait)
+                MODE2: 3-7 day window (13 day wait)
+                MODE3: 8-35 day window (41 day wait)
+              enum:
+                - POSTBACK_WINDOW_MODE1
+                - POSTBACK_WINDOW_MODE2
+                - POSTBACK_WINDOW_MODE3
+  responses:
+    '200':
+      description: Successfully created campaign
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                properties:
+                  advertiser_id:
+                    type: string
+                    description: Advertiser ID
+                  campaign_id:
+                    type: string
+                    description: Campaign ID
+                  create_time:
+                    type: string
+                    description: Creation time
+                  modify_time:
+                    type: string
+                    description: Last modified time
+                  objective_type:
+                    type: string
+                    description: Advertising objective
+                  app_promotion_type:
+                    type: string
+                    description: App promotion type
+                  is_search_campaign:
+                    type: boolean
+                    description: Whether it's a Search Campaign
+                  is_smart_performance_campaign:
+                    type: boolean
+                    description: Whether it's an automated campaign
+                  campaign_type:
+                    type: string
+                    description: Campaign type (REGULAR/IOS14)
+                  app_id:
+                    type: string
+                    description: Application ID
+                  is_advanced_dedicated_campaign:
+                    type: boolean
+                    description: Uses advanced delivery models
+                  campaign_app_profile_page_state:
+                    type: string
+                    description: App Profile Page status
+                  rf_campaign_type:
+                    type: string
+                    description: RF campaign type
+                  campaign_product_source:
+                    type: string
+                    description: Product source
+                  campaign_name:
+                    type: string
+                    description: Campaign name
+                  special_industries:
+                    type: array
+                    description: Special ad categories
+                    items:
+                      type: string
+                  budget_optimize_on:
+                    type: boolean
+                    description: CBO enabled
+                  budget_mode:
+                    type: string
+                    description: Budget mode
+                  budget:
+                    type: number
+                    description: Campaign budget
+                  rta_id:
+                    type: string
+                    description: RTA strategy ID
+                  rta_product_selection_enabled:
+                    type: boolean
+                    description: RTA product selection
+                  operation_status:
+                    type: string
+                    description: Operation status
+                  secondary_status:
+                    type: string
+                    description: Secondary status
+                  postback_window_mode:
+                    type: string
+                    description: SKAN postback mode
+                  is_new_structure:
+                    type: boolean
+                    description: New campaign structure
+                  objective:
+                    type: string
+                    description: Campaign type (APP/LANDING_PAGE)
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

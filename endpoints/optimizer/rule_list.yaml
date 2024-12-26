@@ -1,0 +1,273 @@
+get:
+  summary: Get rules by filters
+  description: Get rules based on filter criteria
+  operationId: listOptimizerRules
+  tags:
+    - optimizer
+  security:
+    - accessToken: []
+  parameters:
+    - name: advertiser_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Advertiser ID
+    - name: filtering
+      in: query
+      schema:
+        type: object
+        properties:
+          status:
+            type: string
+            description: |
+              Rule status filter
+              ON: active
+              OFF: inactive
+              DELETED: deleted
+            enum:
+              - ON
+              - OFF
+              - DELETED
+          rule_info:
+            type: array
+            description: Rule IDs or names to filter by
+            items:
+              type: string
+          data_dimension:
+            type: string
+            description: Object dimension filter
+            enum:
+              - CAMPAIGN
+              - ADGROUP
+              - AD
+    - name: tzone
+      in: query
+      schema:
+        type: string
+      description: |
+        Timezone for time fields in response
+        Affects create_datetime, email_exec_time, check_datetime, exec_datetime
+    - name: page
+      in: query
+      schema:
+        type: integer
+        default: 1
+      description: Current page number (default 1)
+    - name: page_size
+      in: query
+      schema:
+        type: integer
+        default: 10
+      description: Page size (default 10)
+  responses:
+    '200':
+      description: Successfully retrieved rules
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                properties:
+                  rules:
+                    type: array
+                    description: List of rules
+                    items:
+                      type: object
+                      properties:
+                        apply_objects:
+                          type: array
+                          description: Objects rules are applied to
+                          items:
+                            type: object
+                            properties:
+                              dimension:
+                                type: string
+                                description: Object category
+                                enum: [CAMPAIGN, ADGROUP, AD]
+                              dimension_ids:
+                                type: array
+                                description: Object IDs
+                                items:
+                                  type: string
+                              pre_condition_type:
+                                type: string
+                                description: Object filter conditions
+                              bind_type:
+                                type: string
+                                description: Rule binding type
+                                enum: [BIND, UNBIND]
+                        conditions:
+                          type: array
+                          description: Rule conditions
+                          items:
+                            type: object
+                            properties:
+                              subject_type:
+                                type: string
+                                description: Condition subject
+                              range_type:
+                                type: string
+                                description: Time range
+                                enum:
+                                  - TODAY
+                                  - YESTERDAY
+                                  - PAST_THREE_DAYS
+                                  - PAST_FIVE_DAYS
+                                  - PAST_SEVEN_DAYS
+                                  - LIFETIME
+                              match_type:
+                                type: string
+                                description: Condition operator
+                              values:
+                                type: array
+                                description: Condition values
+                                items:
+                                  type: string
+                              calculation_type:
+                                type: string
+                                description: Calculation type
+                                enum:
+                                  - ALL_OBJECTS
+                                  - OF_EACH_OBJECT
+                        actions:
+                          type: array
+                          description: Actions to take
+                          items:
+                            type: object
+                            properties:
+                              subject_type:
+                                type: string
+                                description: Action type
+                              action_type:
+                                type: string
+                                description: Adjustment type
+                              value_type:
+                                type: string
+                                description: Value type
+                              value:
+                                type: object
+                                description: Action value settings
+                              frequency_info:
+                                type: object
+                                description: Action frequency settings
+                                properties:
+                                  type:
+                                    type: string
+                                    description: Frequency type
+                                  custom_frequency_type:
+                                    type: string
+                                    description: Custom frequency type
+                                  time:
+                                    type: integer
+                                    description: Frequency time value
+                                  count:
+                                    type: integer
+                                    description: Frequency count value
+                        notification:
+                          type: object
+                          description: Notification settings
+                          properties:
+                            notification_type:
+                              type: string
+                              description: Notification type
+                            email_setting:
+                              type: object
+                              description: Email settings
+                              properties:
+                                notification_period:
+                                  type: string
+                                  description: Notification period
+                                email_exec_time:
+                                  type: array
+                                  description: Email execution times
+                                  items:
+                                    type: string
+                                no_result_notification:
+                                  type: boolean
+                                  description: Send no-result notifications
+                        rule_exec_info:
+                          type: object
+                          description: Rule execution settings
+                          properties:
+                            exec_time_type:
+                              type: string
+                              description: Execution schedule type
+                            exec_time:
+                              type: string
+                              description: Execution time
+                            time_period_info:
+                              type: array
+                              description: Time period settings
+                              items:
+                                type: object
+                                properties:
+                                  num:
+                                    type: array
+                                    description: Day numbers
+                                    items:
+                                      type: integer
+                                  start_time:
+                                    type: string
+                                    description: Period start time
+                                  end_time:
+                                    type: string
+                                    description: Period end time
+                                  date_type:
+                                    type: string
+                                    description: Date type
+                        last_check_result_summary:
+                          type: object
+                          description: Last execution results
+                          properties:
+                            check_datetime:
+                              type: string
+                              description: Check time (UTC+0)
+                            exec_datetime:
+                              type: string
+                              description: Execution time (UTC+0)
+                            change_success:
+                              type: integer
+                              description: Successful changes
+                            no_change:
+                              type: integer
+                              description: No changes
+                            change_fail:
+                              type: integer
+                              description: Failed changes
+                            task_exec_id:
+                              type: string
+                              description: Execution ID
+                        rule_id:
+                          type: string
+                          description: Rule ID
+                        name:
+                          type: string
+                          description: Rule name
+                        rule_status:
+                          type: string
+                          description: |
+                            Rule status
+                            ON: active
+                            OFF: inactive
+                            DELETED: deleted
+                        create_datetime:
+                          type: string
+                          description: Creation time (UTC+0)
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

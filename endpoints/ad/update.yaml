@@ -1,0 +1,372 @@
+post:
+  summary: Update ads
+  description: |
+    Modify your custom ad creatives such as call-to-action, ad name, text, image and video material.
+    Note: To update ACO ads, use the /ad/aco/update/ endpoint.
+
+    Incremental updates are only supported for the following fields when patch_update is true:
+    - ad_name
+    - identity_id
+    - identity_type
+    - identity_authorized_bc_id
+    - video_id
+    - image_ids
+    - music_id
+    - tiktok_item_id
+    - ad_text
+
+    For other fields, you must use full update mode and pass in all necessary parameters.
+    Otherwise, some parameters may be overwritten as null value.
+
+    Changes from v1.2:
+    - Parameter name changes:
+      * open_url -> deeplink
+      * open_url_type -> deeplink_type
+      * vast_moat -> vast_moat_enabled
+      * is_creative_authorized -> creative_authorized
+      * dpa_fallback_type -> shopping_ads_fallback_type
+      * dpa_open_url_type -> shopping_ads_deeplink_type
+      * dpa_video_tpl_id -> shopping_ads_video_package_id
+    - Data type changes:
+      * advertiser_id: number -> string
+      * adgroup_id: number -> string
+      * ad_id: number -> string
+      * card_id: number -> string
+    - New parameters added for v1.3
+    - identity_type and identity_id are now required
+  operationId: updateAd
+  tags:
+    - ad
+  security:
+    - accessToken: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - advertiser_id
+            - adgroup_id
+            - creatives
+          properties:
+            advertiser_id:
+              type: string
+              description: Advertiser ID
+            adgroup_id:
+              type: string
+              description: Ad group ID
+            patch_update:
+              type: boolean
+              description: |
+                Whether to use incremental update mode.
+                Only supported for: ad_name, identity_id, identity_type, identity_authorized_bc_id,
+                video_id, image_ids, music_id, tiktok_item_id, ad_text
+            creatives:
+              type: array
+              description: Advertising creatives. Max size - 20.
+              maxItems: 20
+              items:
+                type: object
+                required:
+                  - ad_id
+                properties:
+                  ad_id:
+                    type: string
+                    description: Ad ID
+                  ad_name:
+                    type: string
+                    description: |
+                      Ad name. Set as "" (Empty string) for auto-generation.
+                      Length limit - 512 characters, no emojis.
+                      Each word in Chinese/Japanese counts as two characters.
+                  identity_id:
+                    type: string
+                    description: |
+                      Identity ID. Required when not using Spark Ads.
+                      Note: AUTH_CODE, TT_USER, BC_AUTH_TT identities limited to 10,000 ads.
+                  identity_type:
+                    type: string
+                    description: |
+                      Identity type. Required when using Spark Ads.
+                      Enum values - CUSTOMIZED_USER, AUTH_CODE, TT_USER, BC_AUTH_TT
+                  identity_authorized_bc_id:
+                    type: string
+                    description: Business Center ID for BC_AUTH_TT identity type
+                  product_specific_type:
+                    type: string
+                    description: |
+                      Product selection dimension for Video Shopping Ads.
+                      Enum values - ALL, PRODUCT_SET, CUSTOMIZED_PRODUCTS
+                    enum: [ALL, PRODUCT_SET, CUSTOMIZED_PRODUCTS]
+                  item_group_ids:
+                    type: array
+                    description: Product SPU IDs. Max size - 20.
+                    maxItems: 20
+                    items:
+                      type: string
+                  product_set_id:
+                    type: string
+                    description: Product set ID
+                  sku_ids:
+                    type: array
+                    description: SKU IDs. Max size - 20.
+                    maxItems: 20
+                    items:
+                      type: string
+                  ad_format:
+                    $ref: '../schemas/types.yaml#/components/schemas/AdFormat'
+                  vertical_video_strategy:
+                    type: string
+                    description: Video type for Product Sales scenarios
+                    enum: [UNSET, SINGLE_VIDEO, CATALOG_VIDEOS, CATALOG_UPLOADED_VIDEOS, LIVE_STREAM]
+                  dynamic_format:
+                    type: string
+                    description: Dynamic format
+                    enum: [UNSET, DYNAMIC_CREATIVE]
+                  video_id:
+                    type: string
+                    description: Video ID
+                  image_ids:
+                    type: array
+                    description: List of image IDs
+                    items:
+                      type: string
+                  carousel_image_index:
+                    type: integer
+                    description: Index for additional images in VSA Carousel ad
+                    minimum: 0
+                    maximum: 9
+                  music_id:
+                    type: string
+                    description: Music ID for TikTok Carousel Ad
+                  tiktok_item_id:
+                    type: string
+                    description: TikTok post ID for Spark Ads
+                  promotional_music_disabled:
+                    type: boolean
+                    description: Whether to disable promotional music use
+                    default: true
+                  item_duet_status:
+                    type: string
+                    description: Whether to enable dueting
+                    enum: [ENABLE, DISABLE]
+                  item_stitch_status:
+                    type: string
+                    description: Whether to enable stitching
+                    enum: [ENABLE, DISABLE]
+                  dark_post_status:
+                    type: string
+                    description: Whether the ad is a dark post
+                    enum: [ON, OFF]
+                  branded_content_disabled:
+                    type: boolean
+                    description: Whether branded content is disabled
+                    default: false
+                  shopping_ads_video_package_id:
+                    type: string
+                    description: Catalog video template ID
+                  ad_text:
+                    type: string
+                    description: |
+                      Ad text. 1-100 characters, no emoji.
+                      Each word in Chinese/Japanese counts as two characters.
+                  call_to_action:
+                    type: string
+                    description: Call-to-action text
+                  call_to_action_id:
+                    type: string
+                    description: ID of CTA portfolio
+                  card_id:
+                    type: string
+                    description: Creative portfolio ID
+                  landing_page_url:
+                    type: string
+                    description: Landing page URL
+                  utm_params:
+                    type: array
+                    description: URL parameters. Max size - 14.
+                    maxItems: 14
+                    items:
+                      type: object
+                      properties:
+                        key:
+                          type: string
+                          description: URL parameter key
+                        value:
+                          type: string
+                          description: URL parameter value
+                  page_id:
+                    type: string
+                    description: Page ID
+                  cpp_url:
+                    type: string
+                    description: Custom Product Page URL
+                  deeplink:
+                    type: string
+                    description: Deeplink URL
+                  deeplink_type:
+                    type: string
+                    description: Deeplink type
+                    enum: [NORMAL, DEFERRED_DEEPLINK]
+                    default: NORMAL
+                  shopping_ads_deeplink_type:
+                    type: string
+                    description: Deeplink source for Shopping Ads
+                    enum: [NONE, CUSTOM, SHOPPING_ADS]
+                  deeplink_utm_params:
+                    type: array
+                    description: Deeplink URL parameters. Max size - 14.
+                    maxItems: 14
+                    items:
+                      type: object
+                      properties:
+                        key:
+                          type: string
+                          description: Deeplink URL parameter key
+                        value:
+                          type: string
+                          description: Deeplink URL parameter value
+                  shopping_ads_fallback_type:
+                    type: string
+                    description: Fallback type for Shopping Ads
+                    enum: [DEFAULT, CUSTOM, SHOPPING_ADS]
+                  fallback_type:
+                    type: string
+                    description: General fallback type
+                    enum: [APP_INSTALL, WEBSITE, UNSET]
+                  dynamic_destination:
+                    type: string
+                    description: Dynamic destination strategy
+                    enum: [DLP, UNSET]
+                  instant_product_page_used:
+                    type: boolean
+                    description: Whether to use TikTok Instant Product Page
+                  page_image_index:
+                    type: integer
+                    description: Index for additional images on Instant Product Page
+                    minimum: 0
+                    maximum: 9
+                  aigc_disclosure_type:
+                    type: string
+                    description: AI-generated content disclosure type
+                    enum: [SELF_DISCLOSURE, NOT_DECLARED]
+                    default: NOT_DECLARED
+                  disclaimer_type:
+                    type: string
+                    description: Type of disclaimer
+                    enum: [TEXT_LINK, TEXT_ONLY]
+                  disclaimer_text:
+                    type: object
+                    description: Text-only disclaimer
+                    properties:
+                      text:
+                        type: string
+                        description: Disclaimer text
+                  disclaimer_clickable_texts:
+                    type: array
+                    description: Clickable disclaimers. Max size - 3.
+                    maxItems: 3
+                    items:
+                      type: object
+                      properties:
+                        text:
+                          type: string
+                          description: Disclaimer text
+                        url:
+                          type: string
+                          description: Disclaimer URL
+                  tracking_pixel_id:
+                    type: string
+                    description: Pixel ID for tracking
+                  tracking_app_id:
+                    type: string
+                    description: App ID for tracking
+                  tracking_offline_event_set_ids:
+                    type: array
+                    description: Offline Event set IDs. Max size - 50.
+                    maxItems: 50
+                    items:
+                      type: string
+                  vast_moat_enabled:
+                    type: boolean
+                    description: Whether Moat Viewability Verification is enabled
+                    default: false
+                  viewability_postbid_partner:
+                    type: string
+                    description: Post-bid viewability measurement partner
+                    enum: [MOAT, DOUBLE_VERIFY, IAS]
+                  viewability_vast_url:
+                    type: string
+                    description: VAST URL for viewability measurement
+                  brand_safety_postbid_partner:
+                    type: string
+                    description: Post-bid brand safety partner
+                    enum: [DOUBLE_VERIFY, IAS, ZEFR]
+                  brand_safety_vast_url:
+                    type: string
+                    description: VAST URL for brand safety measurement
+                  impression_tracking_url:
+                    type: string
+                    description: Impression Tracking URL
+                  click_tracking_url:
+                    type: string
+                    description: Click Tracking URL
+                  video_view_tracking_url:
+                    type: string
+                    description: Video view tracking URL
+                  playable_url:
+                    type: string
+                    description: Playable material URL
+                  creative_type:
+                    type: string
+                    description: Creative type
+                    enum: [SHORT_VIDEO_LIVE, DIRECT_LIVE, PSA, CUSTOM_INSTANT_PAGE]
+                  app_name:
+                    type: string
+                    description: App name displayed in ad
+                  display_name:
+                    type: string
+                    description: Display name for landing page
+                  avatar_icon_web_uri:
+                    type: string
+                    description: Avatar image ID
+                  creative_authorized:
+                    type: boolean
+                    description: Whether to display in Creative Center
+                    default: false
+  responses:
+    '200':
+      description: Successfully updated ad
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                properties:
+                  ad_ids:
+                    type: array
+                    items:
+                      type: string
+                    description: Updated ad IDs
+                  creatives:
+                    type: array
+                    items:
+                      $ref: '../schemas/types.yaml#/components/schemas/AdCreative'
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

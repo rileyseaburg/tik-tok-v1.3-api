@@ -1,0 +1,438 @@
+post:
+  summary: Update an ad group
+  description: |
+    Update an ad group. Not all information can be modified (e.g., placement).
+
+    Important:
+    - This endpoint uses full replacement, not incremental update
+    - Even for updating one field, all required fields must be specified
+
+    Note:
+    If special_industries is specified at campaign level, ensure ad groups meet targeting requirements.
+  operationId: updateAdGroup
+  tags:
+    - adgroup
+  security:
+    - accessToken: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - advertiser_id
+            - adgroup_id
+          properties:
+            advertiser_id:
+              type: string
+              description: Advertiser ID
+            adgroup_id:
+              type: string
+              description: Ad group ID
+            adgroup_name:
+              type: string
+              description: |
+                Ad group name.
+                Max 512 characters, no emoji.
+            catalog_authorized_bc_id:
+              type: string
+              description: |
+                For catalogs in Business Center, specify Business Center ID.
+                Note: Starting June 30th, 2024, ignored when product_source is STORE.
+            comment_disabled:
+              type: boolean
+              description: Whether to allow comments on TikTok ads
+            share_disabled:
+              type: boolean
+              description: |
+                Whether to disable sharing to third-party platforms.
+                Valid when:
+                - objective_type is APP_PROMOTION, WEB_CONVERSIONS, REACH, TRAFFIC, VIDEO_VIEWS, ENGAGEMENT, LEAD_GENERATION
+                - placement_type is PLACEMENT_TYPE_AUTOMATIC or includes PLACEMENT_TIKTOK
+                Note: Supports incremental updates.
+            blocked_pangle_app_ids:
+              type: array
+              description: Pangle app block list IDs
+              items:
+                type: string
+            audience_type:
+              type: string
+              description: |
+                Required when app_promotion_type is APP_RETARGETING.
+                Not supported otherwise.
+                Must use same settings as creation.
+              enum: [NEW_CUSTOM_AUDIENCE]
+            audience_rule:
+              $ref: '../schemas/types.yaml#/components/schemas/AudienceRule'
+            saved_audience_id:
+              type: string
+              description: |
+                Valid when:
+                - No special_industries in campaign
+                - objective_type not PRODUCT_SALES
+                - TikTok placement selected
+                - auto_targeting_enabled not true
+            auto_targeting_enabled:
+              type: boolean
+              description: |
+                Whether to enable automated targeting.
+                Note: To be deprecated June 2024.
+            shopping_ads_retargeting_type:
+              type: string
+              description: |
+                Valid when shopping_ads_type is VIDEO and product_source is CATALOG.
+                Shopping ads retargeting type.
+              enum: [LAB1, LAB2, LAB3, OFF]
+            shopping_ads_retargeting_actions_days:
+              type: integer
+              description: |
+                Required when shopping_ads_retargeting_type is LAB1/LAB2.
+                Valid time range for audience action.
+              enum: [1, 2, 3, 7, 14, 30, 60, 90, 180]
+            included_custom_actions:
+              type: array
+              description: |
+                Required when shopping_ads_retargeting_type is LAB3.
+                Include conditions for retargeting.
+              items:
+                $ref: '../schemas/types.yaml#/components/schemas/CustomAction'
+            excluded_custom_actions:
+              type: array
+              description: |
+                Required when shopping_ads_retargeting_type is LAB3.
+                Exclude conditions for retargeting.
+              items:
+                $ref: '../schemas/types.yaml#/components/schemas/CustomAction'
+            shopping_ads_retargeting_custom_audience_relation:
+              type: string
+              description: |
+                Valid when:
+                - shopping_ads_type is VIDEO
+                - product_source is CATALOG
+                - shopping_ads_retargeting_type is LAB1/LAB2/LAB3
+                - audience_ids is passed
+                Logical relation between VSA retargeting and custom audiences.
+              enum: [OR, AND]
+            location_ids:
+              type: array
+              description: |
+                Target location IDs.
+                Required with zipcode_ids.
+                Max 3,000 combined.
+              items:
+                type: string
+              maxItems: 3000
+            zipcode_ids:
+              type: array
+              description: |
+                Target zip/postal code IDs.
+                Required with location_ids.
+                Max 3,000 combined.
+              items:
+                type: string
+              maxItems: 3000
+            languages:
+              type: array
+              description: Target language codes
+              items:
+                type: string
+            gender:
+              type: string
+              description: Target gender
+              enum: [GENDER_FEMALE, GENDER_MALE, GENDER_UNLIMITED]
+            age_groups:
+              type: array
+              description: Target age groups
+              items:
+                type: string
+            exclude_age_under_eighteen:
+              type: boolean
+              description: |
+                Whether to exclude ages under 18.
+                Use only when targeting age 13-17 in US not supported.
+              default: false
+            spending_power:
+              type: string
+              description: |
+                Target spending power.
+                HIGH targets users who spend more than average.
+              enum: [ALL, HIGH]
+            household_income:
+              type: array
+              description: |
+                Target household income.
+                Only for TikTok placement in US.
+              items:
+                type: string
+                enum: [TOP5, TOP10, TOP10_25, TOP25_50]
+            audience_ids:
+              type: array
+              description: List of audience IDs
+              items:
+                type: string
+            smart_audience_enabled:
+              type: boolean
+              description: Whether to enable Smart audience
+            excluded_audience_ids:
+              type: array
+              description: List of excluded audience IDs
+              items:
+                type: string
+            interest_category_ids:
+              type: array
+              description: General interest category IDs
+              items:
+                type: string
+            interest_keyword_ids:
+              type: array
+              description: Additional interest category IDs
+              items:
+                type: string
+            purchase_intention_keyword_ids:
+              type: array
+              description: |
+                Purchase intention category IDs.
+                Supports incremental updates.
+              items:
+                type: string
+            actions:
+              type: array
+              description: Targeting behavioral categories
+              items:
+                $ref: '../schemas/types.yaml#/components/schemas/BehavioralCategory'
+            smart_interest_behavior_enabled:
+              type: boolean
+              description: Whether to enable Smart interests & behaviors
+            included_pangle_audience_package_ids:
+              type: array
+              description: |
+                Pangle audiences to include.
+                Valid for Pangle placement only.
+              items:
+                type: string
+            excluded_pangle_audience_package_ids:
+              type: array
+              description: |
+                Pangle audiences to exclude.
+                Valid for Pangle placement only.
+              items:
+                type: string
+            operating_systems:
+              type: array
+              description: |
+                Target operating systems.
+                Required for APP_PROMOTION objective or
+                TRAFFIC objective with APP promotion type.
+                Only one value allowed.
+              items:
+                type: string
+                enum: [ANDROID, IOS]
+              maxItems: 1
+            min_android_version:
+              type: string
+              description: Minimum Android version
+            ios14_targeting:
+              type: string
+              description: |
+                iOS device targeting.
+                Required and must be IOS14_PLUS for iOS14 Dedicated Campaigns.
+              enum: [UNSET, IOS14_MINUS, IOS14_PLUS, ALL]
+            min_ios_version:
+              type: string
+              description: |
+                Required when ios14_targeting specified.
+                Minimum iOS version.
+            device_model_ids:
+              type: array
+              description: Target device model IDs
+              items:
+                type: string
+            network_types:
+              type: array
+              description: Target connection types
+              items:
+                type: string
+            carrier_ids:
+              type: array
+              description: Target carrier IDs
+              items:
+                type: string
+            isp_ids:
+              type: array
+              description: |
+                Target Internet service provider IDs.
+                Valid with country/region location_ids.
+              items:
+                type: string
+            device_price_ranges:
+              type: array
+              description: |
+                Target device price ranges.
+                10000 means 1000+. Must be multiples of 50.
+              items:
+                type: number
+            targeting_expansion:
+              $ref: '../schemas/types.yaml#/components/schemas/TargetingExpansion'
+            contextual_tag_ids:
+              type: array
+              description: |
+                Contextual tag IDs.
+                Supports REACH and VIDEO_VIEWS objectives.
+              items:
+                type: string
+            brand_safety_type:
+              type: string
+              description: |
+                Brand safety type.
+                Valid for TikTok placement only.
+              enum:
+                - EXPANDED_INVENTORY
+                - STANDARD_INVENTORY
+                - LIMITED_INVENTORY
+            category_exclusion_ids:
+              type: array
+              description: Content exclusion category IDs
+              items:
+                type: string
+            vertical_sensitivity_id:
+              type: string
+              description: Vertical sensitivity category ID
+            budget:
+              type: number
+              format: float
+              description: |
+                Ad group budget.
+                Ignored when Campaign Budget Optimization enabled.
+            schedule_type:
+              type: string
+              description: |
+                Schedule type.
+                SCHEDULE_START_END requires start and end times.
+                SCHEDULE_FROM_NOW requires only start time.
+              enum: [SCHEDULE_START_END, SCHEDULE_FROM_NOW]
+            schedule_start_time:
+              type: string
+              format: date-time
+              description: |
+                Schedule start time (UTC+0).
+                Format - YYYY-MM-DD HH:MM:SS
+                Up to 12 hours earlier than current time.
+                Not later than 2028-01-01 00:00:00.
+            schedule_end_time:
+              type: string
+              format: date-time
+              description: |
+                Required for SCHEDULE_START_END type.
+                Schedule end time (UTC+0).
+                Format - YYYY-MM-DD HH:MM:SS
+                Not later than 2038-01-01 00:00:00.
+            dayparting:
+              type: string
+              description: |
+                Ad delivery arrangement string.
+                48x7 characters mapping to 30-min slots Mon-Sun.
+                1=delivery, 0=non-delivery.
+                First char=Mon 0:01-0:30, last=Sun 23:31-0:00.
+            frequency:
+              type: integer
+              minimum: 1
+              maximum: 1000
+              description: |
+                Frequency cap for REACH ads.
+                With frequency_schedule controls ad frequency.
+                1 <= frequency <= 1000
+                1 <= frequency_schedule <= 30
+            frequency_schedule:
+              type: integer
+              minimum: 1
+              maximum: 30
+              description: |
+                Schedule period for frequency cap.
+                With frequency controls ad frequency.
+            secondary_optimization_event:
+              type: string
+              description: |
+                Secondary goal for Install/Value optimization goals.
+                Requires deep_bid_type.
+            bid_type:
+              type: string
+              description: |
+                Bidding strategy.
+                Cannot update when CBO enabled.
+            bid_price:
+              type: number
+              format: float
+              description: |
+                Bid price for Cost Cap strategy.
+                Average cost per result to achieve.
+            conversion_bid_price:
+              type: number
+              format: float
+              description: |
+                Required for oCPM billing and custom bidding.
+                Target cost per conversion.
+            deep_bid_type:
+              type: string
+              description: |
+                In-app event bidding strategy.
+                Required with secondary_optimization_event.
+              enum: [VO_MIN_ROAS, VO_HIGHEST_VALUE]
+            roas_bid:
+              type: number
+              format: float
+              description: |
+                Required when deep_bid_type is VO_MIN_ROAS.
+                ROAS goal for Value Optimization.
+            deep_cpa_bid:
+              type: number
+              format: float
+              description: |
+                Bid price for in-app event bidding strategy.
+                Example - VO_MIN.
+            next_day_retention:
+              type: number
+              format: float
+              minimum: 0
+              maximum: 1
+              exclusiveMinimum: true
+              description: |
+                Day 2 retention ratio.
+                Valid for Pangle placement with NEXT_DAY_OPEN optimization.
+                Formula - conversion_bid_price/deep_cpa_bid
+            pacing:
+              type: string
+              description: |
+                Budget pacing mode.
+                SMOOTH=even distribution
+                FAST=quick results
+                Ignored with CBO, defaults to SMOOTH.
+              enum: [PACING_MODE_SMOOTH, PACING_MODE_FAST]
+            is_hfss:
+              type: boolean
+              description: Whether promoted content is HFSS food
+  responses:
+    '200':
+      description: Successfully updated ad group
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                $ref: '../schemas/responses.yaml#/components/schemas/AdGroupResponse'
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

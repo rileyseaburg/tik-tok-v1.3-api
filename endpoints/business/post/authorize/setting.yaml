@@ -1,0 +1,91 @@
+post:
+  summary: Enable or disable ad authorization for a TikTok post
+  description: |
+    Use this to enable or disable the "Ad authorization" setting for a TikTok post.
+    
+    Note:
+    - By turning on "Ad authorization", you acknowledge that you have read and agreed to the Advertising Content Terms of Service
+    - The privacy status of the post will become "Available for Ads" for review
+    - Posts may appear as ads on TikTok and third party platforms
+    - To delete an authorization code or turn off ad authorization, pause all active campaigns/ads
+    - To extend authorization period, use /business/post/authorize/
+  operationId: setPostAuthorization
+  tags:
+    - business
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - business_id
+            - item_id
+            - is_ad_promotable
+          properties:
+            business_id:
+              type: string
+              description: Application specific unique identifier for the TikTok account. Pass the value of the open_id field returned in the response of /tt_user/oauth2/token/.
+            item_id:
+              type: string
+              description: The ID of the TikTok post. To obtain the public posts of a TikTok account, use /business/video/list/.
+              example: "7123456789123456789"
+            is_ad_promotable:
+              type: boolean
+              description: |
+                Whether to enable the "Ad authorization" setting to allow the post to be promoted.
+                Note: If the TikTok post is being used in Spark Ads, you cannot disable the "Ad authorization" setting.
+            authorization_days:
+              type: number
+              description: The authorization validity period in days.
+              enum: [7, 30, 60, 180, 365]
+              default: 30
+  responses:
+    '200':
+      description: Authorization setting updated successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                description: Response code
+                example: 0
+              message:
+                type: string
+                description: Response message
+                example: "OK"
+              request_id:
+                type: string
+                description: The log ID of a request, which uniquely identifies the request
+              data:
+                type: object
+                properties:
+                  item_id:
+                    type: string
+                    description: The ID of the TikTok post
+                    example: "7123456789123456789"
+                  auth_code:
+                    type: string
+                    description: The authorization code for the TikTok post
+                    example: "#1Ea2bcde3fUM/ghijEk/L4mOceft5deFRq6za7JsgnAJ8PB9n1XIr1rC1b/5Rw4="
+                  auth_code_start_time:
+                    type: string
+                    description: The time when the authorization code becomes valid (UTC+0)
+                    example: "2024-01-01 00:00:00"
+                  auth_code_end_time:
+                    type: string
+                    description: The time when the authorization code expires (UTC+0)
+                    example: "2024-01-01 00:00:00"
+                  authorization_days:
+                    type: number
+                    description: The authorization validity period in days
+                    enum: [7, 30, 60, 180, 365]
+                    example: 365
+    '400':
+      $ref: '../../../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../../../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../../../schemas/responses.yaml#/components/responses/InternalError'

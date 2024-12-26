@@ -1,0 +1,264 @@
+post:
+  operationId: searchTargeting
+  summary: Search for location targeting tags
+  description: |
+    Use this endpoint to search for location targeting tags by keyword.
+
+    You can search for two types of targeting tags that are used to target ad audiences:
+    - Zip code IDs (currently only supported for the US) or postal code IDs (Canada, Brazil, Indonesia, Thailand, and Vietnam)
+    - Location IDs
+
+    Then to apply targeting tags to your ads, you can pass the returned zip code IDs or postal code IDs to zipcode_ids or location IDs to location_ids when calling /adgroup/create/, /adgroup/update/ or /ad/audience_size/estimate/.
+
+    Both /tool/region/ and /tool/targeting/search/ can be used to get location IDs.
+
+    Note:
+    - This endpoint requires POST method, because for GET requests the length of URL will be limited.
+    - Targeting postal code areas in Brazil, Indonesia, Thailand, and Vietnam is currently an allowlist-only feature. If you would like to access it, please contact your TikTok representative.
+    - Targeting the newly available countries or regions using different advertising objectives and placements may require separate allowlists. Contact your TikTok representative for details.
+  tags:
+    - tool
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - advertiser_id
+            - objective_type
+            - placements
+            - search_type
+            - keywords
+          properties:
+            advertiser_id:
+              type: string
+              description: Advertiser ID
+            objective_type:
+              type: string
+              description: |
+                Campaign objective.
+                For descriptions of the objectives, see Objectives.
+              enum:
+                - REACH
+                - TRAFFIC
+                - VIDEO_VIEWS
+                - LEAD_GENERATION
+                - ENGAGEMENT
+                - APP_PROMOTION
+                - WEB_CONVERSIONS
+                - PRODUCT_SALES
+            promotion_type:
+              type: string
+              description: |
+                Promotion type and you can decide where you'd like to promote your products using this field.
+                You need to specify the field when advertising objective (objective_type) for your campaign is NOT set as REACH, VIDEO_VIEWS, or ENGAGEMENT.
+                For enum values, see Enumeration - Promotion Type.
+            placements:
+              type: array
+              description: |
+                The apps where you want to deliver your ads.
+                For enum values, see Enumeration - Placement.
+                Note: If you want to fuzzy search for a zip code ID to be used for zip code targeting or a postal code ID to be used for postal code targeting, the value of this field needs to include PLACEMENT_TIKTOK.
+              items:
+                type: string
+            search_type:
+              type: string
+              description: |
+                The type of search you want to perform.
+                - FUZZY_SEARCH: To fuzzy search for a single location ID, a zip code ID, or a postal code ID.
+                  For this search type, you can only pass one keyword to keywords and a maximum of 100 results will be returned.
+                - BATCH_REGION_SEARCH: To search for location IDs in batch. Fuzzy search is supported.
+                  For this search type, you can pass up to 1,000 keywords to keywords, and for each keyword a maximum of 5 results ordered by relevance will be returned.
+                - BATCH_ZIPCODE_SEARCH: To search for zip code IDs or postal code IDs in batch. Exact search is supported.
+                  For this search type, you can pass up to 1,000 keywords to keywords, and for each keyword one result or no result will be returned.
+              enum:
+                - FUZZY_SEARCH
+                - BATCH_REGION_SEARCH
+                - BATCH_ZIPCODE_SEARCH
+            keywords:
+              type: array
+              description: |
+                The keywords that you use to search for targeting tags.
+                Length limit:
+                - 1 when search_type is FUZZY_SEARCH
+                - 1,000 when search_type is BATCH_REGION_SEARCH or BATCH_ZIPCODE_SEARCH
+                For postal code formats:
+                - US: Five-digit zip codes (e.g., ["10001","10002"])
+                - Canada: Three-character FSA portions (e.g., ["A0A","A0B"])
+                - Brazil: First five digits (e.g., ["81480","18072"])
+                - Indonesia: Five-digit codes (e.g., ["20371","12120"])
+                - Thailand: Five-digit codes (e.g., ["30000","40000"])
+                - Vietnam: First three digits (e.g., ["718","719"])
+              items:
+                type: string
+            geo_types:
+              type: array
+              description: |
+                The types of locations that you want to filter the results by.
+                When search_type is FUZZY_SEARCH: ZIP_CODE, COUNTRY, PROVINCE, CITY, DISTRICT, DMA
+                When search_type is BATCH_ZIPCODE_SEARCH: ZIP_CODE only
+                When search_type is BATCH_REGION_SEARCH: COUNTRY, PROVINCE, CITY, DISTRICT, DMA
+              items:
+                type: string
+                enum:
+                  - COUNTRY
+                  - PROVINCE
+                  - CITY
+                  - DISTRICT
+                  - DMA
+                  - ZIP_CODE
+            region_codes:
+              type: array
+              description: |
+                The codes of targeted countries or regions that you want to filter the results by.
+                Required when search_type is BATCH_ZIPCODE_SEARCH or BATCH_REGION_SEARCH, must be one of: US, CA, BR, ID, TH, VN
+                Optional for FUZZY_SEARCH, can be any supported country code.
+              items:
+                type: string
+            operating_system:
+              type: string
+              description: Device operating system that you want to target
+              enum:
+                - ANDROID
+                - IOS
+            brand_safety_type:
+              type: string
+              description: |
+                Brand safety type. Valid only when placements is set as PLACEMENT_TIKTOK.
+                Default value: NO_BRAND_SAFETY
+              enum:
+                - NO_BRAND_SAFETY
+                - EXPANDED_INVENTORY
+                - STANDARD_INVENTORY
+                - LIMITED_INVENTORY
+                - THIRD_PARTY
+            brand_safety_partner:
+              type: string
+              description: |
+                Required only when brand_safety_type is THIRD_PARTY.
+                Brand safety partner.
+              enum:
+                - IAS
+                - OPEN_SLATE
+  responses:
+    '200':
+      description: Successfully retrieved targeting tags
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - code
+              - message
+              - request_id
+              - data
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: The log ID of a request, which uniquely identifies the request
+              data:
+                type: object
+                properties:
+                  targeting_tag_list:
+                    type: array
+                    description: |
+                      Information about the targeting tags that are matched by the specified keyword or keywords.
+                      Note: Multiple targeting tags of different names (name) may be returned for the same keyword.
+                    items:
+                      $ref: '#/components/schemas/TargetingTag'
+                  parent_tags:
+                    type: array
+                    description: Information about all the parent targeting tags
+                    items:
+                      $ref: '#/components/schemas/TargetingTag'
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../schemas/responses.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../schemas/responses.yaml#/components/responses/NotFound'
+    '429':
+      $ref: '../schemas/responses.yaml#/components/responses/TooManyRequests'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'
+
+components:
+  schemas:
+    TargetingTag:
+      type: object
+      properties:
+        keyword:
+          type: string
+          description: The keyword that is used to search for targeting tags
+        targeting_type:
+          type: string
+          description: |
+            The targeting type that the targeting tag is used for.
+            Enum values: GEO (Geographical targeting, which consists of administrative region targeting and zip code targeting (or postal code targeting)).
+          enum:
+            - GEO
+        name:
+          type: string
+          description: The name of the targeting tag
+        status_info:
+          type: object
+          properties:
+            status:
+              type: string
+              description: |
+                The status of the targeting tag.
+                ENABLED - can be used for targeting
+                DISABLED - cannot be used for targeting
+              enum:
+                - ENABLED
+                - DISABLED
+            reason:
+              type: string
+              description: |
+                The reason why the targeting tag cannot be used for targeting.
+                Returned when status = DISABLED.
+              enum:
+                - OFFLINE
+                - NOT_SUPPORTED
+        geo:
+          type: object
+          description: |
+            Information about the targeting tag that is used for location targeting.
+            Returned when targeting_type is GEO.
+          properties:
+            geo_id:
+              type: string
+              description: |
+                Location ID, zip code ID, or postal code ID.
+                - When geo_type is ZIP_CODE, pass this value to zipcode_ids in adgroup endpoints
+                - When geo_type is not ZIP_CODE, pass this value to location_ids in adgroup endpoints
+            geo_type:
+              type: string
+              description: The type of location that the geo_id corresponds to
+              enum:
+                - COUNTRY
+                - PROVINCE
+                - CITY
+                - DISTRICT
+                - DMA
+                - ZIP_CODE
+            description:
+              type: string
+              description: The description of the targeted location
+            region_code:
+              type: string
+              description: The code of the country or region that the targeted location belongs to
+            parent_id:
+              type: string
+              description: |
+                ID of the parent location.
+                Returns 0 if no parent location exists.

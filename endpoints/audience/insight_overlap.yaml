@@ -1,0 +1,114 @@
+get:
+  summary: Get details of audience overlap
+  description: |
+    Get the details of audience overlap between a benchmark audience and up to four other TikTok Custom Audience segments.
+    Note: Audience sizes fewer than 1,000 will not be displayed.
+  operationId: getAudienceInsightOverlap
+  tags:
+    - audience
+  security:
+    - accessToken: []
+  parameters:
+    - name: advertiser_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Advertiser ID
+    - name: benchmark_custom_audience_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: |
+        ID of benchmark audience
+        Must be accessible by advertiser ID
+    - name: comparison_custom_audience_ids
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+        maxItems: 4
+      description: |
+        IDs of comparison audiences (max 4)
+        Must be accessible by advertiser ID
+  responses:
+    '200':
+      description: Successfully retrieved audience overlap
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                properties:
+                  benchmark_audience:
+                    type: object
+                    description: Benchmark audience data
+                    properties:
+                      audience_id:
+                        type: string
+                        description: Audience ID
+                      audience_name:
+                        type: string
+                        description: Audience name
+                      audience_size:
+                        type: integer
+                        description: Total audience size
+                      targetable_users_count_range:
+                        type: string
+                        description: |
+                          Size range of targetable users
+                          Active in last 30 days
+                  comparison_audiences:
+                    type: array
+                    description: Comparison audience data
+                    items:
+                      type: object
+                      properties:
+                        audience_id:
+                          type: string
+                          description: Audience ID
+                        audience_name:
+                          type: string
+                          description: Audience name
+                        audience_size:
+                          type: integer
+                          description: Total audience size
+                        targetable_users_count_range:
+                          type: string
+                          description: |
+                            Size range of targetable users
+                            Active in last 30 days
+                        benchmark_overlap_rate:
+                          type: string
+                          description: |
+                            Base percentage of benchmark users
+                            available in comparison audience
+                        benchmark_overlap_rate_range:
+                          type: string
+                          description: |
+                            Percentage range of benchmark users
+                            available in comparison audience
+                        benchmark_overlap_count_range:
+                          type: string
+                          description: |
+                            Size range of benchmark users
+                            available in comparison audience
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

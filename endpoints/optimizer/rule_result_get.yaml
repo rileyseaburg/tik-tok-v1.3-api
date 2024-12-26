@@ -1,0 +1,118 @@
+get:
+  summary: Get result details
+  description: Get rule execution results by execution IDs
+  operationId: getOptimizerRuleResults
+  tags:
+    - optimizer
+  security:
+    - accessToken: []
+  parameters:
+    - name: advertiser_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Advertiser ID
+    - name: result_detail
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: object
+          required:
+            - exec_id
+            - rule_id
+          properties:
+            exec_id:
+              type: string
+              description: Rule execution ID
+            rule_id:
+              type: string
+              description: Rule ID
+      description: Result details to retrieve
+    - name: lang
+      in: query
+      schema:
+        type: string
+        default: EN
+        enum:
+          - ZH
+          - EN
+          - JA
+      description: |
+        Language of execution results
+        ZH: Simplified Chinese
+        EN: English (default)
+        JA: Japanese
+  responses:
+    '200':
+      description: Successfully retrieved result details
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                properties:
+                  result_details:
+                    type: array
+                    description: Result details
+                    items:
+                      type: object
+                      properties:
+                        rule_id:
+                          type: string
+                          description: Rule ID
+                        exec_id:
+                          type: string
+                          description: Rule execution ID
+                        action_subject_type:
+                          type: string
+                          description: |
+                            Action type
+                            TURN_ON, TURN_OFF, MESSAGE
+                          enum:
+                            - TURN_ON
+                            - TURN_OFF
+                            - MESSAGE
+                        status:
+                          type: string
+                          description: |
+                            Action status
+                            SUCCESS, FAIL
+                          enum:
+                            - SUCCESS
+                            - FAIL
+                        error_message:
+                          type: string
+                          description: Error message if action failed
+                        object_dimension:
+                          type: string
+                          description: Object category
+                          enum:
+                            - CAMPAIGN
+                            - ADGROUP
+                            - AD
+                        object_dimension_id:
+                          type: string
+                          description: Object ID
+                        object_name:
+                          type: string
+                          description: Object name
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

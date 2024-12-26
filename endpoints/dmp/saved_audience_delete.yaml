@@ -1,0 +1,57 @@
+post:
+  summary: Delete Saved Audiences
+  description: |
+    Delete specified Saved Audiences.
+    Note: Cannot delete Saved Audiences that are applied to active ad groups.
+  operationId: deleteSavedAudiences
+  tags:
+    - dmp
+  security:
+    - accessToken: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - advertiser_id
+            - saved_audience_ids
+          properties:
+            advertiser_id:
+              type: string
+              description: Advertiser ID
+            saved_audience_ids:
+              type: array
+              description: |
+                IDs of Saved Audiences to delete
+                Max size: 100
+              items:
+                type: string
+              maxItems: 100
+  responses:
+    '200':
+      description: Successfully deleted Saved Audiences
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                description: Returned data
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

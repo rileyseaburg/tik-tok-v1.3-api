@@ -1,0 +1,98 @@
+post:
+  summary: Update ad statuses
+  description: |
+    Enable, disable or delete an ad or ads.
+
+    Note: The operation status of a deleted ad or an ad in a deleted ad group or campaign cannot be modified.
+    You can use /campaign/get/, /adgroup/get/, or /ad/get/ to get the operation status via operation_status.
+
+    Changes from v1.2:
+    - Parameter name changes:
+      * opt_status -> operation_status
+    - Data type changes:
+      * advertiser_id: number -> string
+      * ad_ids: number[] -> string[]
+      * aco_ad_ids: number[] -> string[]
+  operationId: updateAdStatus
+  tags:
+    - ad
+  security:
+    - accessToken: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - advertiser_id
+            - operation_status
+          properties:
+            advertiser_id:
+              type: string
+              description: Advertiser ID
+            ad_ids:
+              type: array
+              description: |
+                A list of ad IDs. Allowed quantity - 1-20.
+                Either ad_ids or aco_ad_ids has to be set.
+              minItems: 1
+              maxItems: 20
+              items:
+                type: string
+            aco_ad_ids:
+              type: array
+              description: |
+                A list of ACO ad IDs. Only support ENABLE and DISABLE for ACO ads.
+                Allowed quantity - 1-20.
+                Either ad_ids or aco_ad_ids has to be set.
+              minItems: 1
+              maxItems: 20
+              items:
+                type: string
+            operation_status:
+              type: string
+              description: |
+                The operation being made.
+                Note: The status of deleted ads or ads in deleted campaigns or ad groups cannot be modified.
+              enum: [DELETE, DISABLE, ENABLE]
+  responses:
+    '200':
+      description: Successfully updated ad status
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: The log id of a request, which uniquely identifies the request
+              data:
+                type: object
+                properties:
+                  ad_ids:
+                    type: array
+                    description: List of updated ad IDs
+                    items:
+                      type: string
+                  aco_ad_ids:
+                    type: array
+                    description: List of updated ACO ad IDs
+                    items:
+                      type: string
+                  status:
+                    type: string
+                    description: The operation that was executed
+                    enum: [DELETE, DISABLE, ENABLE]
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

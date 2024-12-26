@@ -1,0 +1,72 @@
+get:
+  operationId: getPhoneRegionCodes
+  summary: Get region calling codes and region codes for phone numbers
+  description: |
+    Use this endpoint to retrieve the region codes, region names, and region calling codes for phone numbers.
+  tags:
+    - tool
+  parameters:
+    - name: advertiser_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Advertiser ID
+  responses:
+    '200':
+      description: Successfully retrieved phone region codes
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - code
+              - message
+              - request_id
+              - data
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: The log ID of a request, which uniquely identifies the request
+              data:
+                type: object
+                properties:
+                  phone_region_code_infos:
+                    type: array
+                    description: Information about the region codes, region names, and region calling codes for phone numbers
+                    items:
+                      type: object
+                      properties:
+                        phone_region_name:
+                          type: string
+                          description: |
+                            The name of the region of a phone number.
+                            Example: "Austria"
+                        phone_region_code:
+                          type: string
+                          description: |
+                            The region code for a phone number.
+                            Example: "AT"
+                        phone_region_calling_code:
+                          type: string
+                          description: |
+                            The region calling code for a phone number.
+                            Example: "+43"
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../schemas/responses.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../schemas/responses.yaml#/components/responses/NotFound'
+    '429':
+      $ref: '../schemas/responses.yaml#/components/responses/TooManyRequests'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

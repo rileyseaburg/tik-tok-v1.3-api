@@ -1,0 +1,233 @@
+get:
+  summary: Get ACO ads
+  description: |
+    Get creative materials for an ACO ad, including call-to-actions, texts, ad names, images, or video materials. 
+    This is a totally new endpoint in v1.3.
+
+    The response of endpoints /ad/aco/create/ and /ad/aco/update/ are mock results which return the request parameters you've passed in, 
+    because the data processing is not finished instantly. To obtain the actual accurate result, wait for 2 or 3 seconds after your call 
+    to the endpoint /ad/aco/create/ or /ad/aco/update/ and then use this endpoint.
+  operationId: getAcoAds
+  tags:
+    - ad
+  security:
+    - accessToken: []
+  parameters:
+    - name: advertiser_id
+      in: query
+      required: true
+      description: Advertiser ID
+      schema:
+        type: string
+    - name: adgroup_ids
+      in: query
+      required: true
+      description: A list of ad group IDs. Quantity - 1-100
+      schema:
+        type: array
+        items:
+          type: string
+        minItems: 1
+        maxItems: 100
+    - name: exclude_field_types_in_response
+      in: query
+      required: false
+      description: The type of fields to remove from the response
+      schema:
+        type: array
+        items:
+          type: string
+          enum: [NULL_FIELD]
+  responses:
+    '200':
+      description: Successfully retrieved ACO ads data
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code. For the complete list of response codes and descriptions, see Appendix - Return Codes.
+              message:
+                type: string
+                description: Response message. For details, see Appendix - Return Codes.
+              request_id:
+                type: string
+                description: The log id of a request, which uniquely identifies the request.
+              data:
+                type: object
+                properties:
+                  list:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        advertiser_id:
+                          type: string
+                          description: Advertiser ID
+                        adgroup_id:
+                          type: string
+                          description: Ad group ID
+                        media_info_list:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              material_id:
+                                type: string
+                                description: Material ID
+                              material_operation_status:
+                                $ref: '../schemas/types.yaml#/components/schemas/MaterialOperationStatus'
+                              media_info:
+                                $ref: '../schemas/types.yaml#/components/schemas/MediaInfo'
+                        identity_id:
+                          type: string
+                          description: Identity ID
+                        identity_type:
+                          type: string
+                          description: Identity type
+                          enum: [AUTH_CODE, TT_USER, CUSTOMIZED_USER]
+                        title_list:
+                          type: array
+                          description: List of ad titles (also called ad texts). Ad titles are shown to your audience as part of your ad creative.
+                          items:
+                            type: object
+                            properties:
+                              title:
+                                type: string
+                                description: Ad title (ad text)
+                              material_id:
+                                type: string
+                                description: Material ID
+                              material_operation_status:
+                                type: string
+                                description: The status of the material
+                                enum: [ENABLE, DISABLE]
+                        call_to_action_list:
+                          type: array
+                          items:
+                            $ref: '../schemas/types.yaml#/components/schemas/CallToActionInfo'
+                        deeplink_list:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              deeplink:
+                                type: string
+                                description: The specific location where you want your audience to go if they have your app installed
+                              deeplink_type:
+                                type: string
+                                description: |
+                                  The deeplink type. Allowed values differs based on campaign objectives.
+                                  For an ad that will be included in an iOS 14 campaign, this field cannot be set to DEFERRED_DEEPLINK.
+                                enum: [NORMAL, DEFERRED_DEEPLINK]
+                                default: NORMAL
+                        display_name_list:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              app_name:
+                                type: string
+                                description: App name
+                              landing_page_name:
+                                type: string
+                                description: Landing page name
+                        avatar_icon_list:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              avatar_icon:
+                                type: object
+                                properties:
+                                  web_uri:
+                                    type: string
+                                    description: Avatar image ID
+                        page_list:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              page_id:
+                                type: string
+                                description: Page ID
+                        card_list:
+                          type: array
+                          description: Length range - [0,1]
+                          maxItems: 1
+                          items:
+                            type: object
+                            properties:
+                              card_id:
+                                type: string
+                                description: Display Card ID, Gift Code Sticker ID, Countdown Sticker ID, or Download Card ID
+                        landing_page_urls:
+                          type: array
+                          items:
+                            type: string
+                            description: Landing page URL
+                        common_material:
+                          type: object
+                          properties:
+                            ad_name:
+                              type: string
+                              description: Ad name
+                            call_to_action_id:
+                              type: string
+                              description: The ID of the CTA portfolio that you want to use in your ads
+                            creative_authorized:
+                              type: boolean
+                              description: |
+                                Whether you grant displaying some of your ads in our TikTok for Business Creative Center.
+                                Only valid for non-US advertisers, the default value is false.
+                                Note - creative_authorized can only be used for video ads.
+                              default: false
+                            playable_url:
+                              type: string
+                              description: Playable material url
+                            fallback_type:
+                              type: string
+                              description: |
+                                Fallback Type. If the audience do not have the app installed, you can have them fall back to install the app, or to view a specific web page.
+                                Note - Not applicable for Deferred Deeplink.
+                              enum: [APP_INSTALL, WEBSITE, UNSET]
+                        tracking_info:
+                          type: object
+                          properties:
+                            impression_tracking_urls:
+                              type: array
+                              items:
+                                type: string
+                              description: Default Impression Tracking URL
+                            click_tracking_urls:
+                              type: array
+                              items:
+                                type: string
+                              description: Click Tracking URL
+                            tracking_pixel_id:
+                              type: string
+                              description: The pixel ID that you'd like to track. You can use this field to track offsite events.
+                            tracking_app_id:
+                              type: string
+                              description: |
+                                The ID of the application that is being tracked.
+                                Note - This field is currently an allowlist-only feature for the advertising objectives APP_PROMOTION, PRODUCT_SALES, and ENGAGEMENT.
+                            tracking_offline_event_set_ids:
+                              type: array
+                              items:
+                                type: string
+                              description: |
+                                A list of Offline Event set IDs that are tracked.
+                                Note - Offline Events Tracking is currently an allowlist-only feature.
+                        is_smart_creative:
+                          type: boolean
+                          description: Whether the ad is a Smart Creative ad
+                          default: false
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

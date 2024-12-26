@@ -1,0 +1,585 @@
+post:
+  operationId: createSmartPlusCampaign
+  summary: Create a Smart+ Campaign
+  description: |
+    Use this endpoint to create a Smart+ Campaign.
+  tags:
+    - campaign
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - advertiser_id
+            - campaign_name
+            - objective_type
+            - promotion_type
+            - location_ids
+            - budget
+            - schedule_type
+            - schedule_start_time
+            - optimization_goal
+            - billing_event
+            - media_info_list
+          properties:
+            advertiser_id:
+              type: string
+              description: Advertiser ID
+            operation_status:
+              type: string
+              enum:
+                - ENABLE
+                - DISABLE
+              default: ENABLE
+              description: |
+                The status of the campaign when created.
+                If you want to update the status after creation, use /campaign/status/update/.
+            objective_type:
+              type: string
+              enum:
+                - APP_PROMOTION
+                - WEB_CONVERSIONS
+              description: Currently supports APP_PROMOTION and WEB_CONVERSIONS
+            spc_type:
+              type: string
+              enum:
+                - WEB_ALL_IN_ONE
+                - UNSET
+              default: UNSET
+              description: |
+                Valid only when objective_type is WEB_CONVERSIONS.
+                The web campaign type:
+                - WEB_ALL_IN_ONE: Smart+ Web Campaign
+                - UNSET: Smart Performance Web Campaign (to be deprecated)
+            web_all_in_one_catalog_status:
+              type: string
+              enum:
+                - OPEN
+                - UNSET
+              default: UNSET
+              description: |
+                Valid only when spc_type is WEB_ALL_IN_ONE.
+                The status of catalog in the Smart+ Web Campaign:
+                - OPEN: enabled (Smart+ Catalog Ads)
+                - UNSET: disabled (regular Smart+ Web Campaign)
+            app_promotion_type:
+              type: string
+              enum:
+                - APP_INSTALL
+              description: |
+                Required when objective_type is APP_PROMOTION.
+                Currently only supports APP_INSTALL.
+            campaign_type:
+              type: string
+              enum:
+                - REGULAR_CAMPAIGN
+                - IOS14_CAMPAIGN
+              default: REGULAR_CAMPAIGN
+              description: Campaign type
+            campaign_app_profile_page_state:
+              type: string
+              enum:
+                - ON
+                - OFF
+              default: OFF
+              description: |
+                Whether to use app profile page to optimize delivery.
+                Only valid when objective_type is APP_PROMOTION and campaign is iOS 14.
+            is_advanced_dedicated_campaign:
+              type: boolean
+              default: false
+              description: |
+                Whether the campaign is an Advanced Dedicated Campaign.
+                Cannot be updated after creation.
+            campaign_name:
+              type: string
+              description: Campaign name
+            special_industries:
+              type: array
+              items:
+                type: string
+                enum:
+                  - HOUSING
+                  - EMPLOYMENT
+                  - CREDIT
+              description: |
+                Ad categories. Only supported for US/Canada advertisers:
+                - HOUSING: Real estate, homeowners insurance, mortgage loans
+                - EMPLOYMENT: Job offers, internships, certification programs
+                - CREDIT: Credit cards, auto loans, long-term financing
+            product_source:
+              type: string
+              enum:
+                - CATALOG
+              description: |
+                Required when web_all_in_one_catalog_status is OPEN.
+                Product source for promotion.
+            catalog_id:
+              type: string
+              description: |
+                Required when web_all_in_one_catalog_status is OPEN.
+                ID of the E-commerce catalog to use.
+            catalog_authorized_bc_id:
+              type: string
+              description: |
+                Required when web_all_in_one_catalog_status is OPEN.
+                ID of the Business Center that owns the catalog.
+            product_specific_type:
+              type: string
+              enum:
+                - ALL
+                - PRODUCT_SET
+                - CUSTOMIZED_PRODUCTS
+              description: |
+                Required when web_all_in_one_catalog_status is OPEN.
+                How to choose products:
+                - ALL: Dynamic choice from all products
+                - PRODUCT_SET: Choose from specified product set
+                - CUSTOMIZED_PRODUCTS: Choose specific products
+            product_set_id:
+              type: string
+              description: |
+                Required when product_specific_type is PRODUCT_SET.
+                ID of the product set.
+            product_ids:
+              type: array
+              items:
+                type: string
+              maxItems: 20
+              description: |
+                Required when product_specific_type is CUSTOMIZED_PRODUCTS.
+                IDs of specific products to use.
+            promotion_type:
+              type: string
+              enum:
+                - APP_ANDROID
+                - APP_IOS
+                - WEBSITE
+              description: |
+                Promotion type (optimization location):
+                - APP_ANDROID/APP_IOS for APP_PROMOTION
+                - WEBSITE for WEB_CONVERSIONS
+            app_id:
+              type: string
+              description: |
+                The Application ID of the promoted app.
+                Get via /app/list/ endpoint.
+            promotion_website_type:
+              type: string
+              enum:
+                - TIKTOK_NATIVE_PAGE
+              description: |
+                Valid when objective_type is WEB_CONVERSIONS and spc_type is UNSET.
+                Currently only supports TIKTOK_NATIVE_PAGE.
+            optimization_goal:
+              type: string
+              enum:
+                - CLICK
+                - INSTALL
+                - IN_APP_EVENT
+                - VALUE
+                - CONVERT
+                - TRAFFIC_LANDING_PAGE_VIEW
+              description: |
+                The measurable results you'd like to drive.
+                See Enumeration - Optimization Goal for details.
+            pixel_id:
+              type: string
+              description: |
+                Pixel ID for landing pages.
+                Get via /pixel/list/ endpoint.
+            optimization_event:
+              type: string
+              description: |
+                Conversion event for the campaign.
+                See Conversion events for supported events.
+            bid_type:
+              type: string
+              enum:
+                - BID_TYPE_NO_BID
+                - BID_TYPE_CUSTOM
+              description: |
+                Bidding strategy:
+                - BID_TYPE_NO_BID: Maximum Delivery
+                - BID_TYPE_CUSTOM: Cost Cap
+            bid_price:
+              type: number
+              format: float
+              description: |
+                Required when:
+                - spc_type is WEB_ALL_IN_ONE
+                - optimization_goal is CLICK
+                - bid_type is BID_TYPE_CUSTOM
+                Target cost per click.
+            conversion_bid_price:
+              type: number
+              format: float
+              description: |
+                Required when:
+                - spc_type is WEB_ALL_IN_ONE
+                - optimization_goal is CONVERT/TRAFFIC_LANDING_PAGE_VIEW
+                - bid_type is BID_TYPE_CUSTOM
+                Target cost per conversion/landing page view.
+            deep_bid_type:
+              type: string
+              enum:
+                - DEFAULT
+                - AEO
+                - VO_MIN_ROAS
+                - VO_HIGHEST_VALUE
+              description: |
+                Bidding strategy for in-app events.
+                See Enumeration - Deep Event Bidding Strategy.
+            roas_bid:
+              type: number
+              format: float
+              minimum: 0.01
+              maximum: 1000
+              description: |
+                Required when deep_bid_type is VO_MIN_ROAS.
+                Target ROAS for Value-Based Optimization.
+            click_attribution_window:
+              type: string
+              enum:
+                - OFF
+                - ONE_DAY
+                - SEVEN_DAYS
+                - FOURTEEN_DAYS
+                - TWENTY_EIGHT_DAYS
+              description: |
+                Click-through attribution window.
+                Time between click and conversion.
+            engaged_view_attribution_window:
+              type: string
+              enum:
+                - ONE_DAY
+                - SEVEN_DAYS
+              description: |
+                Engaged view-through window.
+                Time after 6+ second video view.
+            view_attribution_window:
+              type: string
+              enum:
+                - OFF
+                - ONE_DAY
+                - SEVEN_DAYS
+              description: |
+                View-through window.
+                Time between view and conversion.
+            attribution_event_count:
+              type: string
+              enum:
+                - UNSET
+                - EVERY
+                - ONCE
+              description: |
+                Event count (Statistic type):
+                - EVERY: Count multiple events separately
+                - ONCE: Count multiple events as 1
+            billing_event:
+              type: string
+              enum:
+                - OCPM
+                - CPC
+              description: Events you want to pay for
+            location_ids:
+              type: array
+              items:
+                type: string
+              description: |
+                IDs of locations to target.
+                Get via /tool/region/ endpoint.
+            languages:
+              type: array
+              items:
+                type: string
+              description: |
+                Language codes to target.
+                See Enumeration - Language Code.
+            gender:
+              type: string
+              enum:
+                - GENDER_FEMALE
+                - GENDER_MALE
+                - GENDER_UNLIMITED
+              default: GENDER_UNLIMITED
+              description: Gender targeting (allowlist only)
+            exclude_age_under_eighteen:
+              type: boolean
+              description: |
+                Exclude under 18 audience.
+                Must be true since Sept 21, 2023.
+            excluded_audience_ids:
+              type: array
+              items:
+                type: string
+              description: |
+                Audience IDs to exclude.
+                Get via /dmp/custom_audience/list/.
+            placement_type:
+              type: string
+              enum:
+                - PLACEMENT_TYPE_NORMAL
+                - PLACEMENT_TYPE_AUTOMATIC
+              default: PLACEMENT_TYPE_NORMAL
+              description: |
+                Placement strategy:
+                - NORMAL: Select specific placements
+                - AUTOMATIC: Let system optimize
+            placements:
+              type: array
+              items:
+                type: string
+                enum:
+                  - PLACEMENT_TIKTOK
+              description: |
+                Apps to deliver ads on.
+                Currently supports PLACEMENT_TIKTOK.
+            comment_disabled:
+              type: boolean
+              default: false
+              description: Whether to disable comments
+            share_disabled:
+              type: boolean
+              description: Whether to disable sharing
+            video_download_disabled:
+              type: boolean
+              default: false
+              description: Whether to disable video downloads
+            blocked_pangle_app_ids:
+              type: array
+              items:
+                type: string
+              description: |
+                Pangle app block IDs.
+                Don't use with PLACEMENT_TIKTOK only.
+            budget_mode:
+              type: string
+              enum:
+                - BUDGET_MODE_DAY
+                - BUDGET_MODE_DYNAMIC_DAILY_BUDGET
+              default: BUDGET_MODE_DAY
+              description: |
+                Budget mode.
+                Cannot update after creation.
+            budget:
+              type: number
+              format: float
+              description: Campaign budget
+            schedule_type:
+              type: string
+              enum:
+                - SCHEDULE_START_END
+                - SCHEDULE_FROM_NOW
+              description: Schedule type
+            schedule_start_time:
+              type: string
+              format: date-time
+              description: |
+                Schedule start time (UTC+0).
+                Format: YYYY-MM-DD HH:MM:SS
+                Can be up to 12 hours earlier.
+            schedule_end_time:
+              type: string
+              format: date-time
+              description: |
+                Schedule end time (UTC+0).
+                Format: YYYY-MM-DD HH:MM:SS
+            dayparting:
+              type: string
+              description: |
+                48x7 character string for 30-min delivery windows.
+                1=delivery, 0=no delivery.
+                First char is Mon 0:01-0:30.
+            identity_type:
+              type: string
+              enum:
+                - CUSTOMIZED_USER
+                - AUTH_CODE
+                - TT_USER
+              description: |
+                Identity type.
+                CUSTOMIZED_USER for non-Spark ads.
+                AUTH_CODE/TT_USER for Spark ads.
+            identity_id:
+              type: string
+              description: Identity ID
+            media_info_list:
+              type: array
+              items:
+                type: object
+                properties:
+                  media_info:
+                    type: object
+                    properties:
+                      video_info:
+                        type: object
+                        properties:
+                          video_id:
+                            type: string
+                            description: Video ID from /file/video/ad/upload/
+                          file_name:
+                            type: string
+                            description: Video name
+                      image_info:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            web_uri:
+                              type: string
+                              description: Image ID from /file/image/ad/upload/
+                      music_info:
+                        type: object
+                        properties:
+                          music_id:
+                            type: string
+                            description: Music ID for catalog carousel ads
+                      aigc_disclosure_type:
+                        type: string
+                        enum:
+                          - SELF_DISCLOSURE
+                          - NOT_DECLARED
+                        default: NOT_DECLARED
+                        description: |
+                          AI-generated content disclosure:
+                          - SELF_DISCLOSURE: Declare AI content
+                          - NOT_DECLARED: No declaration
+                      tiktok_item_id:
+                        type: string
+                        description: TikTok post ID for Spark Ads
+            catalog_creative_toggle:
+              type: boolean
+              default: false
+              description: |
+                Enable auto-selection of catalog creatives.
+                Requires music_info when true.
+            title_list:
+              type: array
+              items:
+                type: object
+                properties:
+                  title:
+                    type: string
+                    description: Ad title/text
+            call_to_action_id:
+              type: string
+              description: CTA portfolio ID
+            call_to_action_list:
+              type: array
+              items:
+                type: object
+                properties:
+                  call_to_action:
+                    type: string
+                    description: CTA text
+            card_list:
+              type: array
+              maxItems: 1
+              items:
+                type: object
+                properties:
+                  card_id:
+                    type: string
+                    description: Creative portfolio ID
+            automatic_add_on_enabled:
+              type: boolean
+              default: false
+              description: |
+                Enable auto-selection of interactive add-ons.
+                Valid when web_all_in_one_catalog_status is OPEN.
+            page_list:
+              type: array
+              maxItems: 1
+              items:
+                type: object
+                properties:
+                  page_id:
+                    type: string
+                    description: Page ID (form/instant/profile)
+            deeplink:
+              type: string
+              description: Deep link location for installed app users
+            deeplink_type:
+              type: string
+              enum:
+                - DEFERRED_DEEPLINK
+              description: Deep link type
+            landing_page_urls:
+              type: array
+              items:
+                type: object
+                properties:
+                  landing_page_url:
+                    type: string
+                    description: Landing page URL
+                  video_id:
+                    type: string
+                    description: Video ID for multiple landing pages
+                  tiktok_item_id:
+                    type: string
+                    description: Post ID for multiple landing pages
+            impression_tracking_url:
+              type: string
+              description: Default impression tracking URL
+            click_tracking_url:
+              type: string
+              description: Click tracking URL
+  responses:
+    '200':
+      description: Successfully created Smart+ Campaign
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - code
+              - message
+              - request_id
+              - data
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                properties:
+                  advertiser_id:
+                    type: string
+                    description: Advertiser ID
+                  campaign_id:
+                    type: string
+                    description: Campaign ID
+                  operation_status:
+                    type: string
+                    enum:
+                      - ENABLE
+                      - DISABLE
+                    description: Campaign status
+                  campaign_secondary_status:
+                    type: string
+                    description: Campaign secondary status
+                  is_smart_performance_campaign:
+                    type: boolean
+                    description: Whether it's a Smart+ Campaign
+                  # Additional response fields as per example...
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../schemas/responses.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../schemas/responses.yaml#/components/responses/NotFound'
+    '429':
+      $ref: '../schemas/responses.yaml#/components/responses/TooManyRequests'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

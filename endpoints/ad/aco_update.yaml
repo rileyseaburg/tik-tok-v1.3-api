@@ -1,0 +1,296 @@
+post:
+  summary: Update ACO ads
+  description: |
+    Modify ACO ad creatives. You can modify call-to-action, ad names, images, and video materials. This is a totally new endpoint in v1.3.
+
+    This endpoint supports incremental updates. To modify an updateable setting:
+    - Set patch_update to true
+    - Pass only the field to be updated and the required fields (Header parameters, advertiser_id, and adgroup_id)
+
+    Important Notes:
+    - For array type fields, you must pass all original parameters along with their updated values, regardless of patch_update setting
+    - The response is a mock result which returns the request parameters you've passed in
+    - Does not support updating ACO ad creatives for a Smart+ Campaign
+    - Automatically generated ad names cannot be modified
+    - Avoid duplicated title, creative material, and call-to-action
+  operationId: updateAcoAd
+  tags:
+    - ad
+  security:
+    - accessToken: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - advertiser_id
+            - adgroup_id
+          properties:
+            advertiser_id:
+              type: string
+              description: Advertiser ID
+            adgroup_id:
+              type: string
+              description: |
+                Ad group ID.
+                Note: The ID should be of the ad group that you will enable Automated Creative Optimization for, and creative_material_mode for the ad group must be set as DYNAMIC.
+            patch_update:
+              type: boolean
+              description: |
+                Whether to use incremental update mode.
+                For example, to update ad texts using incremental update mode:
+                - Set patch_update to true
+                - Set title_list to the new ad texts
+                - Pass the required fields (Header parameters, advertiser_id, and adgroup_id)
+            media_info_list:
+              type: array
+              description: |
+                List of media information.
+                Note: If updating any material in this list, you must provide all original materials along with their updates.
+              items:
+                type: object
+                properties:
+                  media_info:
+                    $ref: '../schemas/types.yaml#/components/schemas/MediaInfo'
+            title_list:
+              type: array
+              description: |
+                List of ad titles (also called ad texts).
+                Note: If updating any title, you must provide all original titles along with their updates.
+              minItems: 1
+              maxItems: 5
+              items:
+                type: object
+                required:
+                  - title
+                properties:
+                  title:
+                    type: string
+                    description: |
+                      Ad title (ad text).
+                      - Must be 12-40 characters long
+                      - Cannot contain emoji
+                      - Each word in Chinese or Japanese counts as two characters
+                      - Each letter in English counts as one character
+            call_to_action_list:
+              type: array
+              description: |
+                Call-to-action list.
+                Note: Maximum of three call-to-action texts per list.
+                If updating any CTA, you must provide all original CTAs along with their updates.
+              maxItems: 3
+              items:
+                $ref: '../schemas/types.yaml#/components/schemas/CallToActionInfo'
+            deeplink_list:
+              type: array
+              description: List of deeplinks. Length range - [0,1]
+              maxItems: 1
+              items:
+                type: object
+                properties:
+                  deeplink:
+                    type: string
+                    description: The specific location where you want your audience to go if they have your app installed
+                  deeplink_type:
+                    type: string
+                    description: |
+                      The deeplink type. For iOS 14 campaigns, this field cannot be set to DEFERRED_DEEPLINK.
+                    enum: [NORMAL, DEFERRED_DEEPLINK]
+                    default: NORMAL
+            display_name_list:
+              type: array
+              description: |
+                Display names.
+                Note: You can pass only one app_name or landing_page_name into each display_name_list object.
+              items:
+                type: object
+                properties:
+                  app_name:
+                    type: string
+                    description: |
+                      App name that is displayed in the ad. If not specified, the name in the app store will be used.
+                      Number of characters allowed - 1-40.
+                      If the name in the app store exceeds 40 characters, you must pass in a new app name.
+                  landing_page_name:
+                    type: string
+                    description: The display name of the landing page, required when the promotion type is landing page. Length limit - 1-40 characters.
+            avatar_icon_list:
+              type: array
+              description: |
+                Avatar image list.
+                Note: When you pass in identity_id in media_info or common_material, you don't need to pass in this object.
+                You can only pass in one avatar image ID (web_uri).
+              maxItems: 1
+              items:
+                type: object
+                properties:
+                  avatar_icon:
+                    type: object
+                    properties:
+                      web_uri:
+                        type: string
+                        description: ID of the avatar image (picture ratio requirement is 1:1)
+            page_list:
+              type: array
+              description: Page ID list
+              minItems: 1
+              maxItems: 3
+              items:
+                type: object
+                required:
+                  - page_id
+                properties:
+                  page_id:
+                    type: string
+                    description: Page ID
+            card_list:
+              type: array
+              description: Card ID list. Length range - [0,1]
+              maxItems: 1
+              items:
+                type: object
+                properties:
+                  card_id:
+                    type: string
+                    description: Display Card ID, Gift Code Sticker ID, Countdown Sticker ID, or Download Card ID
+            common_material:
+              type: object
+              description: Common material
+              properties:
+                ad_name:
+                  type: string
+                  description: |
+                    Ad name. Character limit is 512 and cannot contain emoji.
+                    Each word in Chinese or Japanese counts as two characters, while each letter in English counts as one character.
+                    Note: Automatically generated ad names cannot be modified.
+                call_to_action_id:
+                  type: string
+                  description: |
+                    The ID of the CTA portfolio that you want to use in your ads.
+                    Note: If both this field and call_to_action_list are specified, call_to_action_list will be ignored.
+                creative_authorized:
+                  type: boolean
+                  description: |
+                    Whether you grant displaying some of your ads in TikTok for Business Creative Center.
+                    Only valid for non-US advertisers, the default value is false.
+                    Note: creative_authorized can only be used for video ads.
+                  default: false
+                playable_url:
+                  type: string
+                  description: Playable material url, valid only in Pangle placement
+                fallback_type:
+                  type: string
+                  description: |
+                    Fallback Type. If the audience do not have the app installed, you can have them fall back to install the app, or to view a specific web page.
+                    Note: Not applicable for Deferred Deeplink.
+                  enum: [APP_INSTALL, WEBSITE, UNSET]
+            tracking_info:
+              type: object
+              description: Tracking information
+              properties:
+                impression_tracking_urls:
+                  type: array
+                  description: Default Impression Tracking URL
+                  maxItems: 1
+                  items:
+                    type: string
+                click_tracking_urls:
+                  type: array
+                  description: Click Tracking URL
+                  maxItems: 1
+                  items:
+                    type: string
+                tracking_pixel_id:
+                  type: string
+                  description: The pixel ID that you'd like to track. You can use this field to track offsite events.
+                tracking_app_id:
+                  type: string
+                  description: |
+                    The ID of the application that you want to track.
+                    Note: This field is currently an allowlist-only feature for APP_PROMOTION, PRODUCT_SALES, and ENGAGEMENT objectives.
+                tracking_offline_event_set_ids:
+                  type: array
+                  description: |
+                    A list of Offline Event set IDs that you want to track.
+                    Note: Offline Events Tracking is currently an allowlist-only feature.
+                  maxItems: 50
+                  items:
+                    type: string
+            identity_id:
+              type: string
+              description: Required when you are not using Spark Ads (tiktok_item_id)
+            identity_type:
+              type: string
+              description: |
+                Required when you are not using Spark Ads (tiktok_item_id).
+                The only supported value is CUSTOMIZED_USER.
+              enum: [CUSTOMIZED_USER]
+  responses:
+    '200':
+      description: Successfully updated ACO ad
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: The log id of a request, which uniquely identifies the request
+              data:
+                type: object
+                properties:
+                  advertiser_id:
+                    type: string
+                    description: Advertiser ID
+                  adgroup_id:
+                    type: string
+                    description: Ad group ID
+                  media_info_list:
+                    type: array
+                    items:
+                      $ref: '../schemas/types.yaml#/components/schemas/MediaInfo'
+                  title_list:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                          description: Ad title (ad text)
+                  common_material:
+                    type: object
+                    properties:
+                      call_to_action_id:
+                        type: string
+                        description: The ID of the CTA portfolio
+                      identity_id:
+                        type: string
+                        description: Identity ID
+                      is_smart_creative:
+                        type: boolean
+                        description: Whether the ad is a Smart Creative ad
+                      identity_type:
+                        type: string
+                        description: Identity type
+                  landing_page_urls:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        landing_page_url:
+                          type: string
+                          description: Landing page URL
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

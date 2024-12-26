@@ -1,0 +1,738 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: TikTok API
+  description: TikTok API v1.3
+  contact:
+    name: Quantum Forge
+    email: info@quantum-forge.io
+    url: https://quantum-forge.io
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: https://business-api.tiktok.com/open_api
+    description: TikTok Business API Production Server
+
+security:
+  - accessToken: []
+
+paths:
+  /v1.3/business/get:
+    $ref: 'endpoints/business/get.yaml'
+  /v1.3/business/video/list:
+    $ref: 'endpoints/video/list.yaml'
+  /v1.3/business/video/settings:
+    $ref: 'endpoints/video/settings.yaml'
+  /v1.3/file/video/ad/upload:
+    $ref: 'endpoints/video/upload.yaml'
+  /v1.3/business/comment/list:
+    $ref: 'endpoints/comment/list.yaml'
+  /v1.3/business/comment/create:
+    $ref: 'endpoints/comment/create.yaml'
+  /v1.3/business/post/authorize/setting:
+    $ref: 'endpoints/business/post/authorize/setting.yaml'
+  /v1.3/oauth2/advertiser/get:
+    $ref: 'endpoints/oauth2/advertiser/get.yaml'
+  /v1.3/advertiser/info:
+    $ref: 'endpoints/advertiser/info.yaml'
+  /v1.3/ad/get:
+    $ref: 'endpoints/ad/get.yaml'
+  /v1.3/ad/create:
+    $ref: 'endpoints/ad/create.yaml'
+  /v1.3/business/ad/smart-creative:
+    $ref: 'endpoints/ad/smart_creative_ad.yaml'
+  /v1.3/ad/aco/get:
+    $ref: 'endpoints/ad/aco_get.yaml'
+  /v1.3/ad/aco/create:
+    $ref: 'endpoints/ad/aco_create.yaml'
+  /v1.3/ad/aco/update:
+    $ref: 'endpoints/ad/aco_update.yaml'
+  /v1.3/ad/aco/material_status/update:
+    $ref: 'endpoints/ad/aco_material_status_update.yaml'
+  /v1.3/ad/update:
+    $ref: 'endpoints/ad/update.yaml'
+  /v1.3/ad/status/update:
+    $ref: 'endpoints/ad/status_update.yaml'
+  /v1.3/adgroup/get:
+    $ref: 'endpoints/adgroup/get.yaml'
+  /v1.3/adgroup/quota:
+    $ref: 'endpoints/adgroup/quota.yaml'
+  /v1.3/adgroup/create:
+    $ref: 'endpoints/adgroup/create.yaml'
+  /v1.3/adgroup/update:
+    $ref: 'endpoints/adgroup/update.yaml'
+  /v1.3/adgroup/status/update:
+    $ref: 'endpoints/adgroup/status_update.yaml'
+  /v1.3/adgroup/budget/update:
+    $ref: 'endpoints/adgroup/budget_update.yaml'
+  /v1.3/adgroup/review_info:
+    $ref: 'endpoints/adgroup/review_info.yaml'
+  /v1.3/adgroup/appeal:
+    $ref: 'endpoints/adgroup/appeal.yaml'
+  /v1.3/ad/review_info:
+    $ref: 'endpoints/ad/review_info.yaml'
+  /v1.3/ad/audience_size/estimate:
+    $ref: 'endpoints/ad/audience_size_estimate.yaml'
+  /v1.3/dmp/custom_audience/file/upload:
+    $ref: 'endpoints/dmp/custom_audience_file_upload.yaml'
+  /v1.3/dmp/custom_audience/create:
+    $ref: 'endpoints/dmp/custom_audience_create.yaml'
+  /v1.3/dmp/custom_audience/update:
+    $ref: 'endpoints/dmp/custom_audience_update.yaml'
+  /v1.3/segment/audience:
+    $ref: 'endpoints/segment/audience.yaml'
+  /v1.3/segment/mapping:
+    $ref: 'endpoints/segment/mapping.yaml'
+  /v1.3/dmp/custom_audience/list:
+    $ref: 'endpoints/dmp/custom_audience_list.yaml'
+  /v1.3/dmp/custom_audience/get:
+    $ref: 'endpoints/dmp/custom_audience_get.yaml'
+  /v1.3/dmp/custom_audience/rule/create:
+    $ref: 'endpoints/dmp/custom_audience_rule_create.yaml'
+  /v1.3/dmp/custom_audience/lookalike/create:
+    $ref: 'endpoints/dmp/custom_audience_lookalike_create.yaml'
+  /v1.3/dmp/custom_audience/lookalike/update:
+    $ref: 'endpoints/dmp/custom_audience_lookalike_update.yaml'
+  /v1.3/dmp/custom_audience/delete:
+    $ref: 'endpoints/dmp/custom_audience_delete.yaml'
+  /v1.3/dmp/custom_audience/share:
+    $ref: 'endpoints/dmp/custom_audience_share.yaml'
+  /v1.3/dmp/custom_audience/share/cancel:
+    $ref: 'endpoints/dmp/custom_audience_share_cancel.yaml'
+  /v1.3/dmp/custom_audience/share/log:
+    $ref: 'endpoints/dmp/custom_audience_share_log.yaml'
+  /v1.3/dmp/custom_audience/apply:
+    $ref: 'endpoints/dmp/custom_audience_apply.yaml'
+  /v1.3/dmp/custom_audience/apply/log:
+    $ref: 'endpoints/dmp/custom_audience_apply_log.yaml'
+  /v1.3/dmp/saved_audience/create:
+    $ref: 'endpoints/dmp/saved_audience_create.yaml'
+  /v1.3/dmp/saved_audience/list:
+    $ref: 'endpoints/dmp/saved_audience_list.yaml'
+  /v1.3/dmp/saved_audience/delete:
+    $ref: 'endpoints/dmp/saved_audience_delete.yaml'
+  /v1.3/audience/insight/info:
+    $ref: 'endpoints/audience/insight_info.yaml'
+  /v1.3/audience/insight/overlap:
+    $ref: 'endpoints/audience/insight_overlap.yaml'
+  /v1.3/optimizer/rule/create:
+    $ref: 'endpoints/optimizer/rule_create.yaml'
+  /v1.3/optimizer/rule/get:
+    $ref: 'endpoints/optimizer/rule_get.yaml'
+  /v1.3/optimizer/rule/list:
+    $ref: 'endpoints/optimizer/rule_list.yaml'
+  /v1.3/optimizer/rule/result/list:
+    $ref: 'endpoints/optimizer/rule_result_list.yaml'
+  /v1.3/optimizer/rule/result/get:
+    $ref: 'endpoints/optimizer/rule_result_get.yaml'
+  /v1.3/optimizer/rule/update:
+    $ref: 'endpoints/optimizer/rule_update.yaml'
+  /v1.3/optimizer/rule/update/status:
+    $ref: 'endpoints/optimizer/rule_update_status.yaml'
+  /v1.3/optimizer/rule/batch_bind:
+    $ref: 'endpoints/optimizer/rule_batch_bind.yaml'
+  /v1.3/campaign/create:
+    $ref: 'endpoints/campaign/create.yaml'
+  /v1.3/campaign/get:
+    $ref: 'endpoints/campaign/get.yaml'
+  /v1.3/campaign/update:
+    $ref: 'endpoints/campaign/update.yaml'
+  /v1.3/campaign/status/update:
+    $ref: 'endpoints/campaign/status_update.yaml'
+  /v1.3/campaign/quota/info:
+    $ref: 'endpoints/campaign/quota_info.yaml'
+  /v1.3/campaign/copy/task/create:
+    $ref: 'endpoints/campaign/copy_task_create.yaml'
+  /v1.3/campaign/copy/task/check:
+    $ref: 'endpoints/campaign/copy_task_check.yaml'
+  /v1.3/campaign/spc/create:
+    $ref: 'endpoints/campaign/spc_create.yaml'
+  /v1.3/campaign/spc/update:
+    $ref: 'endpoints/campaign/spc_update.yaml'
+  /v1.3/campaign/spc/get:
+    $ref: 'endpoints/campaign/spc_get.yaml'
+  /v1.3/campaign/spc/report/get:
+    $ref: 'endpoints/campaign/spc_report_get.yaml'
+  /v1.3/tool/targeting/search:
+    $ref: 'endpoints/tool/targeting_search.yaml'
+  /v1.3/tool/targeting/info:
+    $ref: 'endpoints/tool/targeting_info.yaml'
+  /v1.3/tool/region:
+    $ref: 'endpoints/tool/region.yaml'
+  /v1.3/search/region:
+    $ref: 'endpoints/search/region.yaml'
+  /v1.3/tool/language:
+    $ref: 'endpoints/tool/language.yaml'
+  /v1.3/tool/interest_category:
+    $ref: 'endpoints/tool/interest_category.yaml'
+  /v1.3/tool/interest_keyword/recommend:
+    $ref: 'endpoints/tool/interest_keyword_recommend.yaml'
+  /v1.3/tool/interest_keyword/get:
+    $ref: 'endpoints/tool/interest_keyword_get.yaml'
+  /v1.3/tool/action_category:
+    $ref: 'endpoints/tool/action_category.yaml'
+  /v1.3/tool/hashtag/recommend:
+    $ref: 'endpoints/tool/hashtag_recommend.yaml'
+  /v1.3/tool/hashtag/get:
+    $ref: 'endpoints/tool/hashtag_get.yaml'
+  /v1.3/tool/targeting_category/recommend:
+    $ref: 'endpoints/tool/targeting_category_recommend.yaml'
+  /v1.3/tool/bid/recommend:
+    $ref: 'endpoints/tool/bid_recommend.yaml'
+  /v1.3/tool/vbo_status:
+    $ref: 'endpoints/tool/vbo_status.yaml'
+  /v1.3/tool/brand_safety/partner/authorize/status:
+    $ref: 'endpoints/tool/brand_safety_partner_authorize_status.yaml'
+  /v1.3/tool/url_validate:
+    $ref: 'endpoints/tool/url_validate.yaml'
+  /v1.3/tool/timezone:
+    $ref: 'endpoints/tool/timezone.yaml'
+  /v1.3/tool/phone_region_code:
+    $ref: 'endpoints/tool/phone_region_code.yaml'
+  /v1.3/report/integrated/get:
+    $ref: 'endpoints/report/integrated_get.yaml'
+  /v1.3/report/task/create:
+    $ref: 'endpoints/report/task_create.yaml'
+  /v1.3/report/task/check:
+    $ref: 'endpoints/report/task_check.yaml'
+  /v1.3/report/task/download:
+    $ref: 'endpoints/report/task_download.yaml'
+  /v1.3/report/task/cancel:
+    $ref: 'endpoints/report/task_cancel.yaml'
+
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      required:
+        - code
+        - message
+        - request_id
+      properties:
+        code:
+          type: integer
+          description: Error code
+        message:
+          type: string
+          description: Error message
+        request_id:
+          type: string
+          description: Request ID for tracking
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Specific error code
+              message:
+                type: string
+                description: Detailed error message
+              field:
+                type: string
+                description: Field that caused the error
+
+    BaseResponse:
+      type: object
+      required:
+        - code
+        - message
+        - request_id
+      properties:
+        code:
+          type: integer
+          description: Response code
+        message:
+          type: string
+          description: Response message
+        request_id:
+          type: string
+          description: The log ID of the request
+
+    AdResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                list:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/AdCreative'
+                page_info:
+                  $ref: '#/components/schemas/PageInfo'
+
+    CampaignResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                list:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/SmartPlusCampaign'
+                page_info:
+                  $ref: '#/components/schemas/PageInfo'
+
+    AdvertiserResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                list:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      advertiser_id:
+                        type: string
+                        description: Advertiser ID
+                      status:
+                        type: string
+                        description: Advertiser status
+                page_info:
+                  $ref: '#/components/schemas/PageInfo'
+
+    CommentResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                comment_id:
+                  type: string
+                  description: Comment ID
+                status:
+                  type: string
+                  description: Comment status
+
+    # Common Types
+    AigcDisclosureType:
+      type: string
+      description: AI-generated content disclosure type
+      enum:
+        - SELF_DISCLOSURE
+        - NOT_DECLARED
+        - AUTO_DETECT
+
+    IdentityType:
+      type: string
+      description: Type of identity for ads
+      enum:
+        - CUSTOMIZED
+        - AUTH_CODE
+        - BUSINESS_ID
+        - TT_USER
+
+    PageInfo:
+      type: object
+      description: Pagination information
+      properties:
+        page:
+          type: integer
+          description: Current page number
+        page_size:
+          type: integer
+          description: Number of items per page
+        total_number:
+          type: integer
+          description: Total number of items
+        total_page:
+          type: integer
+          description: Total number of pages
+
+    AdFormat:
+      type: string
+      description: Format of the advertisement
+      enum:
+        - SINGLE_IMAGE
+        - SINGLE_VIDEO
+        - CAROUSEL
+        - DYNAMIC
+        - PLAYABLE
+        - COLLECTION
+        - SHOWCASE
+        - LIVE_SHOPPING
+        - VERTICAL_VIDEO
+
+    ProductSpecificType:
+      type: string
+      description: Type of product specification
+      enum:
+        - ALL
+        - PRODUCT_SET
+        - CUSTOMIZED_PRODUCTS
+
+    ShowcaseProduct:
+      type: object
+      description: Product showcase information
+      properties:
+        item_group_id:
+          type: string
+          description: SPU ID of the product
+        store_id:
+          type: string
+          description: ID of the store that the product belongs to
+        catalog_id:
+          type: string
+          description: ID of the catalog that the product belongs to
+
+    VideoStrategy:
+      type: string
+      description: Video strategy type
+      enum:
+        - UNSET
+        - SINGLE_VIDEO
+        - CATALOG_VIDEOS
+        - CATALOG_UPLOADED_VIDEOS
+        - LIVE_STREAM
+
+    DynamicDestination:
+      type: string
+      description: Dynamic destination strategy
+      enum:
+        - DLP
+        - UNSET
+
+    UtmParameter:
+      type: object
+      description: UTM tracking parameters
+      properties:
+        key:
+          type: string
+          description: URL parameter
+        value:
+          type: string
+          description: Value of URL parameter
+
+    TikTokPageCategory:
+      type: string
+      description: Category of TikTok pages
+      enum:
+        - PROFILE_PAGE
+        - OTHER_TIKTOK_PAGE
+        - TIKTOK_INSTANT_PAGE
+
+    DeeplinkType:
+      type: string
+      description: Type of deeplink
+      enum:
+        - NORMAL
+        - DEFERRED_DEEPLINK
+
+    DeeplinkFormatType:
+      type: string
+      description: Format of deeplink
+      enum:
+        - UNIVERSAL_OR_APP_LINK
+        - SCHEME_LINK
+        - NONE
+
+    ShoppingAdsDeeplinkType:
+      type: string
+      description: Source of deeplink for Shopping Ads
+      enum:
+        - NONE
+        - CUSTOM
+        - SHOPPING_ADS
+
+    FallbackType:
+      type: string
+      description: General fallback type
+      enum:
+        - APP_INSTALL
+        - WEBSITE
+        - UNSET
+
+    DisclaimerType:
+      type: string
+      description: Type of disclaimer
+      enum:
+        - TEXT_LINK
+        - TEXT_ONLY
+
+    DisclaimerText:
+      type: object
+      description: Text content for disclaimers
+      properties:
+        text:
+          type: string
+          description: The disclaimer text content
+
+    ClickableDisclaimer:
+      type: object
+      description: Interactive disclaimer with clickable elements
+      properties:
+        text:
+          type: string
+          description: Clickable disclaimer text
+        url:
+          type: string
+          description: URL for clickable disclaimer
+
+    PostbidPartner:
+      type: string
+      description: Post-bid partner type
+      enum:
+        - UNSET
+        - MOAT
+        - DOUBLE_VERIFY
+        - IAS
+        - ZEFR
+
+    MediaInfo:
+      type: object
+      description: Media information for ads
+      properties:
+        video_info:
+          type: object
+          properties:
+            video_id:
+              type: string
+              description: Video ID
+            file_name:
+              type: string
+              description: Video name
+        image_info:
+          type: array
+          items:
+            type: object
+            properties:
+              web_uri:
+                type: string
+                description: Image ID
+        music_info:
+          type: object
+          properties:
+            music_id:
+              type: string
+              description: Music ID
+        aigc_disclosure_type:
+          $ref: '#/components/schemas/AigcDisclosureType'
+        tiktok_item_id:
+          type: string
+          description: TikTok post ID
+        identity_type:
+          $ref: '#/components/schemas/IdentityType'
+        identity_id:
+          type: string
+          description: Identity ID
+
+    CallToActionInfo:
+      type: object
+      description: Call-to-action information
+      properties:
+        call_to_action:
+          type: string
+          description: CTA text
+        call_to_action_id:
+          type: string
+          description: CTA portfolio ID
+
+    AdCreative:
+      type: object
+      description: Ad creative information
+      properties:
+        media_info:
+          $ref: '#/components/schemas/MediaInfo'
+        call_to_action_list:
+          type: array
+          items:
+            $ref: '#/components/schemas/CallToActionInfo'
+        title_list:
+          type: array
+          items:
+            type: object
+            properties:
+              title:
+                type: string
+                description: Ad title
+
+    MaterialOperationStatus:
+      type: string
+      description: Material operation status
+      enum:
+        - ENABLE
+        - DISABLE
+        - DELETED
+
+    CustomAction:
+      type: object
+      description: Custom action configuration
+      properties:
+        code:
+          type: string
+          enum:
+            - VIEW_PRODUCT
+            - ADD_TO_CART
+            - PURCHASE
+        days:
+          type: integer
+          description: Valid days for the action
+
+    BehavioralCategory:
+      type: object
+      description: Behavioral targeting category
+      properties:
+        action_scene:
+          type: string
+          enum:
+            - VIDEO_RELATED
+            - CREATOR_RELATED
+            - HASHTAG_RELATED
+        action_period:
+          type: integer
+        video_user_actions:
+          type: array
+          items:
+            type: string
+
+    TargetingExpansion:
+      type: object
+      description: Targeting expansion settings
+      properties:
+        expansion_enabled:
+          type: boolean
+          description: Whether targeting expansion is enabled
+        expansion_types:
+          type: array
+          items:
+            type: string
+
+    AudienceRule:
+      type: object
+      description: Audience targeting rules
+      properties:
+        included_custom_actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomAction'
+        excluded_custom_actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomAction'
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/BehavioralCategory'
+        targeting_expansion:
+          $ref: '#/components/schemas/TargetingExpansion'
+
+    AdGroupResponse:
+      type: object
+      description: Ad group response data
+      properties:
+        adgroup_id:
+          type: string
+          description: Ad group ID
+        adgroup_name:
+          type: string
+          description: Ad group name
+        status:
+          type: string
+          description: Ad group status
+        audience_rule:
+          $ref: '#/components/schemas/AudienceRule'
+
+    Timestamp:
+      type: string
+      format: date-time
+      description: ISO 8601 formatted timestamp
+
+    AdvertisingObjective:
+      type: string
+      description: Advertising objective for the campaign
+      enum:
+        - REACH
+        - VIDEO_VIEWS
+        - TRAFFIC
+        - APP_PROMOTION
+        - LEAD_GENERATION
+        - CONVERSIONS
+        - PRODUCT_SALES
+        - ENGAGEMENT
+
+    SmartPlusCampaign:
+      type: object
+      description: Smart+ Campaign data
+      properties:
+        campaign_id:
+          type: string
+          description: Campaign ID
+        campaign_name:
+          type: string
+          description: Campaign name
+        status:
+          type: string
+          description: Campaign status
+        objective_type:
+          $ref: '#/components/schemas/AdvertisingObjective'
+        budget:
+          type: number
+          description: Campaign budget
+        start_time:
+          $ref: '#/components/schemas/Timestamp'
+        end_time:
+          $ref: '#/components/schemas/Timestamp'
+
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    TooManyRequests:
+      description: Too many requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    InternalError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+  securitySchemes:
+    accessToken:
+      type: apiKey
+      name: Access-Token
+      in: header

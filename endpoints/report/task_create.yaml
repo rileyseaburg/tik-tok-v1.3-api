@@ -1,0 +1,139 @@
+post:
+  operationId: createReportTask
+  summary: Create an asynchronous report task
+  description: |
+    Use this endpoint to create an asynchronous report task.
+
+    Notes:
+    - Rate limit: 1 QPS per app due to computing resource limits
+    - Playable ads reports are not supported in asynchronous reports
+    - No time range limitations for asynchronous reports
+    - Filtering only supports campaign_ids, adgroup_ids, ad_ids or country_code (max 20,000 IDs)
+    - UV metrics with audience dimensions not supported
+    - Report task valid for 30 days
+    - Data refreshed every few hours; current day data may be inaccurate
+
+    Changes from v1.2 to v1.3:
+    - Endpoint path changed from /v1.2/reports/integrated/get/ to /v1.3/report/task/create/
+    - Parameter name changed: filters → filtering
+    - Parameter type changed: advertiser_id (number → string)
+    - Parameter deprecated: lifetime (replaced by query_lifetime)
+    - New parameters added:
+      * output_format
+      * file_name
+      * query_lifetime
+      * advertiser_ids
+      * enable_report_title_translation
+  tags:
+    - report
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - advertiser_id
+            - dimensions
+          properties:
+            advertiser_id:
+              type: string
+              description: |
+                Either advertiser_id or advertiser_ids required.
+                If both provided, advertiser_id will be ignored.
+            advertiser_ids:
+              type: array
+              items:
+                type: string
+              maxItems: 5
+              description: |
+                Either advertiser_id or advertiser_ids required.
+                Valid when report_type is BASIC or AUDIENCE.
+                Max size: 5.
+                Note: Advertisers must belong to same TikTok for Business user.
+            service_type:
+              $ref: '../schemas/types.yaml#/components/schemas/ServiceType'
+            report_type:
+              $ref: '../schemas/types.yaml#/components/schemas/ReportType'
+            data_level:
+              $ref: '../schemas/types.yaml#/components/schemas/ReportDataLevel'
+            dimensions:
+              type: array
+              items:
+                type: string
+              description: |
+                Grouping conditions. For example: ["campaign_id", "stat_time_day"].
+                Different report types support different dimensions.
+            metrics:
+              type: array
+              items:
+                type: string
+              default: ["spend", "impressions"]
+              description: |
+                Metrics to query.
+                Different report types support different metrics.
+            start_date:
+              type: string
+              format: date
+              description: |
+                Required when query_lifetime is false/not specified.
+                Query start date (YYYY-MM-DD).
+            end_date:
+              type: string
+              format: date
+              description: |
+                Required when query_lifetime is false/not specified.
+                Query end date (YYYY-MM-DD).
+            query_lifetime:
+              type: boolean
+              default: false
+              description: |
+                Whether to request lifetime metrics.
+                If true, start_date and end_date are ignored.
+            order_field:
+              type: string
+              description: Sorting field. All metrics (except attributes) support sorting.
+            order_type:
+              type: string
+              enum:
+                - ASC
+                - DESC
+              default: DESC
+              description: Sorting order
+            enable_report_title_translation:
+              type: boolean
+              default: true
+              description: |
+                Whether to enable translation of report title row.
+                Only valid when report_type is BASIC or AUDIENCE.
+            output_format:
+              $ref: '../schemas/types.yaml#/components/schemas/ReportOutputFormat'
+            file_name:
+              type: string
+              maxLength: 255
+              description: |
+                Optional customized download file name when output_format is CSV_DOWNLOAD or XLSX_DOWNLOAD.
+                Max length: 255 characters.
+                Cannot contain: /, \t, \b, @, #, $, %, ^, &, *, (, ), [, ]
+            filtering:
+              type: array
+              items:
+                $ref: '../schemas/types.yaml#/components/schemas/ReportFilter'
+              description: |
+                Filtering conditions.
+                Only campaign_ids, adgroup_ids, and ad_ids supported in async mode.
+  responses:
+    '200':
+      $ref: '../schemas/responses.yaml#/components/responses/ReportTaskCreated'
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../schemas/responses.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../schemas/responses.yaml#/components/responses/NotFound'
+    '429':
+      $ref: '../schemas/responses.yaml#/components/responses/TooManyRequests'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

@@ -1,0 +1,260 @@
+components:
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    ReportTaskCreated:
+      description: Report task created successfully
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/BaseResponse'
+              - type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      task_id:
+                        type: string
+                        description: ID of the created report task
+
+    ReportTaskStatus:
+      description: Report task status retrieved successfully
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/BaseResponse'
+              - type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      task_id:
+                        type: string
+                        description: Report task ID
+                      status:
+                        type: string
+                        enum:
+                          - PENDING
+                          - PROCESSING
+                          - SUCCESS
+                          - FAILED
+                        description: Current status of the task
+                      progress:
+                        type: integer
+                        description: Task progress percentage (0-100)
+                      create_time:
+                        type: string
+                        format: date-time
+                        description: Task creation time
+                      finish_time:
+                        type: string
+                        format: date-time
+                        description: Task completion time
+
+    ReportTaskDownload:
+      description: Report download URL retrieved successfully
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/BaseResponse'
+              - type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                        description: Download URL for the report
+                      expiry_time:
+                        type: string
+                        format: date-time
+                        description: URL expiration time
+
+    ReportTaskCanceled:
+      description: Report task canceled successfully
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/BaseResponse'
+              - type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      task_id:
+                        type: string
+                        description: ID of the canceled task
+                      status:
+                        type: string
+                        enum:
+                          - CANCELED
+                        description: Task status after cancellation
+
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    TooManyRequests:
+      description: Too many requests
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+    InternalError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+  schemas:
+    ErrorResponse:
+      type: object
+      required:
+        - code
+        - message
+        - request_id
+      properties:
+        code:
+          type: integer
+          description: Error code
+        message:
+          type: string
+          description: Error message
+        request_id:
+          type: string
+          description: Request ID for tracking
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Specific error code
+              message:
+                type: string
+                description: Detailed error message
+              field:
+                type: string
+                description: Field that caused the error
+
+    BaseResponse:
+      type: object
+      required:
+        - code
+        - message
+        - request_id
+      properties:
+        code:
+          type: integer
+          description: Response code
+        message:
+          type: string
+          description: Response message
+        request_id:
+          type: string
+          description: The log ID of the request
+
+    AdResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                list:
+                  type: array
+                  items:
+                    $ref: '../../endpoints/schemas/types.yaml#/components/schemas/AdCreative'
+                page_info:
+                  $ref: '../../endpoints/schemas/types.yaml#/components/schemas/PageInfo'
+
+    CampaignResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                list:
+                  type: array
+                  items:
+                    $ref: '../../endpoints/schemas/types.yaml#/components/schemas/SmartPlusCampaign'
+                page_info:
+                  $ref: '../../endpoints/schemas/types.yaml#/components/schemas/PageInfo'
+
+    AdvertiserResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                list:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      advertiser_id:
+                        type: string
+                        description: Advertiser ID
+                      status:
+                        type: string
+                        description: Advertiser status
+                page_info:
+                  $ref: '../../endpoints/schemas/types.yaml#/components/schemas/PageInfo'
+
+    CommentResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                comment_id:
+                  type: string
+                  description: Comment ID
+                status:
+                  type: string
+                  description: Comment status
+
+    # Report Task Related Responses
+    AdGroupResponse:
+      allOf:
+        - $ref: '#/components/schemas/BaseResponse'
+        - type: object
+          properties:
+            data:
+              $ref: '../schemas/types.yaml#/components/schemas/AdGroupResponse'

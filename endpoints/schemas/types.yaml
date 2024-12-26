@@ -1,0 +1,436 @@
+components:
+  schemas:
+    # Link Related Types
+    DeeplinkFormatType:
+      type: string
+      description: Format of deeplink
+      enum:
+        - UNIVERSAL_OR_APP_LINK
+        - SCHEME_LINK
+        - NONE
+
+    ShoppingAdsDeeplinkType:
+      type: string
+      description: Source of deeplink for Shopping Ads
+      enum:
+        - NONE
+        - CUSTOM
+        - SHOPPING_ADS
+
+    FallbackType:
+      type: string
+      description: General fallback type
+      enum:
+        - APP_INSTALL
+        - WEBSITE
+        - UNSET
+
+    # Disclaimer Related Types
+    DisclaimerType:
+      type: string
+      description: Type of disclaimer
+      enum:
+        - TEXT_LINK
+        - TEXT_ONLY
+
+    DisclaimerText:
+      type: object
+      description: Text content for disclaimers
+      properties:
+        text:
+          type: string
+          description: The disclaimer text content
+
+    ClickableDisclaimer:
+      type: object
+      description: Interactive disclaimer with clickable elements
+      properties:
+        text:
+          type: string
+          description: Clickable disclaimer text
+        url:
+          type: string
+          description: URL for clickable disclaimer
+
+    # Partner Types
+    PostbidPartner:
+      type: string
+      description: Post-bid partner type
+      enum:
+        - UNSET
+        - MOAT
+        - DOUBLE_VERIFY
+        - IAS
+        - ZEFR
+
+    AigcDisclosureType:
+      type: string
+      description: AI-generated content disclosure type
+      enum:
+        - SELF_DISCLOSURE
+        - NOT_DECLARED
+        - AUTO_DETECT
+
+    IdentityType:
+      type: string
+      description: Type of identity for ads
+      enum:
+        - CUSTOMIZED
+        - AUTH_CODE
+        - BUSINESS_ID
+        - TT_USER
+
+    PageInfo:
+      type: object
+      description: Pagination information
+      properties:
+        page:
+          type: integer
+          description: Current page number
+        page_size:
+          type: integer
+          description: Number of items per page
+        total_number:
+          type: integer
+          description: Total number of items
+        total_page:
+          type: integer
+          description: Total number of pages
+
+    AdFormat:
+      type: string
+      description: Format of the advertisement
+      enum:
+        - SINGLE_IMAGE
+        - SINGLE_VIDEO
+        - CAROUSEL
+        - DYNAMIC
+        - PLAYABLE
+        - COLLECTION
+        - SHOWCASE
+        - LIVE_SHOPPING
+        - VERTICAL_VIDEO
+
+    ProductSpecificType:
+      type: string
+      description: Type of product specification
+      enum:
+        - ALL
+        - PRODUCT_SET
+        - CUSTOMIZED_PRODUCTS
+
+    ShowcaseProduct:
+      type: object
+      description: Product showcase information
+      properties:
+        item_group_id:
+          type: string
+          description: SPU ID of the product
+        store_id:
+          type: string
+          description: ID of the store that the product belongs to
+        catalog_id:
+          type: string
+          description: ID of the catalog that the product belongs to
+
+    VideoStrategy:
+      type: string
+      description: Video strategy type
+      enum:
+        - UNSET
+        - SINGLE_VIDEO
+        - CATALOG_VIDEOS
+        - CATALOG_UPLOADED_VIDEOS
+        - LIVE_STREAM
+
+    DynamicDestination:
+      type: string
+      description: Dynamic destination strategy
+      enum:
+        - DLP
+        - UNSET
+
+    UtmParameter:
+      type: object
+      description: UTM tracking parameters
+      properties:
+        key:
+          type: string
+          description: URL parameter
+        value:
+          type: string
+          description: Value of URL parameter
+
+    TikTokPageCategory:
+      type: string
+      description: Category of TikTok pages
+      enum:
+        - PROFILE_PAGE
+        - OTHER_TIKTOK_PAGE
+        - TIKTOK_INSTANT_PAGE
+
+    DeeplinkType:
+      type: string
+      description: Type of deeplink
+      enum:
+        - NORMAL
+        - DEFERRED_DEEPLINK
+
+    MediaInfo:
+      type: object
+      description: Media information for ads
+      properties:
+        video_info:
+          type: object
+          properties:
+            video_id:
+              type: string
+              description: Video ID
+            file_name:
+              type: string
+              description: Video name
+        image_info:
+          type: array
+          items:
+            type: object
+            properties:
+              web_uri:
+                type: string
+                description: Image ID
+        music_info:
+          type: object
+          properties:
+            music_id:
+              type: string
+              description: Music ID
+        aigc_disclosure_type:
+          $ref: '#/components/schemas/AigcDisclosureType'
+        tiktok_item_id:
+          type: string
+          description: TikTok post ID
+        identity_type:
+          $ref: '#/components/schemas/IdentityType'
+        identity_id:
+          type: string
+          description: Identity ID
+
+    CallToActionInfo:
+      type: object
+      description: Call-to-action information
+      properties:
+        call_to_action:
+          type: string
+          description: CTA text
+        call_to_action_id:
+          type: string
+          description: CTA portfolio ID
+
+    AdCreative:
+      type: object
+      description: Ad creative information
+      properties:
+        media_info:
+          $ref: '#/components/schemas/MediaInfo'
+        call_to_action_list:
+          type: array
+          items:
+            $ref: '#/components/schemas/CallToActionInfo'
+        title_list:
+          type: array
+          items:
+            type: object
+            properties:
+              title:
+                type: string
+                description: Ad title
+
+    MaterialOperationStatus:
+      type: string
+      description: Material operation status
+      enum:
+        - ENABLE
+        - DISABLE
+        - DELETED
+
+    CustomAction:
+      type: object
+      description: Custom action configuration
+      properties:
+        code:
+          type: string
+          enum:
+            - VIEW_PRODUCT
+            - ADD_TO_CART
+            - PURCHASE
+        days:
+          type: integer
+          description: Valid days for the action
+
+    BehavioralCategory:
+      type: object
+      description: Behavioral targeting category
+      properties:
+        action_scene:
+          type: string
+          enum:
+            - VIDEO_RELATED
+            - CREATOR_RELATED
+            - HASHTAG_RELATED
+        action_period:
+          type: integer
+        video_user_actions:
+          type: array
+          items:
+            type: string
+
+    TargetingExpansion:
+      type: object
+      description: Targeting expansion settings
+      properties:
+        expansion_enabled:
+          type: boolean
+          description: Whether targeting expansion is enabled
+        expansion_types:
+          type: array
+          items:
+            type: string
+
+    AudienceRule:
+      type: object
+      description: Audience targeting rules
+      properties:
+        included_custom_actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomAction'
+        excluded_custom_actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomAction'
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/BehavioralCategory'
+        targeting_expansion:
+          $ref: '#/components/schemas/TargetingExpansion'
+
+    AdGroupResponse:
+      type: object
+      description: Ad group response data
+      properties:
+        adgroup_id:
+          type: string
+          description: Ad group ID
+        adgroup_name:
+          type: string
+          description: Ad group name
+        status:
+          type: string
+          description: Ad group status
+        audience_rule:
+          $ref: '#/components/schemas/AudienceRule'
+
+    Timestamp:
+      type: string
+      format: date-time
+      description: ISO 8601 formatted timestamp
+
+    AdvertisingObjective:
+      type: string
+      description: Advertising objective for the campaign
+      enum:
+        - REACH
+        - VIDEO_VIEWS
+        - TRAFFIC
+        - APP_PROMOTION
+        - LEAD_GENERATION
+        - CONVERSIONS
+        - PRODUCT_SALES
+        - ENGAGEMENT
+
+    SmartPlusCampaign:
+      type: object
+      description: Smart+ Campaign data
+      properties:
+        campaign_id:
+          type: string
+          description: Campaign ID
+        campaign_name:
+          type: string
+          description: Campaign name
+        status:
+          type: string
+          description: Campaign status
+        objective_type:
+          $ref: '#/components/schemas/AdvertisingObjective'
+        budget:
+          type: number
+          description: Campaign budget
+        start_time:
+          $ref: '#/components/schemas/Timestamp'
+        end_time:
+          $ref: '#/components/schemas/Timestamp'
+
+    # Report Related Types
+    ServiceType:
+      type: string
+      description: Type of service for report
+      enum:
+        - AUCTION
+        - RESERVATION
+
+    ReportType:
+      type: string
+      description: Type of report
+      enum:
+        - BASIC
+        - AUDIENCE
+        - PLAYABLE_MATERIAL
+        - CATALOG
+        - SEARCH_TERMS
+
+    ReportDataLevel:
+      type: string
+      description: Level of data aggregation
+      enum:
+        - ADVERTISER
+        - CAMPAIGN
+        - ADGROUP
+        - AD
+        - COUNTRY
+        - PROVINCE
+        - GENDER
+        - AGE
+        - INTEREST_CATEGORY
+        - PLATFORM
+        - AC
+        - LANGUAGE
+        - PLACEMENT
+
+    ReportOutputFormat:
+      type: string
+      description: Output format of the report
+      enum:
+        - CSV
+        - JSON
+
+    ReportFilter:
+      type: object
+      description: Filter criteria for report
+      properties:
+        field_name:
+          type: string
+          description: Name of the field to filter on
+        filter_type:
+          type: string
+          enum:
+            - IN
+            - MATCH
+            - GREATER_EQUAL
+            - LESS_EQUAL
+            - BETWEEN
+        filter_value:
+          type: array
+          items:
+            type: string
+          description: Values to filter by

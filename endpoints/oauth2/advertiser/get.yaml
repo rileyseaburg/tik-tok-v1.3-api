@@ -1,0 +1,59 @@
+get:
+  summary: Get authorized ad accounts
+  description: Use this endpoint to obtain a list of advertiser accounts that authorized an app.
+  operationId: getAuthorizedAdvertisers
+  tags:
+    - oauth2
+  parameters:
+    - name: app_id
+      in: query
+      required: true
+      description: The App id applied by the developer, which can be found on the Application Management page.
+      schema:
+        type: string
+    - name: secret
+      in: query
+      required: true
+      description: The private key of the developer's application, which can be found on the Application Management page.
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Successfully retrieved authorized advertisers
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                description: Return code
+                example: 0
+              message:
+                type: string
+                description: Return message
+                example: "OK"
+              request_id:
+                type: string
+                description: Request log ID. Uniquely identifying a request.
+                example: "202003100820230101890492231E063EE3"
+              data:
+                type: object
+                properties:
+                  list:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        advertiser_id:
+                          type: string
+                          description: Authorising Advertiser ID
+                        advertiser_name:
+                          type: string
+                          description: Authorising Advertiser Name
+    '400':
+      $ref: '../../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../../schemas/responses.yaml#/components/responses/InternalError'

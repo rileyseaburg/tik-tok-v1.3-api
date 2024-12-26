@@ -1,0 +1,84 @@
+get:
+  operationId: getHashtags
+  summary: Get targeting hashtags by ID
+  description: |
+    Use this endpoint to get the targeting hashtag names and statuses by ID.
+
+    Changes from v1.2 to v1.3:
+    - Endpoint path changed from /v1.2/tools/hashtag/get/ to /v1.3/tool/hashtag/get/
+    - advertiser_id type changed from number to string
+    - Parameter name and type changed: keyword_id (number) → keyword_ids (string[])
+    - The keyword_query_pairs object is removed from v1.3
+    - Response parameter type changed: keyword_id (number to string)
+  tags:
+    - tool
+  parameters:
+    - name: advertiser_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Advertiser ID
+    - name: keyword_ids
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+      description: List of keyword IDs
+  responses:
+    '200':
+      description: Successfully retrieved hashtag information
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - code
+              - message
+              - request_id
+              - data
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: The log ID of a request, which uniquely identifies the request
+              data:
+                type: object
+                properties:
+                  keywords_status:
+                    type: array
+                    description: Keyword information
+                    items:
+                      type: object
+                      properties:
+                        keyword:
+                          type: string
+                          description: Keyword
+                        keyword_id:
+                          type: string
+                          description: Keyword ID
+                        keyword_status:
+                          type: string
+                          description: Keyword status
+                          enum:
+                            - ONLINE
+                            - OFFLINE
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../schemas/responses.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../schemas/responses.yaml#/components/responses/NotFound'
+    '429':
+      $ref: '../schemas/responses.yaml#/components/responses/TooManyRequests'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

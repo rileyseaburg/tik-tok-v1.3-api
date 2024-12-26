@@ -1,0 +1,175 @@
+get:
+  summary: Get ad account details
+  description: |
+    Use this endpoint to obtain the details of an advertiser's ad account.
+    
+    Note: To add a partner and assign ad accounts to this partner, use the /bc/partner/add/ endpoint. 
+    Set asset_type to ADVERTISER and pass in advertiser IDs to the asset_ids field. 
+    You can get the advertiser IDs in the response field advertiser_id of this endpoint.
+  operationId: getAdvertiserInfo
+  tags:
+    - advertiser
+  parameters:
+    - name: advertiser_ids
+      in: query
+      required: true
+      description: List of advertiser IDs to query. You can obtain Advertiser IDs through the /oauth2/advertiser/get/ endpoint.
+      schema:
+        type: array
+        items:
+          type: string
+    - name: fields
+      in: query
+      required: false
+      description: |
+        A list of information to be returned. If not specified, all information excluding company_name_editable is returned by default.
+        Note: If you include company_name_editable, only company_name_editable along with advertiser_id will be returned and other values will be ignored.
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - telephone_number
+            - contacter
+            - currency
+            - cellphone_number
+            - timezone
+            - advertiser_id
+            - role
+            - company
+            - status
+            - description
+            - rejection_reason
+            - address
+            - name
+            - language
+            - industry
+            - license_no
+            - email
+            - license_url
+            - country
+            - balance
+            - create_time
+            - display_timezone
+            - owner_bc_id
+            - company_name_editable
+  responses:
+    '200':
+      description: Successfully retrieved advertiser information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: The log id of the request, which uniquely identifies a request
+              data:
+                type: object
+                properties:
+                  list:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        advertiser_id:
+                          type: string
+                          description: Advertiser ID
+                        owner_bc_id:
+                          type: string
+                          description: The ID of a Business Center that the ad account belongs to
+                        status:
+                          type: string
+                          description: Ad account status
+                          example: "STATUS_ENABLE"
+                        role:
+                          type: string
+                          description: Ad account role
+                          example: "ROLE_ADVERTISER"
+                        rejection_reason:
+                          type: string
+                          description: Reason for rejection
+                        name:
+                          type: string
+                          description: Ad account name
+                        timezone:
+                          type: string
+                          description: Ad account time zone including GMT offset
+                          example: "Etc/GMT"
+                        display_timezone:
+                          type: string
+                          description: Time zone name in Region/City format
+                          example: "Europe/London"
+                        company:
+                          type: string
+                          description: Ad account's company name
+                        company_name_editable:
+                          type: boolean
+                          description: Whether the company name can be updated via API
+                        industry:
+                          type: string
+                          description: Ad account industry category code
+                          example: "290303"
+                        address:
+                          type: string
+                          description: Ad account address
+                        country:
+                          type: string
+                          description: Place of registration code
+                          example: "US"
+                        advertiser_account_type:
+                          type: string
+                          description: Type of the ad account
+                          enum: [RESERVATION, AUCTION]
+                        currency:
+                          type: string
+                          description: Type of currency in ISO 4217 code format
+                          example: "EUR"
+                        contacter:
+                          type: string
+                          description: Contact name in masked format
+                          example: "Te********************nt"
+                        email:
+                          type: string
+                          description: Contact email in masked format
+                          example: "l***********@*************"
+                        cellphone_number:
+                          type: string
+                          description: Contact mobile number in masked format
+                        telephone_number:
+                          type: string
+                          description: Fixed phone number in masked format
+                        language:
+                          type: string
+                          description: Language code used by the ad account
+                          example: "en"
+                        license_no:
+                          type: string
+                          description: Business license number
+                        license_url:
+                          type: string
+                          description: Business license preview URL (valid for 1 hour)
+                        description:
+                          type: string
+                          description: Brand description
+                        balance:
+                          type: number
+                          format: float
+                          description: Ad account available balance
+                          example: 5325.43
+                        create_time:
+                          type: integer
+                          description: Account creation time as Unix timestamp in seconds
+                          example: 1510740064
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

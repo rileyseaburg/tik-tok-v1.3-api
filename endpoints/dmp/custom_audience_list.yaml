@@ -1,0 +1,151 @@
+get:
+  summary: Get all audiences
+  description: |
+    Get paginated list of all audiences (owned and shared).
+    Returns audience details like ID, name, type, creation/expiration time.
+    Use is_creator to check audience ownership.
+    For detailed audience status and modification history, use /dmp/custom_audience/get/.
+  operationId: listCustomAudiences
+  tags:
+    - dmp
+  security:
+    - accessToken: []
+  parameters:
+    - name: advertiser_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Advertiser ID
+    - name: custom_audience_ids
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+        minItems: 1
+        maxItems: 100
+      description: List of Audience IDs (1-100)
+    - name: page
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+      description: |
+        Current page number.
+        Default: 1
+        Minimum: 1
+    - name: page_size
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 10
+      description: |
+        Page size.
+        Default: 10
+        Range: 1-100
+  responses:
+    '200':
+      description: Successfully retrieved audiences
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                properties:
+                  list:
+                    type: array
+                    description: List of audiences
+                    items:
+                      type: object
+                      properties:
+                        shared:
+                          type: boolean
+                          description: Whether audience is shared with others
+                        is_creator:
+                          type: boolean
+                          description: |
+                            Whether advertiser owns the audience:
+                            shared=true, is_creator=true: Owner, shared to others
+                            shared=true, is_creator=false: Not owner, shared by others
+                            shared=false, is_creator=true: Owner, not shared
+                        audience_id:
+                          type: string
+                          description: Audience ID
+                        cover_num:
+                          type: integer
+                          description: Number of matched TikTok users
+                        create_time:
+                          type: string
+                          description: Creation time (GMT)
+                        is_valid:
+                          type: boolean
+                          description: |
+                            Audience availability.
+                            Available after processing, invalid after expiration.
+                        is_expiring:
+                          type: boolean
+                          description: Whether expiring (<60 days to expiration)
+                        expired_time:
+                          type: string
+                          description: Expiration time (YYYY-MM-DD HH:MM:SS)
+                        name:
+                          type: string
+                          description: Audience name
+                        audience_type:
+                          type: string
+                          description: |
+                            Audience type:
+                            Customer File Audience
+                            Engagement Audience
+                            App Activity Audience
+                            Website Audience
+                            Lookalike Audience
+                            Lead Generation
+                            Rule Business Account
+                            Rule ad shop
+                            Partner
+                            Challenge
+                            Preferred Population
+                            Note: Partner, Challenge, Premium not creatable via API
+                        calculate_type:
+                          type: string
+                          description: |
+                            Encryption type (customer file audiences only).
+                            See Enumeration - Encryption Type.
+                  page_info:
+                    type: object
+                    description: Pagination information
+                    properties:
+                      page:
+                        type: integer
+                        description: Current page number
+                      page_size:
+                        type: integer
+                        description: Page size
+                      total_number:
+                        type: integer
+                        description: Total number of results
+                      total_page:
+                        type: integer
+                        description: Total number of pages
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

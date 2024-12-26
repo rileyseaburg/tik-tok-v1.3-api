@@ -1,0 +1,300 @@
+post:
+  summary: Create an audience by rule
+  description: |
+    Create an audience using inclusion and optional exclusion rules.
+    Specify targeting criteria like engagement, app activity, website traffic, etc.
+    
+    Note:
+    - New audiences take up to 48 hours to process
+    - Use /dmp/custom_audience/get/ to check status
+    - Only available (is_valid = true) audiences can be used
+    - Expired audiences become unavailable and detach from campaigns
+    - Campaigns with only audience targeting will pause if audience expires
+  operationId: createCustomAudienceRule
+  tags:
+    - dmp
+  security:
+    - accessToken: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - advertiser_id
+            - custom_audience_name
+            - audience_type
+            - rule_spec
+          properties:
+            advertiser_id:
+              type: string
+              description: Advertiser ID
+            custom_audience_name:
+              type: string
+              description: |
+                Audience name
+                Length limit: 128 characters
+            audience_type:
+              type: string
+              description: |
+                Audience type:
+                ENGAGEMENT: Engagement Audience (ad groups)
+                ENGAGEMENT_ORGANIC_VIDEO: Organic Engagement Audience (public video)
+                ENGAGEMENT_LIVE_VIDEO: Live Engagement Audience (live video)
+                APP: App Activity Audience
+                PIXEL: Website Traffic Audience
+                LEAD_GENERATION: Lead Generation Audience
+                BUSINESS_ACCOUNT: Business Account Audience
+                TIKTOK_SHOP: Shop Activity Audience
+                OFFLINE: Offline Activity Audience
+            audience_sub_type:
+              type: string
+              description: |
+                Audience sub type for ad usage:
+                NORMAL: For non-R&F ads (default)
+                REACH_FREQUENCY: For R&F ads only
+              default: NORMAL
+            retention_in_days:
+              type: integer
+              description: |
+                Days to retain audience (1-365)
+                If specified: Expires after retention days from creation
+                If not specified: Expires 365 days after last active use/modification
+              minimum: 1
+              maximum: 365
+            is_auto_refresh:
+              type: boolean
+              description: |
+                Enable audience auto-refresh
+                Default: true
+              default: true
+            identity_id:
+              type: string
+              description: Required for ENGAGEMENT_LIVE_VIDEO or ENGAGEMENT_ORGANIC_VIDEO
+            identity_type:
+              type: string
+              description: |
+                Required for ENGAGEMENT_LIVE_VIDEO or ENGAGEMENT_ORGANIC_VIDEO
+                Values: TT_USER, BC_AUTH_TT
+            identity_authorized_bc_id:
+              type: string
+              description: Required when identity_type is BC_AUTH_TT
+            rule_spec:
+              type: object
+              required:
+                - inclusion_rule_set
+              properties:
+                inclusion_rule_set:
+                  type: object
+                  required:
+                    - operator
+                    - rules
+                  properties:
+                    operator:
+                      type: string
+                      description: Operator between inclusion rules (OR only)
+                      enum: [OR]
+                    rules:
+                      type: array
+                      description: List of inclusion rules
+                      items:
+                        type: object
+                        required:
+                          - retention_days
+                          - filter_set
+                        properties:
+                          event_source_ids:
+                            type: array
+                            description: |
+                              List of event source IDs:
+                              - Engagement: ad group IDs
+                              - Organic Engagement: TikTok post IDs (max 10)
+                              - Live Engagement: live video IDs (max 10)
+                              - App Activity: App IDs
+                              - Website Traffic: pixel IDs
+                              - Lead Generation: do not use
+                              - Business Account: core user IDs
+                              - Shop Activity: TikTok Shop IDs
+                              - Offline Activity: Offline Event set IDs
+                            items:
+                              type: string
+                          retention_days:
+                            type: integer
+                            description: |
+                              Lookback window
+                              For BUSINESS_ACCOUNT (except FOLLOW): 7, 14, or 30
+                              For ENGAGEMENT_LIVE_VIDEO/ORGANIC_VIDEO: 7, 14, or 30
+                          filter_set:
+                            type: object
+                            required:
+                              - operator
+                              - filters
+                            properties:
+                              operator:
+                                type: string
+                                description: Operator between filters (OR only)
+                                enum: [OR]
+                              filters:
+                                type: array
+                                description: Action filters with optional URL/parameter filters
+                                maxItems: 1
+                                items:
+                                  type: object
+                                  required:
+                                    - field
+                                    - operator
+                                    - value
+                                  properties:
+                                    field:
+                                      type: string
+                                      description: Filter field (EVENT only)
+                                      enum: [EVENT]
+                                    operator:
+                                      type: string
+                                      description: Filter operator (EQ only)
+                                      enum: [EQ]
+                                    value:
+                                      type: string
+                                      description: Filter value (see Enumeration - Filter Value)
+                              parameter_filters:
+                                type: array
+                                description: |
+                                  URL/parameter filters (combined with action filter using AND)
+                                  Max: 1 URL filter + 10 parameter filters
+                                items:
+                                  type: object
+                                  required:
+                                    - field
+                                    - operator
+                                    - values
+                                  properties:
+                                    field:
+                                      type: string
+                                      description: |
+                                        Filter type:
+                                        URL: URL keywords
+                                        CONTENT_TYPE: content_type parameter
+                                        PRICE: price parameter
+                                        VALUE: value parameter
+                                        CONTENT_ID: content_id parameter
+                                        CONTENT_CATEGORY: content_category parameter
+                                    operator:
+                                      type: string
+                                      description: |
+                                        For URL: CONTAINS, DOES_NOT_CONTAIN, EQ
+                                        For parameters: above + IS_LESS_THAN, IS_GREATER_THAN,
+                                        IS_LESS_THAN_OR_EQUAL_TO, IS_GREATER_THAN_OR_EQUAL_TO
+                                    values:
+                                      type: array
+                                      description: |
+                                        Filter values (combined with OR)
+                                        Max size: 10
+                                        Max length each: 100 chars
+                                      maxItems: 10
+                                      items:
+                                        type: string
+                                        maxLength: 100
+                exclusion_rule_set:
+                  type: object
+                  description: Optional exclusion rules
+                  properties:
+                    operator:
+                      type: string
+                      description: Operator between exclusion rules (OR only)
+                      enum: [OR]
+                    rules:
+                      type: array
+                      description: List of exclusion rules
+                      items:
+                        type: object
+                        required:
+                          - retention_days
+                          - filter_set
+                        properties:
+                          event_source_ids:
+                            type: array
+                            items:
+                              type: string
+                            description: Same as inclusion rules event_source_ids
+                          retention_days:
+                            type: integer
+                            description: Same as inclusion rules retention_days
+                          filter_set:
+                            type: object
+                            required:
+                              - operator
+                              - filters
+                            properties:
+                              operator:
+                                type: string
+                                enum: [OR]
+                                description: Operator between filters (OR only)
+                              filters:
+                                type: array
+                                maxItems: 1
+                                description: Same structure as inclusion filters
+                                items:
+                                  type: object
+                                  required:
+                                    - field
+                                    - operator
+                                    - value
+                                  properties:
+                                    field:
+                                      type: string
+                                      enum: [EVENT]
+                                    operator:
+                                      type: string
+                                      enum: [EQ]
+                                    value:
+                                      type: string
+                              parameter_filters:
+                                type: array
+                                description: Same structure as inclusion parameter_filters
+                                items:
+                                  type: object
+                                  required:
+                                    - field
+                                    - operator
+                                    - values
+                                  properties:
+                                    field:
+                                      type: string
+                                    operator:
+                                      type: string
+                                    values:
+                                      type: array
+                                      maxItems: 10
+                                      items:
+                                        type: string
+                                        maxLength: 100
+  responses:
+    '200':
+      description: Successfully created audience
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                properties:
+                  custom_audience_id:
+                    type: string
+                    description: Created audience ID
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

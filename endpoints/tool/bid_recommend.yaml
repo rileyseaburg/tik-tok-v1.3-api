@@ -1,0 +1,86 @@
+post:
+  operationId: recommendBid
+  summary: Get a suggested bid
+  description: |
+    Use this endpoint to get a suggested bid value for your ad group based on basic campaign and ad group settings like objectives, conversion events, and locations.
+    Note that the suggested bid can only be used with Cost Cap bidding strategy (bid_type = BID_TYPE_CUSTOM).
+
+    Changes from v1.2 to v1.3:
+    - Endpoint path changed from /v1.2/tools/suggest_bid/ to /v1.3/tool/bid/recommend/
+    - Parameter types changed:
+      * advertiser_id: number → string
+      * campaign_id: number → string
+    - Parameter name and type changed: locations (number[]) → location_ids (string[])
+  tags:
+    - tool
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - advertiser_id
+            - objective_type
+            - location_ids
+          properties:
+            advertiser_id:
+              type: string
+              description: Advertiser ID
+            campaign_id:
+              type: string
+              description: Campaign ID
+            objective_type:
+              type: string
+              description: |
+                Campaign objective. The current API endpoint only supports Traffic and Website conversions objectives.
+                For enum values and descriptions, see Objectives.
+                Note: This API is being revamped to support larger function scope and more accurate result. Please stay tuned for updates.
+            location_ids:
+              type: array
+              description: IDs of the locations that you want to target
+              items:
+                type: string
+            external_action:
+              type: string
+              description: Conversion event for the ad group
+  responses:
+    '200':
+      description: Successfully retrieved suggested bid
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - code
+              - message
+              - request_id
+              - data
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: The log ID of a request, which uniquely identifies the request
+              data:
+                type: object
+                properties:
+                  bid:
+                    type: number
+                    description: Recommended bid value
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../schemas/responses.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../schemas/responses.yaml#/components/responses/NotFound'
+    '429':
+      $ref: '../schemas/responses.yaml#/components/responses/TooManyRequests'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

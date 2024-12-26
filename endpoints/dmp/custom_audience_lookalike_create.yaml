@@ -1,0 +1,130 @@
+post:
+  summary: Create a lookalike audience
+  description: |
+    Create a lookalike audience based on an existing source audience.
+    
+    Note:
+    - New audiences take up to 48 hours to process
+    - Use /dmp/custom_audience/get/ to check status
+    - Only available (is_valid) audiences can be used
+    - Source audience must have at least 100 users
+    - Source audience cannot be an existing lookalike audience
+  operationId: createLookalikeAudience
+  tags:
+    - dmp
+  security:
+    - accessToken: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - advertiser_id
+            - custom_audience_name
+            - lookalike_spec
+          properties:
+            advertiser_id:
+              type: string
+              description: Advertiser ID
+            custom_audience_name:
+              type: string
+              description: |
+                Audience name
+                Maximum length: 128 characters
+              maxLength: 128
+            audience_sub_type:
+              type: string
+              deprecated: true
+              description: |
+                DEPRECATED
+                Audience sub type for ad usage:
+                NORMAL: For non-R&F ads (default)
+                REACH_FREQUENCY: For R&F ads only
+              default: NORMAL
+              enum:
+                - NORMAL
+                - REACH_FREQUENCY
+            lookalike_spec:
+              type: object
+              required:
+                - source_audience_id
+                - include_source
+                - mobile_os
+                - placements
+                - location_ids
+                - audience_size
+              properties:
+                source_audience_id:
+                  type: string
+                  description: |
+                    Source (seed) audience ID
+                    Must have at least 100 users
+                    Cannot be a lookalike audience
+                include_source:
+                  type: boolean
+                  description: Whether to include source audience in new lookalike audience
+                mobile_os:
+                  type: string
+                  description: |
+                    Device operating systems
+                    See Enumeration-Audience Management-Lookalike System
+                  enum:
+                    - ALL
+                    - ANDROID
+                    - IOS
+                placements:
+                  type: array
+                  description: |
+                    Apps for ad delivery
+                    See Enumeration - Audience Management-Lookalike Placement
+                  items:
+                    type: string
+                    enum:
+                      - TikTok
+                      - TopBuzz & BuzzVideo
+                      - Pangle
+                location_ids:
+                  type: array
+                  description: |
+                    Target location IDs
+                    See Enumeration-Lookalike Locations
+                  items:
+                    type: string
+                audience_size:
+                  type: string
+                  description: Size of lookalike audience
+                  enum:
+                    - NARROW
+                    - BALANCED
+                    - BROAD
+  responses:
+    '200':
+      description: Successfully created lookalike audience
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                properties:
+                  custom_audience_id:
+                    type: string
+                    description: Created audience ID
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

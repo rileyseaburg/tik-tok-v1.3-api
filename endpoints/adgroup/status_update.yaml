@@ -1,0 +1,108 @@
+post:
+  summary: Update ad group statuses
+  description: |
+    Update the statuses of ad groups. You can:
+    - Enable ad group delivery with specified plan
+    - Disable ad group to suspend delivery
+    - Delete ad group
+
+    Notes:
+    - Ad groups in Dedicated Campaigns cannot be deleted (must delete campaign)
+    - Cannot modify status of deleted ad groups or ad groups in deleted campaigns
+    - ENABLE/DISABLE not supported for R&F ad groups
+  operationId: updateAdGroupStatus
+  tags:
+    - adgroup
+  security:
+    - accessToken: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - advertiser_id
+            - adgroup_ids
+            - operation_status
+          properties:
+            advertiser_id:
+              type: string
+              description: Advertiser ID
+            adgroup_ids:
+              type: array
+              description: |
+                IDs of ad groups to operate on.
+                Size range - 1-20.
+              items:
+                type: string
+              minItems: 1
+              maxItems: 20
+            operation_status:
+              type: string
+              description: |
+                Operation to perform on ad groups.
+                DISABLE - pause
+                ENABLE - enable
+                DELETE - delete
+              enum: [DISABLE, ENABLE, DELETE]
+            allow_partial_success:
+              type: boolean
+              description: |
+                Whether to allow partial success.
+                If true, operation can succeed for only some ad groups.
+                Ineligible ad groups will be filtered out.
+              default: false
+  responses:
+    '200':
+      description: Successfully updated ad group statuses
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                properties:
+                  adgroup_ids:
+                    type: array
+                    description: IDs of ad groups with successful operation
+                    items:
+                      type: string
+                  status:
+                    type: string
+                    description: |
+                      Current status of successful ad groups.
+                      DISABLE - paused
+                      ENABLE - enabled
+                      DELETE - deleted
+                    enum: [DISABLE, ENABLE, DELETE]
+                  error_list:
+                    type: array
+                    description: |
+                      Returned only when allow_partial_success is true.
+                      List of errors and corresponding failed ad groups.
+                    items:
+                      type: object
+                      properties:
+                        adgroup_id:
+                          type: string
+                          description: ID of failed ad group
+                        error_message:
+                          type: string
+                          description: Error message for failed ad group
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

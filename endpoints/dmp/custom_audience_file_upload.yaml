@@ -1,0 +1,83 @@
+post:
+  summary: Upload audience file
+  description: |
+    Upload a data file to create or update an audience.
+    Returns a unique file path that can be used in audience operations.
+
+    Notes:
+    - Maximum file size: 250MB (larger files can be split)
+    - Formats: .csv and .txt files only
+    - Encryption: MD5 or SHA256 (SHA256 recommended)
+    - Phone numbers must be in E.164 format before hashing
+    - SHA256 hashed data will be 64 digits (a-f, A-F, 0-9)
+    - Multiple ID types supported with MULTIPLE_TYPES calculate_type
+    - Headers for multiple types: MAID, phone_SHA256, email_SHA256, MAID_SHA256, MAID_MD5 (case insensitive)
+
+    See Customer File API documentation for formatting rules and templates.
+  operationId: uploadAudienceFile
+  tags:
+    - dmp
+  security:
+    - accessToken: []
+  requestBody:
+    required: true
+    content:
+      multipart/form-data:
+        schema:
+          type: object
+          required:
+            - advertiser_id
+            - file
+            - file_signature
+            - calculate_type
+          properties:
+            advertiser_id:
+              type: string
+              description: Advertiser ID
+            file:
+              type: string
+              format: binary
+              description: |
+                Data file to upload.
+                Must be .csv or .txt format.
+            file_signature:
+              type: string
+              description: |
+                File's MD5 hash for server-side verification.
+            calculate_type:
+              type: string
+              description: |
+                Encryption type.
+                Must match actual file data or upload will fail.
+                For multiple ID types, use MULTIPLE_TYPES and include headers.
+  responses:
+    '200':
+      description: Successfully uploaded file
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                properties:
+                  file_path:
+                    type: string
+                    description: |
+                      Unique path to uploaded file.
+                      Note: Only same advertiser ID can use this path.
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

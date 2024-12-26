@@ -1,0 +1,170 @@
+get:
+  summary: Get ad review information
+  description: Get review information for ads
+  operationId: getAdReviewInfo
+  tags:
+    - ad
+  security:
+    - accessToken: []
+  parameters:
+    - name: advertiser_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Advertiser ID
+    - name: ad_ids
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+        minItems: 1
+        maxItems: 100
+      description: |
+        List of ad IDs.
+        Quantity: 1-100.
+    - name: lang
+      in: query
+      schema:
+        type: string
+      description: Language
+  responses:
+    '200':
+      description: Successfully retrieved review information
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                properties:
+                  ad_review_map:
+                    type: object
+                    description: Review data at ad level
+                    additionalProperties:
+                      type: object
+                      properties:
+                        ad_id:
+                          type: string
+                          description: Ad ID
+                        is_approved:
+                          type: boolean
+                          description: Whether ad is approved
+                        review_status:
+                          type: string
+                          description: |
+                            Ad review status:
+                            ALL_AVAILABLE - Reviewed and can be delivered
+                            PART_AVAILABLE - Reviewed and can be delivered to some targets
+                            UNAVAILABLE - Reviewed and cannot be delivered
+                          enum: [ALL_AVAILABLE, PART_AVAILABLE, UNAVAILABLE]
+                        appeal_status:
+                          type: string
+                          description: |
+                            Ad appeal status.
+                            Set to APPEALING when appealed via /adgroup/appeal/
+                        forbidden_placements:
+                          type: array
+                          description: Placements that failed review
+                          items:
+                            type: string
+                        forbidden_ages:
+                          type: array
+                          description: Age groups that failed review
+                          items:
+                            type: string
+                        forbidden_locations:
+                          type: array
+                          description: Locations that failed review
+                          items:
+                            type: string
+                        forbidden_operation_systems:
+                          type: array
+                          description: Operating systems that failed review
+                          items:
+                            type: string
+                        last_audit_time:
+                          type: string
+                          description: Last review time (always null)
+                        reject_info:
+                          type: array
+                          description: Rejection details
+                          items:
+                            type: object
+                            properties:
+                              suggestion:
+                                type: string
+                                description: Review suggestion
+                              reasons:
+                                type: array
+                                description: List of rejection reasons
+                                items:
+                                  type: string
+                              forbidden_ages:
+                                type: array
+                                description: Age groups that failed review
+                                items:
+                                  type: string
+                              forbidden_locations:
+                                type: array
+                                description: Locations that failed review
+                                items:
+                                  type: string
+                              forbidden_placements:
+                                type: array
+                                description: Placements that failed review
+                                items:
+                                  type: string
+                              content_info:
+                                type: object
+                                description: Reviewed content details
+                                properties:
+                                  image_content:
+                                    type: object
+                                    properties:
+                                      image_id:
+                                        type: string
+                                        description: Reviewed image ID
+                                  video_content:
+                                    type: object
+                                    properties:
+                                      video_id:
+                                        type: string
+                                        description: Reviewed video ID
+                                  text_content:
+                                    type: string
+                                    description: Text content
+                                  content_type:
+                                    type: string
+                                    description: |
+                                      Content type being reviewed:
+                                      MODE_STRING - Text
+                                      MODE_IMAGE - Image
+                                      MODE_VIDEO - Video
+                                      MODE_CAROUSEL_MUSIC - Carousel ad music
+                                    enum: [MODE_STRING, MODE_IMAGE, MODE_VIDEO, MODE_CAROUSEL_MUSIC]
+                                  carousel_music_content:
+                                    type: object
+                                    description: Carousel ad music content (when content_type is MODE_CAROUSEL_MUSIC)
+                                    properties:
+                                      music_id:
+                                        type: string
+                                        description: Carousel ad music ID
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

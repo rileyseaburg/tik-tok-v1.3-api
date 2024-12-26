@@ -1,0 +1,296 @@
+post:
+  summary: Create ads
+  description: |
+    Use this endpoint to upload your ad creatives (pictures, videos, texts, call-to-action) and create an ad. For different placements, the creative formats and requirements are different.
+
+    Ad group limits:
+    - For RF_REACH objective: max 20 ads per ad group
+    - For PRODUCT_SALES objective: 
+      - With STORE source: max 20 ads
+      - With CATALOG source: max 50 ads
+    - For other objectives: max 50 ads per ad group
+  operationId: createAd
+  tags:
+    - ad
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - advertiser_id
+            - adgroup_id
+            - creatives
+          properties:
+            advertiser_id:
+              type: string
+              description: Advertiser ID
+            adgroup_id:
+              type: string
+              description: Ad group ID
+            creatives:
+              type: array
+              description: |
+                Advertising creatives. Max size: 20.
+                Within an ad group, you can create a maximum of 20 ads in a single request.
+              items:
+                type: object
+                required:
+                  - ad_name
+                  - identity_type
+                  - identity_id
+                  - ad_format
+                properties:
+                  ad_name:
+                    type: string
+                    description: |
+                      Ad name. To auto-generate, set to empty string.
+                      Length limit: 512 characters (Chinese/Japanese count as 2).
+                  identity_type:
+                    $ref: '../../swagger.yaml#/components/schemas/IdentityType'
+                  identity_id:
+                    type: string
+                    description: Identity ID. Required for all ads.
+                  ad_format:
+                    $ref: '../../swagger.yaml#/components/schemas/AdFormat'
+                  video_id:
+                    type: string
+                    description: |
+                      Required when ad_format is SINGLE_VIDEO and identity_type is CUSTOMIZED_USER.
+                      Video ID from /file/video/ad/search/.
+                  image_ids:
+                    type: array
+                    description: |
+                      Image IDs for ad or video cover.
+                      Required for SINGLE_IMAGE, CAROUSEL_ADS formats.
+                    items:
+                      type: string
+                  ad_text:
+                    type: string
+                    description: |
+                      Ad text shown to audience.
+                      Required for image/video ads.
+                      Length: 1-100 characters.
+                  call_to_action:
+                    type: string
+                    description: Call-to-action text. Either this or call_to_action_id required.
+                  landing_page_url:
+                    type: string
+                    description: Landing page URL for redirecting users.
+                  catalog_id:
+                    type: string
+                    description: Product catalog ID. Required for Shopping Ads with product source as catalog.
+                  product_specific_type:
+                    $ref: '../../swagger.yaml#/components/schemas/ProductSpecificType'
+                  item_group_ids:
+                    type: array
+                    description: |
+                      Product SPU IDs. Required in specific scenarios:
+                      - When shopping_ads_type is VIDEO, product_source is CATALOG, and product_specific_type is PRODUCT_SET
+                      - When shopping_ads_type is PRODUCT_SHOPPING_ADS, product_source is STORE, and product_specific_type is CUSTOMIZED_PRODUCTS
+                    items:
+                      type: string
+                  product_set_id:
+                    type: string
+                    description: The ID of the product set. Required when shopping_ads_type is VIDEO, product_source is CATALOG, and product_specific_type is PRODUCT_SET.
+                  sku_ids:
+                    type: array
+                    description: |
+                      IDs of the SKUs. Required when shopping_ads_type is VIDEO, product_source is CATALOG, and product_specific_type is CUSTOMIZED_PRODUCTS.
+                      Max size: 20.
+                    items:
+                      type: string
+                  showcase_products:
+                    type: array
+                    description: |
+                      Required when product_source is SHOWCASE.
+                      List of Showcase products to use in ad. Max size: 20.
+                    items:
+                      $ref: '../../swagger.yaml#/components/schemas/ShowcaseProduct'
+                  vertical_video_strategy:
+                    $ref: '../../swagger.yaml#/components/schemas/VideoStrategy'
+                  dynamic_format:
+                    $ref: '../../swagger.yaml#/components/schemas/DynamicDestination'
+                  music_id:
+                    type: string
+                    description: |
+                      ID of music to use in TikTok Carousel Ad.
+                      Required for:
+                      - CAROUSEL_ADS format with Spark Ads Push or Non-Spark Ads
+                      - CATALOG_CAROUSEL format
+                  tiktok_item_id:
+                    type: string
+                    description: |
+                      ID of TikTok post for Spark Ads.
+                      Required when identity_type is AUTH_CODE or BC_AUTH_TT.
+                      Not supported with CUSTOMIZED_USER.
+                  promotional_music_disabled:
+                    type: boolean
+                    description: Whether to disable promotional music use in Spark Ad. Default true.
+                  dark_post_status:
+                    type: string
+                    description: Set to ON or OFF. Default OFF. Controls ad visibility on creator's homepage.
+                    enum:
+                      - ON
+                      - OFF
+                  shopping_ads_video_package_id:
+                    type: string
+                    description: Product video package ID from /catalog/video/get/ endpoint.
+                  call_to_action_id:
+                    type: string
+                    description: ID of CTA portfolio for auto-optimized CTAs.
+                  card_id:
+                    type: string
+                    description: |
+                      Creative portfolio ID for:
+                      - Call-to-action text
+                      - Display Card
+                      - Website info card
+                      - Download Card
+                      - Product Card
+                      - Product Tiles
+                      - Countdown Sticker
+                      - Gift Code Sticker
+                      - Pop-up Showcase
+                  utm_params:
+                    type: array
+                    description: URL parameters for tracking clicks and interactions.
+                    items:
+                      $ref: '../../swagger.yaml#/components/schemas/UtmParameter'
+                  page_id:
+                    type: string
+                    description: Page ID for Instant form, Custom TikTok Instant Page or App Profile Page.
+                  cpp_url:
+                    type: string
+                    description: Custom Product Page URL for highlighting specific app content.
+                  tiktok_page_category:
+                    $ref: '../../swagger.yaml#/components/schemas/TikTokPageCategory'
+                  phone_number:
+                    type: string
+                    description: Phone number for click-to-call ads.
+                  phone_region_code:
+                    type: string
+                    description: Region code for phone number.
+                  phone_region_calling_code:
+                    type: string
+                    description: Region calling code for phone number.
+                  deeplink:
+                    type: string
+                    description: Specific location for users with app installed.
+                  deeplink_type:
+                    $ref: '../../swagger.yaml#/components/schemas/DeeplinkType'
+                  deeplink_format_type:
+                    $ref: '../../swagger.yaml#/components/schemas/DeeplinkFormatType'
+                  shopping_ads_deeplink_type:
+                    $ref: '../../swagger.yaml#/components/schemas/ShoppingAdsDeeplinkType'
+                  deeplink_utm_params:
+                    type: array
+                    description: Deeplink URL parameters for tracking.
+                    items:
+                      $ref: '../../swagger.yaml#/components/schemas/UtmParameter'
+                  shopping_ads_fallback_type:
+                    $ref: '../../swagger.yaml#/components/schemas/FallbackType'
+                  fallback_type:
+                    $ref: '../../swagger.yaml#/components/schemas/FallbackType'
+                  dynamic_destination:
+                    $ref: '../../swagger.yaml#/components/schemas/DynamicDestination'
+                  instant_product_page_used:
+                    type: boolean
+                    description: Whether to use TikTok Instant Product Page.
+                  page_image_index:
+                    type: integer
+                    description: Index for additional images on TikTok Instant Product Page.
+                  aigc_disclosure_type:
+                    $ref: '../../swagger.yaml#/components/schemas/AigcDisclosureType'
+                  disclaimer_type:
+                    $ref: '../../swagger.yaml#/components/schemas/DisclaimerType'
+                  disclaimer_text:
+                    $ref: '../../swagger.yaml#/components/schemas/DisclaimerText'
+                  disclaimer_clickable_texts:
+                    type: array
+                    description: Clickable disclaimers. Max size 3.
+                    items:
+                      $ref: '../../swagger.yaml#/components/schemas/ClickableDisclaimer'
+                  tracking_pixel_id:
+                    type: number
+                    description: Pixel ID to track offsite events.
+                  tracking_app_id:
+                    type: string
+                    description: Application ID to track offsite app events.
+                  tracking_offline_event_set_ids:
+                    type: array
+                    description: Offline Event set IDs to track offline activity.
+                    items:
+                      type: string
+                  tracking_message_event_set_id:
+                    type: string
+                    description: Message event set ID for measuring instant messaging conversations.
+                  viewability_postbid_partner:
+                    $ref: '../../swagger.yaml#/components/schemas/PostbidPartner'
+                  viewability_vast_url:
+                    type: string
+                    description: Wrapped VAST URL for viewability measurement.
+                  brand_safety_postbid_partner:
+                    $ref: '../../swagger.yaml#/components/schemas/PostbidPartner'
+                  brand_safety_vast_url:
+                    type: string
+                    description: Wrapped VAST URL for brand safety measurement.
+                  operation_status:
+                    type: string
+                    description: Status of ad when created.
+                    enum:
+                      - ENABLE
+                      - DISABLE
+  responses:
+    '200':
+      description: Successfully created ad
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              data:
+                type: object
+                properties:
+                  ad_ids:
+                    type: array
+                    description: Created ad IDs
+                    items:
+                      type: string
+                  creatives:
+                    type: array
+                    description: List of created ads with full details
+                    items:
+                      type: object
+                      properties:
+                        advertiser_id:
+                          type: string
+                          description: Advertiser ID
+                        campaign_id:
+                          type: string
+                          description: Campaign ID
+                        adgroup_id:
+                          type: string
+                          description: Ad group ID
+                        ad_id:
+                          type: string
+                          description: Ad ID
+                        ad_name:
+                          type: string
+                          description: Ad name
+                        status:
+                          type: string
+                          description: Ad status
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

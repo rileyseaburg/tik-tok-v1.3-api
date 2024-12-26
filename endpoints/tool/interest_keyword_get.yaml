@@ -1,0 +1,118 @@
+get:
+  operationId: getInterestKeywords
+  summary: Get additional interest categories by ID
+  description: |
+    Use this endpoint to get additional interest categories by ID.
+
+    Changes from v1.2 to v1.3:
+    - Endpoint path changed from /v1.2/tools/interest_keyword/get/ to /v1.3/tool/interest_keyword/get/
+    - advertiser_id type changed from number to string
+    - Parameter name and type changed: id (number) → keyword_id (string)
+    - New parameters added: filtering, audience_type
+    - Response parameter type changed: id (number) → keyword_id (string)
+  tags:
+    - tool
+  parameters:
+    - name: advertiser_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Advertiser ID
+    - name: keyword_query
+      in: query
+      required: true
+      schema:
+        type: array
+        maxItems: 50
+        items:
+          type: object
+          required:
+            - keyword_id
+          properties:
+            keyword_id:
+              type: string
+              description: Additional interest category ID
+            language:
+              type: string
+              description: |
+                Additional interest category language. Default value: en.
+                Supported languages: fr, id, it, ja, ms, ar, vi, en, ru, es, th, tr, hi, zh, de, ko.
+      description: |
+        Information of the additional interest category you want to get.
+        Max size = 50.
+    - name: filtering
+      in: query
+      schema:
+        type: object
+        properties:
+          audience_type:
+            type: string
+            enum:
+              - GENERAL_INTEREST
+              - PURCHASE_INTENTION
+            default: GENERAL_INTEREST
+            description: |
+              The audience type that you want to filter by:
+              - GENERAL_INTEREST: General interest. The audiences have a general, long-term interest in a video category.
+              - PURCHASE_INTENTION: Purchase intent. The audiences' recent behavior suggests they may buy something related to a content category.
+      description: Filtering conditions
+  responses:
+    '200':
+      description: Successfully retrieved interest categories
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - code
+              - message
+              - request_id
+              - data
+            properties:
+              code:
+                type: integer
+                description: Return code
+              message:
+                type: string
+                description: Return message
+              request_id:
+                type: string
+                description: The log ID of a request, which uniquely identifies the request
+              data:
+                type: object
+                properties:
+                  keywords:
+                    type: array
+                    description: List of additional interest categories
+                    items:
+                      type: object
+                      properties:
+                        keyword:
+                          type: string
+                          description: Additional interest category
+                        keyword_id:
+                          type: string
+                          description: Additional interest category ID
+                        status:
+                          type: string
+                          description: |
+                            Whether an additional interest category will be effective.
+                            - EFFECTIVE: effective if using it can reach a reasonable number of people
+                            - INEFFECTIVE: ineffective if the projected audience size is too small
+                            Note: Only effective additional interest categories can be used in ad groups to target audiences
+                          enum:
+                            - EFFECTIVE
+                            - INEFFECTIVE
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../schemas/responses.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../schemas/responses.yaml#/components/responses/NotFound'
+    '429':
+      $ref: '../schemas/responses.yaml#/components/responses/TooManyRequests'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

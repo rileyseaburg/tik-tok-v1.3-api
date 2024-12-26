@@ -1,0 +1,149 @@
+get:
+  operationId: getActionCategories
+  summary: Get action categories
+  description: |
+    Use this endpoint to get action category enumeration values. Action categories are also referred to as behavioral categories in our documentation.
+
+    Action targeting provides advertisers with a way to serve relevant ads to users based on their recent in-app behaviors. In-app behaviors can be categorized into two types:
+    - Video related actions (views, likes, comments or share)
+    - Creator related actions (following or viewed homepage)
+
+    Accordingly, the action_scene where a developer can use action categories when calling /adgroup/create/ is CREATOR_RELATED, or VIDEO_RELATED.
+
+    Note:
+    We recommend that you use the Consolidated Interest and Behavior API (/targeting/search/) to search for or list targeting categories and hashtags for interests and behaviors. This API provides a consolidated and efficient approach to access the necessary targeting information.
+
+    Changes from v1.2 to v1.3:
+    - Endpoint path changed from /v1.2/tools/action_category/ to /v1.3/tool/action_category/
+    - Parameter name changed: industry_types → special_industries
+    - advertiser_id type changed from number to string
+    - Response parameter name changed: industry_types → special_industries
+    - Response parameter types changed:
+      * id → action_category_id (number to string)
+      * children → sub_category_ids (number[] to string[])
+    - New request parameter: language
+  tags:
+    - tool
+  parameters:
+    - name: advertiser_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Advertiser ID
+    - name: special_industries
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - HOUSING
+            - EMPLOYMENT
+            - CREDIT
+      description: |
+        Special ad categories.
+        Note: This field is generally available to advertisers registered in America or Canada.
+        Advertisers who are not registered in America or Canada but want to target these countries with special ad categories need to apply for an additional allowlist.
+    - name: language
+      in: query
+      schema:
+        type: string
+        enum:
+          - en
+          - zh
+          - ja
+          - de
+          - es
+          - fr
+          - id
+          - it
+          - ko
+          - ru
+          - th
+          - tr
+          - vi
+          - ar
+          - pt
+          - ms
+        default: en
+      description: |
+        Category name language in response.
+        For details, see Enumeration - Language Code.
+  responses:
+    '200':
+      description: Successfully retrieved action categories
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - code
+              - message
+              - request_id
+              - data
+            properties:
+              code:
+                type: integer
+                description: Return code
+              message:
+                type: string
+                description: Return message
+              request_id:
+                type: string
+                description: The log ID of a request, which uniquely identifies the request
+              data:
+                type: object
+                properties:
+                  action_categories:
+                    type: array
+                    description: Action Categories list
+                    items:
+                      type: object
+                      properties:
+                        description:
+                          type: string
+                          description: Action description
+                        action_category_id:
+                          type: string
+                          description: Action category ID
+                        level:
+                          type: integer
+                          description: Level
+                        sub_category_ids:
+                          type: array
+                          description: Subcategory ID list
+                          items:
+                            type: string
+                        name:
+                          type: string
+                          description: Action category name
+                        special_industries:
+                          type: array
+                          description: |
+                            Special ad categories.
+                            Note: If the returned value is empty([]), it means that the action categories do not support any special ad categories.
+                          items:
+                            type: string
+                            enum:
+                              - HOUSING
+                              - EMPLOYMENT
+                              - CREDIT
+                        action_scene:
+                          type: string
+                          description: Action scene
+                          enum:
+                            - CREATOR_RELATED
+                            - VIDEO_RELATED
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../schemas/responses.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../schemas/responses.yaml#/components/responses/NotFound'
+    '429':
+      $ref: '../schemas/responses.yaml#/components/responses/TooManyRequests'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

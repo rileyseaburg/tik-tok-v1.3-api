@@ -1,0 +1,71 @@
+post:
+  summary: Share audiences
+  description: |
+    Share audiences with other ad accounts in the same Business Center.
+    
+    Ad account owners, or users in Admin or Operator roles can share:
+    - Custom Audiences (from Customer file, Segment, Engagement, App Activity or Website Traffic)
+    - Lookalike Audiences
+  operationId: shareCustomAudiences
+  tags:
+    - dmp
+  security:
+    - accessToken: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - custom_audience_ids
+            - shared_advertiser_ids
+            - advertiser_id
+          properties:
+            custom_audience_ids:
+              type: array
+              description: |
+                Custom audiences to share
+                Size: 1-10
+              items:
+                type: string
+              minItems: 1
+              maxItems: 10
+            shared_advertiser_ids:
+              type: array
+              description: |
+                Target advertisers to share with (must be in same Business Center)
+                Size: 1-10
+              items:
+                type: string
+              minItems: 1
+              maxItems: 10
+            advertiser_id:
+              type: string
+              description: Operator advertiser ID
+  responses:
+    '200':
+      description: Successfully shared audiences
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                description: Returned data
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

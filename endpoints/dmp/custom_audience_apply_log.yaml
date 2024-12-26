@@ -1,0 +1,117 @@
+get:
+  summary: Get the application log of audiences
+  description: |
+    Get the latest application log of custom audiences.
+    Note: Only retrieves logs for apply operations (action_mode = Apply).
+    The advertiser must be the owner of the custom_audience_ids.
+  operationId: getCustomAudienceApplyLog
+  tags:
+    - dmp
+  security:
+    - accessToken: []
+  parameters:
+    - name: advertiser_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Advertiser ID
+    - name: custom_audience_ids
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+      description: List of custom audience IDs
+    - name: page
+      in: query
+      schema:
+        type: integer
+        default: 1
+      description: Current page number (default 1)
+    - name: page_size
+      in: query
+      schema:
+        type: integer
+        default: 10
+      description: Page size (default 10)
+    - name: timezone
+      in: query
+      schema:
+        type: string
+      description: |
+        Timezone for returned values
+        See Appendix - Time Zone for enum values
+        Defaults to UTC if not specified
+  responses:
+    '200':
+      description: Successfully retrieved application logs
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                properties:
+                  advertiser_id:
+                    type: string
+                    description: Advertiser ID
+                  list:
+                    type: array
+                    description: Array of application data
+                    items:
+                      type: object
+                      properties:
+                        audience_id:
+                          type: string
+                          description: Audience ID
+                        adgroup_id:
+                          type: string
+                          description: Ad group ID
+                        adgroup_name:
+                          type: string
+                          description: Ad group name
+                        usage_mode:
+                          type: string
+                          description: |
+                            Audience's usage mode in the ad group
+                            Enum values: Include, Exclude
+                        editor:
+                          type: string
+                          description: Operator
+                        action_timestamp:
+                          type: string
+                          description: Time of action (YYYY-MM-DD HH:MM:SS)
+                  page_info:
+                    type: object
+                    description: Pagination information
+                    properties:
+                      page:
+                        type: integer
+                        description: Current page number
+                      page_size:
+                        type: integer
+                        description: Page size
+                      total_number:
+                        type: integer
+                        description: Total number of results
+                      total_page:
+                        type: integer
+                        description: Total number of pages
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

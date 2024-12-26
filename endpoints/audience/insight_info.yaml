@@ -1,0 +1,459 @@
+post:
+  summary: Get details of potential audiences
+  description: Get detailed insights about potential audiences based on location or custom audience targeting
+  operationId: getAudienceInsightInfo
+  tags:
+    - audience
+  security:
+    - accessToken: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - advertiser_id
+            - dimensions
+          properties:
+            advertiser_id:
+              type: string
+              description: Advertiser ID
+            custom_audience_id:
+              type: string
+              description: |
+                Custom audience ID
+                Note: Cannot be used with locations or selected_audience
+            locations:
+              type: array
+              description: |
+                Target locations
+                Cannot be used with custom_audience_id
+              maxItems: 5
+              items:
+                type: object
+                required:
+                  - country_code
+                properties:
+                  country_code:
+                    type: string
+                    description: Country code
+                  location_ids:
+                    type: array
+                    description: |
+                      Location IDs
+                      Default: all locations in country
+                    items:
+                      type: string
+            dimensions:
+              type: array
+              description: |
+                Response dimensions to return
+                Note: Only one dimension per call
+              items:
+                type: string
+                enum:
+                  - age
+                  - gender
+                  - country
+                  - top_regions
+                  - operating_system
+                  - operating_system_version
+                  - device_price
+                  - top_interests
+                  - bottom_interests
+                  - engagement
+                  - ad_interest_categories
+                  - top_hashtags
+            top_regions_country_code:
+              type: string
+              description: |
+                Required for top_regions dimension with locations
+                Country code for sub-region data
+            selected_audience:
+              type: object
+              description: Audience filtering criteria
+              properties:
+                languages:
+                  type: array
+                  description: Target language codes
+                  items:
+                    type: string
+                age_groups:
+                  type: array
+                  description: Target age groups
+                  items:
+                    type: string
+                gender:
+                  type: array
+                  description: |
+                    Target genders
+                    GENDER_FEMALE, GENDER_MALE
+                  items:
+                    type: string
+                device_price_ranges:
+                  type: array
+                  description: |
+                    Device price ranges
+                    Multiples of 50, 10000 = 1000+
+                  items:
+                    type: integer
+                min_ios_version:
+                  type: array
+                  description: Minimum iOS versions
+                  items:
+                    type: string
+                min_android_version:
+                  type: array
+                  description: Minimum Android versions
+                  items:
+                    type: string
+                operating_systems:
+                  type: array
+                  description: |
+                    Target OS (required with min_*_version)
+                    ANDROID, IOS (one only)
+                  items:
+                    type: string
+                interest_category_ids:
+                  type: array
+                  description: Interest category IDs
+                  items:
+                    type: string
+                video_action_category_ids:
+                  type: array
+                  description: Video action category IDs
+                  items:
+                    type: string
+                creator_action_category_ids:
+                  type: array
+                  description: Creator action category IDs
+                  items:
+                    type: string
+                hashtag_action_category_ids:
+                  type: array
+                  description: Hashtag IDs
+                  items:
+                    type: string
+  responses:
+    '200':
+      description: Successfully retrieved audience insights
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                properties:
+                  age:
+                    type: object
+                    description: Age distribution (if requested)
+                    properties:
+                      all:
+                        type: array
+                        description: All audience data (null if <1000 or using custom_audience_id)
+                        items:
+                          type: object
+                          properties:
+                            label:
+                              type: string
+                              description: Age group label
+                            rate:
+                              type: number
+                              description: Percentage of age group
+                      selected:
+                        type: array
+                        description: Filtered audience data
+                        items:
+                          type: object
+                          properties:
+                            label:
+                              type: string
+                            rate:
+                              type: number
+                  gender:
+                    type: object
+                    description: Gender distribution (if requested)
+                    properties:
+                      all:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            label:
+                              type: string
+                            rate:
+                              type: number
+                      selected:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            label:
+                              type: string
+                            rate:
+                              type: number
+                  country:
+                    type: object
+                    description: Country distribution (if requested)
+                    properties:
+                      all:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            label:
+                              type: string
+                            rate:
+                              type: number
+                      selected:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            label:
+                              type: string
+                            rate:
+                              type: number
+                  top_regions:
+                    type: object
+                    description: Region distribution (if requested)
+                    properties:
+                      all:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            label:
+                              type: string
+                            rate:
+                              type: number
+                            region_id:
+                              type: string
+                            country_code:
+                              type: string
+                      selected:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            label:
+                              type: string
+                            rate:
+                              type: number
+                            region_id:
+                              type: string
+                            country_code:
+                              type: string
+                  operating_system:
+                    type: object
+                    description: OS distribution (if requested)
+                    properties:
+                      all:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            label:
+                              type: string
+                            rate:
+                              type: number
+                      selected:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            label:
+                              type: string
+                            rate:
+                              type: number
+                  operating_system_version:
+                    type: object
+                    description: OS version distribution (if requested)
+                    properties:
+                      all:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            label:
+                              type: string
+                            rate:
+                              type: number
+                      selected:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            label:
+                              type: string
+                            rate:
+                              type: number
+                  device_price:
+                    type: object
+                    description: Device price distribution (if requested)
+                    properties:
+                      all:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            label:
+                              type: string
+                            rate:
+                              type: number
+                      selected:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            label:
+                              type: string
+                            rate:
+                              type: number
+                  top_interests:
+                    type: object
+                    description: Top interests (if requested)
+                    properties:
+                      all:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            label:
+                              type: string
+                            rate:
+                              type: number
+                            ad_interest_category:
+                              type: string
+                      selected:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            label:
+                              type: string
+                            rate:
+                              type: number
+                            ad_interest_category:
+                              type: string
+                  bottom_interests:
+                    type: object
+                    description: Bottom interests (if requested)
+                    properties:
+                      all:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            label:
+                              type: string
+                            rate:
+                              type: number
+                            ad_interest_category:
+                              type: string
+                      selected:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            label:
+                              type: string
+                            rate:
+                              type: number
+                            ad_interest_category:
+                              type: string
+                  ad_interest_categories:
+                    type: object
+                    description: Interest categories (if requested)
+                    properties:
+                      all:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            label:
+                              type: string
+                            rate:
+                              type: number
+                            type:
+                              type: string
+                      selected:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            label:
+                              type: string
+                            rate:
+                              type: number
+                            type:
+                              type: string
+                  top_hashtags:
+                    type: object
+                    description: Top hashtags (if requested)
+                    properties:
+                      hashtag_id:
+                        type: string
+                      hashtag_name:
+                        type: string
+                      count:
+                        type: integer
+                  engagement:
+                    type: object
+                    description: Engagement metrics (if requested)
+                    properties:
+                      all:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            daily_sessions:
+                              type: number
+                            daily_session_duration_in_minutes:
+                              type: number
+                            daily_video_views:
+                              type: number
+                            daily_comments:
+                              type: number
+                            daily_likes:
+                              type: number
+                            daily_shares:
+                              type: number
+                            total_video_uploads:
+                              type: number
+                      selected:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            daily_sessions:
+                              type: number
+                            daily_session_duration_in_minutes:
+                              type: number
+                            daily_video_views:
+                              type: number
+                            daily_comments:
+                              type: number
+                            daily_likes:
+                              type: number
+                            daily_shares:
+                              type: number
+                            total_video_uploads:
+                              type: number
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

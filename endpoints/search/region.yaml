@@ -1,0 +1,116 @@
+get:
+  operationId: getRegionsByAdvertiserId
+  summary: Get available locations by advertiser ID
+  description: |
+    Use this endpoint to get available locations that your ads can be delivered to based on your advertiser IDs.
+    
+    If you want to get available locations that your ads can be delivered to based on your objectives, placements, and optionally targeting operating systems, and brand safety settings, use the /tool/region/ endpoint.
+  tags:
+    - search
+  parameters:
+    - name: advertiser_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Advertiser ID
+    - name: language
+      in: query
+      schema:
+        type: string
+        default: en
+        enum:
+          - zh
+          - fr
+          - es
+          - ko
+          - vi
+          - en
+          - hi
+          - it
+          - tr
+          - ru
+          - ja
+          - id
+          - de
+          - ms
+          - ar
+          - th
+      description: |
+        The language you want the returned region name to be translated into.
+        Default value: en
+        Currently, we only support zh, fr, es, ko, vi, en, hi, it, tr, ru, ja, id, de, ms, ar, and th
+        Note: If you do not pass in one of the supported values above, it will return as the default en.
+  responses:
+    '200':
+      description: Successfully retrieved available regions
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - code
+              - message
+              - request_id
+              - data
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: The log ID of a request, which uniquely identifies the request
+              data:
+                type: object
+                properties:
+                  region_list:
+                    type: array
+                    description: List of all available regions
+                    items:
+                      type: object
+                      properties:
+                        region_id:
+                          type: string
+                          description: Region ID
+                        region_name:
+                          type: string
+                          description: Region name
+                        region_level:
+                          type: string
+                          description: |
+                            Region level. DMA and metropolitans are at the province level.
+                          enum:
+                            - COUNTRY
+                            - PROVINCE
+                            - CITY
+                            - DISTRICT
+                        country_code:
+                          type: string
+                          description: Country code for the country of the region
+                        parent_id:
+                          type: string
+                          description: The upper-level region id. This field will not be returned if region_level is COUNTRY
+                        area_type:
+                          type: string
+                          description: Location type
+                          enum:
+                            - ADMIN
+                            - METROPOLITAN_OR_DMA
+                        support_below_18:
+                          type: boolean
+                          description: Whether the location supports ads to be delivered to people under 18 years of age
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../schemas/responses.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../schemas/responses.yaml#/components/responses/NotFound'
+    '429':
+      $ref: '../schemas/responses.yaml#/components/responses/TooManyRequests'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

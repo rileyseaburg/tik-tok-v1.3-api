@@ -1,0 +1,191 @@
+get:
+  summary: Get Profile Data
+  description: Access detailed analytics and insights about a TikTok account's follower base and profile engagement.
+  operationId: getBusinessProfile
+  parameters:
+    - name: Access-Token
+      in: header
+      required: true
+      schema:
+        type: string
+      description: Access token authorized by TikTok creators
+    - name: business_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Application specific unique identifier for the TikTok account
+    - name: start_date
+      in: query
+      schema:
+        type: string
+        format: date
+      description: Query start date (UTC), format YYYY-MM-DD
+    - name: end_date
+      in: query
+      schema:
+        type: string
+        format: date
+      description: Query end date (UTC), format YYYY-MM-DD
+    - name: fields
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+      description: Requested fields. Default fields are display_name and profile_image
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            $ref: '../swagger.yaml#/components/schemas/BusinessResponse'
+    '401':
+      $ref: '../swagger.yaml#/components/responses/UnauthorizedError'
+    '400':
+      $ref: '../swagger.yaml#/components/responses/ValidationError'
+    '500':
+      $ref: '../swagger.yaml#/components/responses/ServerError'
+
+post:
+  summary: Create Business Account
+  description: Create a new business account or convert an existing account to a business account.
+  operationId: createBusinessAccount
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - username
+            - email
+            - business_type
+          properties:
+            username:
+              type: string
+              description: Desired username for the business account
+            email:
+              type: string
+              format: email
+              description: Business email address
+            business_type:
+              type: string
+              enum: [brand, agency, creator]
+            business_name:
+              type: string
+            website:
+              type: string
+              format: uri
+            phone:
+              type: string
+            country:
+              type: string
+  responses:
+    '201':
+      description: Business account created successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../swagger.yaml#/components/schemas/BusinessResponse'
+    '400':
+      $ref: '../swagger.yaml#/components/responses/ValidationError'
+    '401':
+      $ref: '../swagger.yaml#/components/responses/UnauthorizedError'
+    '409':
+      description: Username already exists
+    '500':
+      $ref: '../swagger.yaml#/components/responses/ServerError'
+
+put:
+  summary: Update Business Profile
+  description: Update business account information and settings
+  operationId: updateBusinessProfile
+  parameters:
+    - name: business_id
+      in: query
+      required: true
+      schema:
+        type: string
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            display_name:
+              type: string
+            bio_description:
+              type: string
+            website:
+              type: string
+              format: uri
+            email:
+              type: string
+              format: email
+            phone:
+              type: string
+            business_hours:
+              type: object
+              properties:
+                timezone:
+                  type: string
+                hours:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      day:
+                        type: string
+                        enum: [monday, tuesday, wednesday, thursday, friday, saturday, sunday]
+                      open:
+                        type: string
+                        format: time
+                      close:
+                        type: string
+                        format: time
+  responses:
+    '200':
+      description: Business profile updated successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../swagger.yaml#/components/schemas/BusinessResponse'
+    '400':
+      $ref: '../swagger.yaml#/components/responses/ValidationError'
+    '401':
+      $ref: '../swagger.yaml#/components/responses/UnauthorizedError'
+    '404':
+      description: Business account not found
+    '500':
+      $ref: '../swagger.yaml#/components/responses/ServerError'
+
+delete:
+  summary: Delete Business Account
+  description: Permanently delete a business account
+  operationId: deleteBusinessAccount
+  parameters:
+    - name: business_id
+      in: query
+      required: true
+      schema:
+        type: string
+    - name: confirmation
+      in: query
+      required: true
+      schema:
+        type: string
+        description: Must be 'DELETE' to confirm the operation
+  responses:
+    '204':
+      description: Business account deleted successfully
+    '400':
+      $ref: '../swagger.yaml#/components/responses/ValidationError'
+    '401':
+      $ref: '../swagger.yaml#/components/responses/UnauthorizedError'
+    '404':
+      description: Business account not found
+    '500':
+      $ref: '../swagger.yaml#/components/responses/ServerError'

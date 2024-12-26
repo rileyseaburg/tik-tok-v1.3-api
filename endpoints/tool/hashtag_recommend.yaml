@@ -1,0 +1,113 @@
+get:
+  operationId: recommendHashtags
+  summary: Search for targeting hashtags
+  description: |
+    Use this endpoint to search for targeting hashtags based on seed keywords.
+
+    The returned hashtag (keyword_id) can be passed on to the action_category_ids field in /adgroup/create/ to target users who watched TikTok videos with the hashtag. You need to set action_scene to HASHTAG_RELATED simultaneously.
+
+    Note:
+    We recommend that you use the Consolidated Interest and Behavior API (/targeting/search/) to search for or list targeting categories and hashtags for interests and behaviors. This API provides a consolidated and efficient approach to access the necessary targeting information.
+
+    Changes from v1.2 to v1.3:
+    - Endpoint path changed from /v1.2/tools/hashtag/recommend/ to /v1.3/tool/hashtag/recommend/
+    - advertiser_id type changed from number to string
+    - New parameter added: operator
+    - Response parameter type changed: keyword_id (number to string)
+    - New response parameter added: input_keyword
+  tags:
+    - tool
+  parameters:
+    - name: advertiser_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Advertiser ID
+    - name: keywords
+      in: query
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+        maxItems: 10
+      description: |
+        Keywords that you want to get recommended hashtags for.
+        If you specify multiple unrelated keywords and set operator to AND, it is possible that no recommended hashtags are returned.
+        Max size: 10.
+    - name: operator
+      in: query
+      schema:
+        type: string
+        enum:
+          - AND
+          - OR
+        default: AND
+      description: |
+        The operator to be used between the keywords:
+        - AND: Recommended hashtags will be generated based on all the keywords specified in keywords
+        - OR: Recommended hashtags will be generated separately for each individual keyword in keywords
+  responses:
+    '200':
+      description: Successfully retrieved recommended hashtags
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - code
+              - message
+              - request_id
+              - data
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: The log ID of a request, which uniquely identifies the request
+              data:
+                type: object
+                properties:
+                  recommend_keywords:
+                    type: array
+                    description: Recommend hashtags
+                    items:
+                      type: object
+                      properties:
+                        input_keyword:
+                          type: string
+                          description: |
+                            Returned only when operator is set to OR and more than one keyword is specified in keywords in the request.
+                            The specific keyword for which the recommended hashtag is generated.
+                        keyword:
+                          type: string
+                          description: Recommended hashtag
+                        keyword_id:
+                          type: string
+                          description: |
+                            Hashtag keyword ID.
+                            It can be passed to the action_category_ids field when creating an ad group using /adgroup/create/.
+                            You need to set action_scene to HASHTAG_RELATED simultaneously to target users who watched TikTok videos with the hashtag.
+                        keyword_status:
+                          type: string
+                          description: Keyword status
+                          enum:
+                            - ONLINE
+                            - OFFLINE
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../schemas/responses.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../schemas/responses.yaml#/components/responses/NotFound'
+    '429':
+      $ref: '../schemas/responses.yaml#/components/responses/TooManyRequests'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

@@ -1,0 +1,204 @@
+get:
+  summary: Get Video List
+  description: |
+    Retrieve a list of public video posts of the TikTok account, including organic videos displayed in the account's profile and "Only show in ads" video posts.
+    Note: All video engagement metrics are aggregated over the lifetime of the video and are not limited to a 60-day look-back period.
+  operationId: getVideoList
+  parameters:
+    - name: Access-Token
+      in: header
+      required: true
+      schema:
+        type: string
+      description: Access token authorized by TikTok creators. Obtain via /tt_user/oauth2/token/
+    - name: business_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Application specific unique identifier for the TikTok account (open_id from OAuth token response)
+    - name: fields
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+        default: ["item_id"]
+      description: |
+        Requested fields. Must include "item_id" if requesting multiple fields.
+        Example: ["item_id", "create_time"]
+    - name: filters
+      in: query
+      schema:
+        type: object
+        properties:
+          video_ids:
+            type: array
+            items:
+              type: string
+            description: List of video IDs to filter insights for
+      description: Filters to apply to the result set
+    - name: cursor
+      in: query
+      schema:
+        type: integer
+      description: |
+        Cursor for pagination. Pass returned cursor for next page.
+        Default: Current time as Unix timestamp in milliseconds
+    - name: max_count
+      in: query
+      schema:
+        type: integer
+        default: 10
+        maximum: 20
+      description: Maximum number of videos per page
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Unique identifier for the API request
+              data:
+                type: object
+                properties:
+                  videos:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        item_id:
+                          type: string
+                          description: Unique identifier for the video
+                        create_time:
+                          type: string
+                          description: Unix timestamp when video was posted (UTC)
+                        thumbnail_url:
+                          type: string
+                          description: Temporary URL for video thumbnail
+                        share_url:
+                          type: string
+                          description: Shareable URL for the video
+                        embed_url:
+                          type: string
+                          description: Embeddable URL for the video
+                        caption:
+                          type: string
+                          description: Video description
+                        video_views:
+                          type: integer
+                          description: Total number of video views
+                        video_duration:
+                          type: number
+                          format: float
+                          description: Video length in seconds
+                        likes:
+                          type: integer
+                          description: Total number of likes
+                        comments:
+                          type: integer
+                          description: Total number of comments
+                        shares:
+                          type: integer
+                          description: Total number of shares
+                        reach:
+                          type: integer
+                          description: Total number of unique viewers
+                        full_video_watched_rate:
+                          type: number
+                          format: float
+                          description: Percentage of complete video views
+                        total_time_watched:
+                          type: number
+                          format: float
+                          description: Total watch time in seconds
+                        average_time_watched:
+                          type: number
+                          format: float
+                          description: Average watch time in seconds
+                        impression_sources:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              impression_source:
+                                type: string
+                                enum: [For You, Follow, Hashtag, Sound, Personal Profile, other_profile_vv, Search]
+                              percentage:
+                                type: number
+                                format: float
+                        audience_countries:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              country:
+                                type: string
+                                description: ISO 3166-1 alpha-2 country code
+                              percentage:
+                                type: number
+                                format: float
+                  cursor:
+                    type: integer
+                    description: Cursor for next page
+                  has_more:
+                    type: boolean
+                    description: Whether more results are available
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+              message:
+                type: string
+              request_id:
+                type: string
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+              message:
+                type: string
+              request_id:
+                type: string
+              errors:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    field:
+                      type: string
+                    message:
+                      type: string
+    '500':
+      description: Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+              message:
+                type: string
+              request_id:
+                type: string

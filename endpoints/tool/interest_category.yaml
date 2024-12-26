@@ -1,0 +1,166 @@
+get:
+  operationId: getInterestCategories
+  summary: Get general interest categories
+  description: |
+    Use this endpoint to get general interest category enumeration values.
+
+    Note:
+    We recommend that you use the Consolidated Interest and Behavior API (/targeting/search/) to search for or list targeting categories and hashtags for interests and behaviors. This API provides a consolidated and efficient approach to access the necessary targeting information.
+
+    Changes from v1.2 to v1.3:
+    - Endpoint path changed from /v1.2/tools/interest_category/ to /v1.3/tool/interest_category/
+    - Parameter names changed: placement → placements, industry_types → special_industries
+    - advertiser_id type changed from number to string
+    - Response parameter names changed:
+      * name → interest_category_name
+      * id → interest_category_id
+      * children → sub_category_ids
+      * Parameter types changed from number to string
+  tags:
+    - tool
+  parameters:
+    - name: advertiser_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Advertiser ID
+    - name: version
+      in: query
+      schema:
+        type: integer
+        enum: [1, 2]
+        default: 2
+      description: |
+        Version of interest category.
+        Enum values:
+        - 1 (interest_category)
+        - 2 (interest_category_v2)
+        Default: 2
+    - name: language
+      in: query
+      schema:
+        type: string
+        default: en
+        enum:
+          - en
+          - zh
+          - ja
+          - de
+          - es
+          - fr
+          - id
+          - it
+          - ko
+          - ru
+          - th
+          - tr
+          - vi
+          - ar
+          - pt
+          - ms
+      description: |
+        Category name language in response.
+        Default value: en.
+        For details, see Enumeration - Language Code.
+    - name: placements
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+      description: |
+        The apps where you want to deliver your ads.
+        For enum values, see Enumeration - Placement.
+        The interest categories available for different placements may be different, and the field only takes effect when version = 2.
+    - name: special_industries
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - HOUSING
+            - EMPLOYMENT
+            - CREDIT
+      description: |
+        Special ad categories.
+        Note: This field is generally available to advertisers registered in America or Canada.
+        Advertisers who are not registered in America or Canada but want to target these countries with special ad categories need to apply for an additional allowlist.
+  responses:
+    '200':
+      description: Successfully retrieved interest categories
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - code
+              - message
+              - request_id
+              - data
+            properties:
+              code:
+                type: integer
+                description: Return code
+              message:
+                type: string
+                description: Return message
+              request_id:
+                type: string
+                description: The log id of a request, which uniquely identifies the request
+              data:
+                type: object
+                properties:
+                  interest_categories:
+                    type: array
+                    description: |
+                      Interest category list.
+                      To determine the corresponding names for gaming-related interest category IDs, see Interest category.
+                    items:
+                      type: object
+                      properties:
+                        interest_category_id:
+                          type: string
+                          description: Interest category ID
+                        interest_category_name:
+                          type: string
+                          description: Interest category name
+                        level:
+                          type: integer
+                          description: Level
+                        sub_category_ids:
+                          type: array
+                          description: Subcategory ID list
+                          items:
+                            type: string
+                        special_industries:
+                          type: array
+                          description: |
+                            Special ad categories.
+                            Note: If the returned value is empty([]), it means that the interest categories do not support any special ad categories.
+                          items:
+                            type: string
+                            enum:
+                              - HOUSING
+                              - EMPLOYMENT
+                              - CREDIT
+                        placements:
+                          type: array
+                          description: |
+                            Available placement for this interest category.
+                            Returning an empty list means unlimited.
+                          items:
+                            type: string
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../schemas/responses.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../schemas/responses.yaml#/components/responses/NotFound'
+    '429':
+      $ref: '../schemas/responses.yaml#/components/responses/TooManyRequests'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

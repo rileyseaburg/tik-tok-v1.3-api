@@ -1,0 +1,78 @@
+post:
+  summary: Update ACO material statuses
+  description: |
+    Update the status of creative materials for an ACO ad, including ad texts, images, and video materials.
+    This is a totally new endpoint in v1.3.
+  operationId: updateAcoMaterialStatus
+  tags:
+    - ad
+  security:
+    - accessToken: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - advertiser_id
+            - ad_group_id
+            - material_ids
+            - material_status
+          properties:
+            advertiser_id:
+              type: string
+              description: Advertiser ID
+            ad_group_id:
+              type: string
+              description: |
+                Ad group ID.
+                Note: The ID should be of the ad group that you will enable Automated Creative Optimization for, and creative_material_mode for the ad group must be set as DYNAMIC.
+            material_ids:
+              type: array
+              description: Material IDs. You can pass in only one Material ID.
+              maxItems: 1
+              items:
+                type: string
+            material_status:
+              type: string
+              description: Status of the material
+              enum: [ENABLE, DISABLE]
+  responses:
+    '200':
+      description: Successfully updated material status
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: The log id of a request, which uniquely identifies the request
+              data:
+                type: object
+                properties:
+                  ad_group_id:
+                    type: string
+                    description: Ad group ID
+                  material_ids:
+                    type: array
+                    description: Material IDs
+                    items:
+                      type: string
+                  material_status:
+                    type: string
+                    description: Status of the material
+                    enum: [ENABLE, DISABLE]
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

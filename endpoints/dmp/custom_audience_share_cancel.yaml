@@ -1,0 +1,55 @@
+post:
+  summary: Cancel the sharing of an audience
+  description: Stop sharing an audience with specified advertisers
+  operationId: cancelShareCustomAudience
+  tags:
+    - dmp
+  security:
+    - accessToken: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - custom_audience_id
+            - advertiser_id
+          properties:
+            custom_audience_id:
+              type: string
+              description: Custom audience to stop sharing
+            shared_advertiser_id:
+              type: string
+              description: |
+                Optional. Advertiser to stop sharing with.
+                Only set when canceling audiences shared with others.
+            advertiser_id:
+              type: string
+              description: Operator advertiser ID
+  responses:
+    '200':
+      description: Successfully cancelled audience sharing
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                description: Returned data
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

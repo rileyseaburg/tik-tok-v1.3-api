@@ -1,0 +1,189 @@
+get:
+  operationId: recommendInterestKeywords
+  summary: Search for additional interest categories
+  description: |
+    Use this endpoint to search for additional interest categories. You need to specify one or more seed keywords and the seed keyword or keywords will be used to search for related additional interest categories.
+
+    The returned additional interest categories (keyword_id) with status as EFFECTIVE can be passed to the interest_keyword_ids field when calling /adgroup/create/. Then the additional interest categories will be used in the ad group to target audience.
+
+    Note:
+    We recommend that you use the Consolidated Interest and Behavior API (/targeting/search/) to search for or list targeting categories and hashtags for interests and behaviors. This API provides a consolidated and efficient approach to access the necessary targeting information.
+
+    Changes from v1.2 to v1.3:
+    - Endpoint path changed from /v1.2/tools/interest_keyword/recommend/ to /v1.3/tool/interest_keyword/recommend/
+    - advertiser_id type changed from number to string
+    - Parameter name and type changed: keywords (string[]) → keyword (string)
+    - New parameters added: audience_type, keywords
+    - Response parameter type changed: id (number) → keyword_id (string)
+    - New response parameter added: input_keyword
+  tags:
+    - tool
+  parameters:
+    - name: advertiser_id
+      in: query
+      required: true
+      schema:
+        type: string
+      description: Advertiser ID
+    - name: keywords
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+        maxItems: 10
+      description: |
+        Either keywords or keyword has to be set.
+        If keywords and keyword are passed simultaneously, keyword will be ignored.
+        A list of seed keywords that you provide to search for additional interest categories.
+        Each seed keyword will be used separately to generate corresponding additional interest categories.
+        Max size: 10.
+    - name: keyword
+      in: query
+      schema:
+        type: string
+      description: |
+        Either keywords or keyword has to be set.
+        If keywords and keyword are passed simultaneously, keyword will be ignored.
+        One seed keyword that you provide to search for additional interest categories.
+    - name: mode
+      in: query
+      schema:
+        type: string
+        enum:
+          - FUZZ_MATCH
+          - SEMANTIC_RECOMMEND
+        default: FUZZ_MATCH
+      description: Search mode
+    - name: language
+      in: query
+      schema:
+        type: string
+        enum:
+          - fr
+          - id
+          - it
+          - ja
+          - ms
+          - ar
+          - vi
+          - en
+          - ru
+          - es
+          - th
+          - tr
+          - hi
+          - zh
+          - de
+          - ko
+        default: en
+      description: |
+        Keyword language.
+        Note that target audience languages are not limited by keyword languages.
+        You can use English categories to target audience that do not speak English.
+    - name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 50
+        default: 50
+      description: |
+        Number of additional interest categories you want to get.
+        Value range: 1-50
+    - name: audience_type
+      in: query
+      schema:
+        type: string
+        enum:
+          - GENERAL_INTEREST
+          - PURCHASE_INTENTION
+        default: GENERAL_INTEREST
+      description: |
+        Audience type:
+        - GENERAL_INTEREST: General interest. The audiences have a general, long-term interest in a video category.
+        - PURCHASE_INTENTION (deprecated): Purchase intent. The audiences' recent behavior suggests they may buy something related to a content category.
+  responses:
+    '200':
+      description: Successfully retrieved recommended interest categories
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - code
+              - message
+              - request_id
+              - data
+            properties:
+              code:
+                type: integer
+                description: Return code
+              message:
+                type: string
+                description: Return message
+              request_id:
+                type: string
+                description: The log ID of a request, which uniquely identifies the request
+              data:
+                type: object
+                properties:
+                  recommended_keywords:
+                    type: array
+                    description: A list of additional interest categories
+                    items:
+                      type: object
+                      properties:
+                        input_keyword:
+                          type: string
+                          description: |
+                            Returned only when keywords is included in the request and contains more than one keyword.
+                            The specific seed keyword for which the additional interest category is generated.
+                        keyword:
+                          type: string
+                          description: Additional interest category
+                        keyword_id:
+                          type: string
+                          description: ID of the additional interest category
+                        language:
+                          type: string
+                          description: Language of the additional interest category
+                          enum:
+                            - fr
+                            - id
+                            - it
+                            - ja
+                            - ms
+                            - ar
+                            - vi
+                            - en
+                            - ru
+                            - es
+                            - th
+                            - tr
+                            - hi
+                            - zh
+                            - de
+                            - ko
+                        status:
+                          type: string
+                          description: |
+                            Whether the additional interest category will be effective.
+                            - EFFECTIVE: effective. An additional interest category is effective if using it can reach a reasonable number of people.
+                            - INEFFECTIVE: ineffective. An additional interest category is ineffective if the estimated audience size is too small.
+                            Note: Only effective additional interest categories can be used in ad groups to target audiences.
+                          enum:
+                            - EFFECTIVE
+                            - INEFFECTIVE
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../schemas/responses.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../schemas/responses.yaml#/components/responses/NotFound'
+    '429':
+      $ref: '../schemas/responses.yaml#/components/responses/TooManyRequests'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

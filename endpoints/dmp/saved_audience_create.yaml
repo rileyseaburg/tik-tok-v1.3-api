@@ -1,0 +1,189 @@
+post:
+  summary: Create a Saved Audience
+  description: |
+    Create a Saved Audience with targeting parameters.
+    An advertiser account can have up to 400 Saved Audiences.
+  operationId: createSavedAudience
+  tags:
+    - dmp
+  security:
+    - accessToken: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - advertiser_id
+            - saved_audience_name
+            - location_ids
+          properties:
+            advertiser_id:
+              type: string
+              description: Advertiser ID
+            saved_audience_name:
+              type: string
+              description: |
+                Saved Audience name
+                Character limit is 512 and cannot contain emoji
+              maxLength: 512
+            location_ids:
+              type: array
+              description: |
+                IDs of target locations
+                Note: Overlapping locations not supported (e.g., US and California)
+              items:
+                type: string
+            gender:
+              type: string
+              description: Target gender
+              enum:
+                - GENDER_FEMALE
+                - GENDER_MALE
+                - GENDER_UNLIMITED
+            age_groups:
+              type: array
+              description: Target age groups (see Enumeration - Targeting Age Group)
+              items:
+                type: string
+            languages:
+              type: array
+              description: |
+                Target language codes
+                Empty or omit for no language targeting
+              items:
+                type: string
+            audience_ids:
+              type: array
+              description: List of audience IDs to include
+              items:
+                type: string
+            excluded_audience_ids:
+              type: array
+              description: List of audience IDs to exclude
+              items:
+                type: string
+            interest_category_ids:
+              type: array
+              description: |
+                Interest categories to target
+                Users not matching interests will be excluded
+                Omit to target everyone
+              items:
+                type: string
+            interest_keyword_ids:
+              type: array
+              description: Interest keyword IDs to target
+              items:
+                type: string
+            actions:
+              type: array
+              description: Action category targeting
+              items:
+                type: object
+                properties:
+                  action_category_ids:
+                    type: array
+                    description: |
+                      Action category IDs
+                      Required when actions specified and only TikTok placement selected
+                    items:
+                      type: string
+                  action_scene:
+                    type: string
+                    description: |
+                      Action information source
+                      Required when actions specified
+                    enum:
+                      - VIDEO_RELATED
+                      - CREATOR_RELATED
+                      - HASHTAG_RELATED
+                  action_period:
+                    type: integer
+                    description: |
+                      Time period for actions (days)
+                      Required when actions specified
+                      0 = no timeframe
+                      For CREATOR_RELATED/HASHTAG_RELATED, always 0
+                    enum: [0, 7, 15]
+                  video_user_actions:
+                    type: array
+                    description: |
+                      Video-related actions
+                      Required when actions specified
+                      VIDEO_RELATED: WATCHED_TO_END, LIKED, COMMENTED, SHARED
+                      CREATOR_RELATED: FOLLOWING, VIEW_HOMEPAGE
+                      HASHTAG_RELATED: VIEW_HASHTAG
+                    items:
+                      type: string
+            operating_systems:
+              type: array
+              description: Target operating systems (only one allowed)
+              items:
+                type: string
+                enum: [ANDROID, IOS]
+              maxItems: 1
+            min_android_version:
+              type: string
+              description: Minimum Android version
+            min_ios_version:
+              type: string
+              description: Minimum iOS version
+            device_model_ids:
+              type: array
+              description: |
+                Target device model IDs
+                Cannot be used with device_price_ranges
+              items:
+                type: string
+            network_types:
+              type: array
+              description: Target connection types
+              items:
+                type: string
+            carrier_ids:
+              type: array
+              description: |
+                Target carriers
+                Must be valid (in_use=true) and match target locations
+              items:
+                type: string
+            device_price_ranges:
+              type: array
+              description: |
+                Target device price ranges
+                Must be multiples of 50
+                10000 means 1000+
+                Note: Upper limit is increased by 50 internally
+              items:
+                type: integer
+  responses:
+    '200':
+      description: Successfully created Saved Audience
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                properties:
+                  saved_audience_id:
+                    type: string
+                    description: Created Saved Audience ID
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

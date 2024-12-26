@@ -1,0 +1,24 @@
+get:
+  summary: Check report task status
+  description: Get the current status of a report generation task
+  operationId: checkReportTask
+  tags:
+    - report
+  parameters:
+    - name: task_id
+      in: query
+      required: true
+      description: ID of the report task to check
+      schema:
+        type: string
+  responses:
+    '200':
+      $ref: '../../schemas/responses.yaml#/components/responses/ReportTaskStatus'
+    '400':
+      $ref: '../../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../../schemas/responses.yaml#/components/responses/Unauthorized'
+    '404':
+      $ref: '../../schemas/responses.yaml#/components/responses/NotFound'
+    '500':
+      $ref: '../../schemas/responses.yaml#/components/responses/InternalError'

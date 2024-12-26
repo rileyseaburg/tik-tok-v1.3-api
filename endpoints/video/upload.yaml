@@ -1,0 +1,298 @@
+post:
+  operationId: uploadVideo
+  summary: Upload a video to the Asset Library
+  description: |
+    Upload a video to the Asset Library and use the obtained video ID for creating ads.
+
+    Request timeout for this interface is 10s, and the transmission speed depends on network bandwidth. Please make sure that the file size is reasonable.
+
+    If you upload a video that already exists in the advertiser account, the API response will be the information of the existing video.
+
+    Note:
+    - We recommend that you turn on Smart Fix when uploading your videos. This API will automatically detect and fix issues in your videos, ensuring that they meet our requirements for delivery.
+    - Before you start, you need to confirm the video meets the Creative requirements for delivery before the video can be used in ads.
+  tags:
+    - video
+  requestBody:
+    required: true
+    content:
+      multipart/form-data:
+        schema:
+          $ref: '#/components/schemas/VideoUploadByFileRequest'
+      application/json:
+        schema:
+          $ref: '#/components/schemas/VideoUploadByUrlRequest'
+  responses:
+    '200':
+      description: Successfully uploaded video
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/VideoUploadResponse'
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '403':
+      $ref: '../schemas/responses.yaml#/components/responses/Forbidden'
+    '404':
+      $ref: '../schemas/responses.yaml#/components/responses/NotFound'
+    '429':
+      $ref: '../schemas/responses.yaml#/components/responses/TooManyRequests'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'
+
+components:
+  schemas:
+    VideoUploadByFileRequest:
+      type: object
+      required:
+        - advertiser_id
+        - upload_type
+        - video_file
+        - video_signature
+      properties:
+        advertiser_id:
+          type: string
+          description: Advertiser ID
+        file_name:
+          type: string
+          description: |
+            Video name. Length limit: 1 - 100 characters.
+            
+            Default value:
+            - When Smart Fix is not enabled (flaw_detect and auto_fix_enabled are set to false):
+              - If you upload a local file, the default name will be the original file name.
+              - If you provide a URL, the default name will be the filename portion of the URL path.
+              - If the original file name or the filename portion of the URL path exceeds 100 characters, it will be truncated to use only the first 100 characters.
+            - When Smart Fix is enabled (flaw_detect and auto_fix_enabled are set to true):
+              - The default name will be an auto-generated name in the format of "SmartFix-XXXXXXXXXXXXXXXX-X-XXX". If you specify a custom video name via file_name, the file_name value will be ignored.
+          minLength: 1
+          maxLength: 100
+        upload_type:
+          type: string
+          enum:
+            - UPLOAD_BY_FILE
+          default: UPLOAD_BY_FILE
+          description: Video upload method
+        video_file:
+          type: string
+          format: binary
+          description: |
+            Video file.
+            Recommended settings:
+            - File size: 500 MB limit
+            - Ratio: 9:16, 16:9, and 1:1
+            - Format: .mp4, .mov, .mpeg, .avi
+        video_signature:
+          type: string
+          description: Video MD5 (used for server verification)
+        is_third_party:
+          type: boolean
+          description: Whether the video is third party or not
+        flaw_detect:
+          type: boolean
+          description: Whether to automatically detect an issue in your video
+          default: false
+        auto_fix_enabled:
+          type: boolean
+          description: |
+            Whether to automatically fix the detected issue.
+            If an issue is detected in your video:
+            - When auto_fix_enabled is set to false, we'll return an error message with flaw types indicated.
+            - When auto_fix_enabled is set to true, we'll automatically fix all the issues and return fix_task_id and flaw_types.
+          default: false
+        auto_bind_enabled:
+          type: boolean
+          description: |
+            Valid only when flaw_detect = true and auto_fix_enabled = true.
+            Whether to automatically upload the fixed video to your creative library.
+          default: false
+
+    VideoUploadByUrlRequest:
+      type: object
+      required:
+        - advertiser_id
+        - upload_type
+        - video_url
+      properties:
+        advertiser_id:
+          type: string
+          description: Advertiser ID
+        file_name:
+          type: string
+          description: |
+            Video name. Length limit: 1 - 100 characters.
+            
+            Default value:
+            - When Smart Fix is not enabled (flaw_detect and auto_fix_enabled are set to false):
+              - If you upload a local file, the default name will be the original file name.
+              - If you provide a URL, the default name will be the filename portion of the URL path.
+              - If the original file name or the filename portion of the URL path exceeds 100 characters, it will be truncated to use only the first 100 characters.
+            - When Smart Fix is enabled (flaw_detect and auto_fix_enabled are set to true):
+              - The default name will be an auto-generated name in the format of "SmartFix-XXXXXXXXXXXXXXXX-X-XXX". If you specify a custom video name via file_name, the file_name value will be ignored.
+          minLength: 1
+          maxLength: 100
+        upload_type:
+          type: string
+          enum:
+            - UPLOAD_BY_URL
+            - UPLOAD_BY_FILE_ID
+            - UPLOAD_BY_VIDEO_ID
+          description: Video upload method
+        video_url:
+          type: string
+          format: uri
+          description: |
+            Required when upload_type is UPLOAD_BY_URL.
+            Video URL address, such as http://xxx.xxx.
+            - File size: better within 10MB
+            - Verification: We will verify Content-Type in the response header. A common invalid media type is text (Content-Type = text/*, such as text/html, text/plain). Also, we will verify the data if you set a Content-MD5 in the response header.
+            - Encoding: The URL needs to be a valid URL in the browser. For instance, the spaces in the URL need to be encoded into %20.
+            - Others: ratio, format, resolution and bitrate limitation is the same as video_file.
+        file_id:
+          type: string
+          description: |
+            Required when upload_type is UPLOAD_BY_FILE_ID.
+            The file_id of the file that you want to upload. This field is for files that are uploaded to the file repository.
+        video_id:
+          type: string
+          description: |
+            Required when upload_type is UPLOAD_BY_VIDEO_ID.
+            Video ID.
+        is_third_party:
+          type: boolean
+          description: Whether the video is third party or not
+        flaw_detect:
+          type: boolean
+          description: Whether to automatically detect an issue in your video
+          default: false
+        auto_fix_enabled:
+          type: boolean
+          description: |
+            Whether to automatically fix the detected issue.
+            If an issue is detected in your video:
+            - When auto_fix_enabled is set to false, we'll return an error message with flaw types indicated.
+            - When auto_fix_enabled is set to true, we'll automatically fix all the issues and return fix_task_id and flaw_types.
+          default: false
+        auto_bind_enabled:
+          type: boolean
+          description: |
+            Valid only when flaw_detect = true and auto_fix_enabled = true.
+            Whether to automatically upload the fixed video to your creative library.
+          default: false
+
+    VideoUploadResponse:
+      type: object
+      required:
+        - code
+        - message
+        - request_id
+        - data
+      properties:
+        code:
+          type: integer
+          description: Response code
+        message:
+          type: string
+          description: Response message
+        request_id:
+          type: string
+          description: The log id of a request, which uniquely identifies the request
+        data:
+          type: array
+          description: |
+            Returned data. For compatibility reasons, an array, instead of an object, is returned, and the array contains only one object.
+            Note: Due to the latency between client and server, it is possible that only video_id is returned. In this case, you can wait for 30 seconds to five minutes and use the /file/video/ad/search/ endpoint to retrieve other data.
+          items:
+            type: object
+            properties:
+              video_cover_url:
+                type: string
+                description: |
+                  Temporary URL for video cover, valid for six hours and needs to be re-acquired after expiration.
+                  The expiration time is included in the URL after the x-expires parameter, in the format of an Epoch/Unix timestamp in seconds.
+              format:
+                type: string
+                description: Video format
+              preview_url:
+                type: string
+                description: |
+                  Video preview link, valid for six hours and needs to be re-acquired after expiration.
+                  To find out the expiration time of the preview link, see preview_url_expire_time.
+              preview_url_expire_time:
+                type: string
+                description: The expiration time of the video preview link, in the format of YYYY-MM-DD HH:MM:SS (UTC+0)
+              file_name:
+                type: string
+                description: Video name
+              displayable:
+                type: boolean
+                description: Whether it can be displayed on the platform
+              height:
+                type: integer
+                description: Video height
+              width:
+                type: integer
+                description: Video width
+              bit_rate:
+                type: integer
+                description: Bit rate in bps
+              create_time:
+                type: string
+                format: date-time
+                description: Creation time in UTC format (e.g., 2020-06-10T07:39:14Z)
+              modify_time:
+                type: string
+                format: date-time
+                description: Modification time in UTC format (e.g., 2020-06-10T07:39:14Z)
+              signature:
+                type: string
+                description: Video file MD5
+              duration:
+                type: number
+                format: float
+                description: Video duration in seconds
+              video_id:
+                type: string
+                description: |
+                  Video ID, which can be used to create ads.
+                  Note:
+                  - If you upload via video ID (upload_type as UPLOAD_BY_VIDEO_ID), the same video ID will be returned.
+                  - If you upload via file, URL or file ID (upload_type as UPLOAD_BY_FILE, UPLOAD_BY_URL or UPLOAD_BY_FILE_ID), a new video ID (video_id) will be returned.
+              size:
+                type: integer
+                description: Video size in bytes
+              material_id:
+                type: string
+                description: Material ID
+              allowed_placements:
+                type: array
+                description: |
+                  Available placements. Due to music copyright, some materials generated by creative tools can only be shown on TikTok.
+                  It won't pass when they are created on other placements.
+                items:
+                  type: string
+              allow_download:
+                type: boolean
+                description: |
+                  Whether the video is downloadable. Due to the music copyright, some materials generated by creative tools are only allowed to preview.
+                  It is prohibited to download and disseminate them.
+              fix_task_id:
+                type: string
+                description: |
+                  Returned only when you've set both flaw_detect and auto_fix_enabled to true in request, and video issues are detected.
+                  Fix task ID.
+              flaw_types:
+                type: array
+                description: |
+                  Returned only when you've set both flaw_detect and auto_fix_enabled to true in request, and video issues are detected.
+                  Video issue types.
+                items:
+                  type: string
+                  enum:
+                    - LOW_RESOLUTION
+                    - NO_BGM
+                    - ILLEGAL_VIDEO_SIZE
+                    - BLACK_EDGE
+                    - ILLEGAL_DURATION

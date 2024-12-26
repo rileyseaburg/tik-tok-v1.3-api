@@ -1,0 +1,63 @@
+post:
+  summary: Create a custom audience
+  description: Create a new custom audience for targeting
+  operationId: createCustomAudience
+  tags:
+    - dmp
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - advertiser_id
+            - name
+            - audience_type
+          properties:
+            advertiser_id:
+              type: string
+              description: Advertiser ID
+            name:
+              type: string
+              description: Custom audience name
+            audience_type:
+              type: string
+              description: Type of custom audience
+              enum:
+                - CUSTOMER_FILE
+                - ENGAGEMENT
+                - WEBSITE_VISITOR
+                - APP_ACTIVITY
+            description:
+              type: string
+              description: Description of the custom audience
+  responses:
+    '200':
+      description: Successfully created custom audience
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                properties:
+                  audience_id:
+                    type: string
+                    description: Created custom audience ID
+                  name:
+                    type: string
+                    description: Custom audience name
+                  audience_type:
+                    type: string
+                    description: Type of custom audience

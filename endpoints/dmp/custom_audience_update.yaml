@@ -1,0 +1,106 @@
+post:
+  summary: Update audience
+  description: |
+    Update audience details like name and audience file.
+
+    Modification Types for Customer File Audience:
+    - REPLACE: Replace all previous data files (limit 1 per day)
+    - APPEND: Add new data files
+    - REMOVE: Remove specified files (cannot remove all)
+
+    Notes:
+    - Quota: 24 update operations (Append/Remove/Replace) per 24 hours per audience
+    - Multitasking: Wait for current operation to complete before retrying
+    - Replace operations rejected if unfinished replace exists
+    - Supported scope:
+      * Customer file audience: Can change files
+      * Engagement/App/Website/Lookalike: Only name updates
+    - Cannot modify expiring/expired audiences (only delete)
+    - Operations fail if audience size < 1,000 after update
+    - SLA: Immediate response + 48 hour async processing
+  operationId: updateCustomAudience
+  tags:
+    - dmp
+  security:
+    - accessToken: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - advertiser_id
+            - custom_audience_id
+          anyOf:
+            - required: [custom_audience_name]
+            - required: [file_paths]
+          properties:
+            advertiser_id:
+              type: string
+              description: Advertiser ID
+            custom_audience_id:
+              type: string
+              description: Custom audience ID
+            custom_audience_name:
+              type: string
+              description: |
+                New name for audience.
+                Maximum 128 characters.
+                Required if file_paths not provided.
+              maxLength: 128
+            audience_sub_type:
+              type: string
+              description: |
+                Audience sub type for ad usage:
+                REACH_FREQUENCY - Enable for R&F campaigns
+                Note:
+                - Only NORMAL to REACH_FREQUENCY conversion allowed
+                - Cannot change Lookalike audience to REACH_FREQUENCY
+                - Other updates ignored when changing this field
+              enum: [REACH_FREQUENCY]
+            file_paths:
+              type: array
+              description: |
+                Files to update Customer File audience.
+                Required if custom_audience_name not provided.
+                Recommended <50 files per request.
+                Must use same encryption as original audience.
+              items:
+                type: string
+            action:
+              type: string
+              description: |
+                Modification type (when file_paths provided):
+                APPEND - Add new data (only adds unique entries)
+                REMOVE - Remove matching data
+                REPLACE - Replace all existing data
+                Note: Operations fail if resulting size < 1,000
+              enum: [APPEND, REMOVE, REPLACE]
+              default: REPLACE
+  responses:
+    '200':
+      description: Successfully updated audience
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                description: Empty object on success
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'

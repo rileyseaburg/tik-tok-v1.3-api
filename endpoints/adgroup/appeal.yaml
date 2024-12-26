@@ -1,0 +1,65 @@
+post:
+  summary: Appeal ad group rejection
+  description: |
+    Appeal rejection decision to request re-evaluation of rejected ad group.
+    
+    After appealing, wait and use /adgroup/review_info/ to check appeal status
+    and updated review status.
+  operationId: appealAdGroup
+  tags:
+    - adgroup
+  security:
+    - accessToken: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - advertiser_id
+            - adgroup_id
+          properties:
+            advertiser_id:
+              type: string
+              description: Advertiser ID
+            adgroup_id:
+              type: string
+              description: Ad group ID
+            ad_id:
+              type: string
+              description: Ad ID (optional)
+            appeal_reason:
+              type: string
+              description: Reason for the appeal
+            attachment_list:
+              type: array
+              description: List of attachment links
+              items:
+                type: string
+  responses:
+    '200':
+      description: Successfully submitted appeal
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                description: Response code
+              message:
+                type: string
+                description: Response message
+              request_id:
+                type: string
+                description: Request log ID
+              data:
+                type: object
+                description: Returned data
+    '400':
+      $ref: '../schemas/responses.yaml#/components/responses/BadRequest'
+    '401':
+      $ref: '../schemas/responses.yaml#/components/responses/Unauthorized'
+    '500':
+      $ref: '../schemas/responses.yaml#/components/responses/InternalError'
